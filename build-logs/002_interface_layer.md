@@ -118,6 +118,23 @@ RTX 3060 GPU
 
 ---
 
+## Operational Improvement
+
+The Open WebUI container was recreated with a Docker restart policy so that the interface automatically starts when Docker starts.
+
+Command used:
+
+docker run -d \
+-p 3000:8080 \
+--restart unless-stopped \
+-v open-webui:/app/backend/data \
+--name open-webui \
+ghcr.io/open-webui/open-webui:main
+
+This ensures the Jarvis interface is available after system reboot without manual intervention.
+
+---
+
 ## Current System State
 
 Jarvis now has two working interfaces for interacting with the local AI runtime.
