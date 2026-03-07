@@ -15,6 +15,7 @@ OS: Windows 11 with WSL2 Ubuntu
 
 Primary NVMe (G:)
 
+```
 G:\ai
 models
 runtime
@@ -22,6 +23,7 @@ memory
 projects
 logs
 backups
+```
 
 External HDD (4TB)
 
@@ -42,8 +44,6 @@ Ollama – model runtime
 Open WebUI – chat interface  
 Whisper – speech-to-text  
 Piper – text-to-speech  
-Chroma – vector database  
-LlamaIndex – document indexing
 
 ---
 
@@ -51,10 +51,53 @@ LlamaIndex – document indexing
 
 User interfaces include:
 
-Tablets
-Voice nodes
-Web interface
+Tablets  
+Voice nodes  
+Web interface  
 Mobile devices via Tailscale
+
+---
+
+## Knowledge Layer
+
+The knowledge layer allows Jarvis to retrieve and use information from local data sources rather than relying only on model training.
+
+Core components:
+
+Chroma – vector database used to store semantic embeddings  
+LlamaIndex – document ingestion and retrieval framework
+
+Responsibilities of this layer:
+
+Index local documents and notes  
+Store semantic embeddings for retrieval  
+Provide relevant context to the AI during queries
+
+Typical knowledge sources may include:
+
+Personal documentation  
+GitHub repositories  
+System logs  
+Technical notes  
+Project files
+
+Conceptual workflow:
+
+```
+documents
+   ↓
+text chunking
+   ↓
+embedding generation
+   ↓
+vector database storage
+   ↓
+semantic retrieval
+   ↓
+context injected into AI prompt
+```
+
+This layer enables **retrieval augmented generation (RAG)** so Jarvis can answer questions using locally indexed knowledge.
 
 ---
 
@@ -62,10 +105,10 @@ Mobile devices via Tailscale
 
 Sensors feeding the AI:
 
-Microphones
-Cameras
-Motion sensors
-Door sensors
+Microphones  
+Cameras  
+Motion sensors  
+Door sensors  
 Smart devices
 
 ---
@@ -74,9 +117,9 @@ Smart devices
 
 Home Assistant provides integration with:
 
-lights
-cameras
-sensors
+lights  
+cameras  
+sensors  
 automation rules
 
 Communication handled through MQTT.
