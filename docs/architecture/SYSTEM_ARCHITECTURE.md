@@ -58,6 +58,37 @@ Mobile devices via Tailscale
 
 ---
 
+## Logic Layer
+
+The logic layer acts as the control system for Jarvis. It receives requests from the interface layer and determines how the system should respond.
+
+Responsibilities of this layer:
+
+Interpret user requests  
+Determine which system capability should be used  
+Route requests to the appropriate tool or data source  
+Assemble context for the AI model  
+Return responses to the interface layer
+
+Possible routing targets include:
+
+Knowledge retrieval  
+System diagnostics  
+Home automation commands  
+Internet search  
+External AI models
+
+Conceptual request flow:
+
+User request  
+→ Intent detection  
+→ Tool selection  
+→ Data retrieval  
+→ AI reasoning  
+→ Response returned to interface
+
+---
+
 ## Knowledge Layer
 
 The knowledge layer allows Jarvis to retrieve and use information from local data sources rather than relying only on model training.

@@ -60,6 +60,10 @@ Knowledge documents are stored in the AI workspace:
 
 /mnt/g/ai/memory/knowledge
 
+### Knowledge Directory
+
+![Knowledge Directory](../docs/screenshots/knowledge/knowledge-directory.png)
+
 Example file used during testing:
 
 linux_notes.txt
@@ -104,6 +108,10 @@ Location:
 
 scripts/index_knowledge.py
 
+### Indexing Script
+
+![Indexing Script](../docs/screenshots/knowledge/indexing-script.png)
+
 Purpose of the script:
 
 1. Load documents from the knowledge directory
@@ -132,6 +140,10 @@ This ensures the system operates completely offline.
 The indexing pipeline was executed with:
 
 python scripts/index_knowledge.py
+
+### Successful Knowledge Indexing
+
+![Knowledge Index Success](../docs/screenshots/knowledge/knowledge-index-success.png)
 
 During execution:
 
