@@ -10,6 +10,7 @@ readable on GitHub, and easy to update.
 
 # System Architecture
 
+```text
                     Internet
                         │
                     Tailscale
@@ -25,19 +26,21 @@ readable on GitHub, and easy to update.
         │                                 │
     Windows 11                        Storage
         │                                 │
- ┌──────┴──────────┐            ┌──────────┼───────────┐
+ ┌──────┴──────────┐            ┌──────────┴───────────┐
  │                 │            │                      │
-WSL Ubuntu     VMware WS      C: Windows          G: Jarvis
- │                 │          256GB NVMe           2TB NVMe
+WSL Ubuntu     VMware WS     C: Windows             G: Jarvis
+ │                 │          256GB NVMe             2TB NVMe
  │            ┌────┴─────┐
  │            │          │
 Jarvis AI   Proxmox   LinuxPractice
 Platform      VM           VM
+```
 
 ---
 
 # Lenovo Legion Hardware Layout
 
+```text
            ┌─────────────────────────┐
            │           CPU           │
            │      Ryzen 7 5800       │
@@ -57,11 +60,13 @@ Platform      VM           VM
            │
        PCIe x1 Slot
      (Expansion Available)
+```
 
 ---
 
 # Future Infrastructure Architecture
 
+```text
                  ┌─────────────────┐
                  │  Lenovo Legion  │
                  │  AI Compute     │
@@ -73,3 +78,4 @@ Platform      VM           VM
      Infrastructure Node           Storage Node
         (Mini Server)                 (NAS)
      Automation + APIs         Models + Archives
+```
