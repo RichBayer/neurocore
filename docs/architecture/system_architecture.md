@@ -1,6 +1,13 @@
-# Jarvis System Architecture
+# NeuroCore System Architecture
 
-## Compute Node
+> NOTE:
+> This system was originally named "Jarvis".
+> It has since been renamed to "NeuroCore".
+> References to "Jarvis" reflect the original name during development.
+
+---
+
+# Compute Node
 
 Primary machine: Lenovo Legion Desktop
 
@@ -9,7 +16,7 @@ RAM: 32GB
 GPU: NVIDIA RTX 3060 12GB  
 OS: Windows 11 with WSL2 Ubuntu
 
-Jarvis currently runs primarily on this workstation.
+NeuroCore currently runs primarily on this workstation.
 
 Although the system is currently hosted on a single machine, the architecture is designed so that components may later be distributed across multiple nodes for scalability.
 
@@ -36,7 +43,7 @@ camera recordings
 AI memory archive  
 system backups  
 
-This storage structure allows Jarvis data to remain visible and easily backed up.
+This storage structure allows NeuroCore data to remain visible and easily backed up.
 
 ---
 
@@ -60,7 +67,7 @@ Future versions may support multiple models optimized for different tasks.
 
 # Interface Layer
 
-The interface layer provides ways for users to interact with Jarvis.
+The interface layer provides ways for users to interact with NeuroCore.
 
 Examples include:
 
@@ -76,7 +83,7 @@ The interface layer sends user requests to the logic layer.
 
 # Logic Layer
 
-The logic layer acts as the control system for Jarvis.
+The logic layer acts as the control system for NeuroCore.
 
 It receives requests from the interface layer and determines how the system should respond.
 
@@ -116,7 +123,7 @@ Response returned to interface
 
 # Knowledge Layer
 
-The knowledge layer allows Jarvis to retrieve and use information from local data sources rather than relying only on model training.
+The knowledge layer allows NeuroCore to retrieve and use information from local data sources rather than relying only on model training.
 
 Core components:
 
@@ -159,7 +166,7 @@ This layer enables **retrieval augmented generation (RAG)**.
 
 # Memory Layer
 
-The memory layer stores contextual information generated through interaction with Jarvis.
+The memory layer stores contextual information generated through interaction with NeuroCore.
 
 This layer is separate from the knowledge system.
 
@@ -175,7 +182,7 @@ User memory must remain **isolated per user** so private information cannot be a
 
 # Tool Execution Layer
 
-The tool layer allows Jarvis to interact with external systems and perform actions beyond simple text responses.
+The tool layer allows NeuroCore to interact with external systems and perform actions beyond simple text responses.
 
 Examples include:
 
@@ -199,7 +206,7 @@ Motion sensors
 Door sensors  
 Smart devices
 
-This layer allows Jarvis to perceive events occurring in the physical environment.
+This layer allows NeuroCore to perceive events occurring in the physical environment.
 
 ---
 
@@ -220,7 +227,7 @@ Communication occurs through MQTT or other automation protocols.
 
 # Distributed Architecture (Future)
 
-Although Jarvis currently runs primarily on one workstation, the architecture allows components to be distributed across multiple machines.
+Although NeuroCore currently runs primarily on one workstation, the architecture allows components to be distributed across multiple machines.
 
 Possible future node roles include:
 
@@ -229,7 +236,7 @@ Knowledge node – stores vector databases and indexing systems
 Automation node – runs Home Assistant and device integrations  
 Interface nodes – tablets, mobile devices, voice terminals
 
-This distributed design allows Jarvis to scale as data size and system complexity increase.
+This distributed design allows NeuroCore to scale as data size and system complexity increase.
 
 ---
 
