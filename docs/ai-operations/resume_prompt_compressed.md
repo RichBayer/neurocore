@@ -1,8 +1,10 @@
-# Jarvis Development – Compressed Resume Prompt
+# NeuroCore Development – Compressed Resume Prompt
 
-We are continuing development of my local AI system called Jarvis.
+We are continuing development of my local AI system called NeuroCore.
 
-Jarvis is a local-first AI infrastructure project designed to run on my workstation and operate primarily offline using local models, local knowledge, and local automation tools.
+NeuroCore was previously known as "Jarvis". References to Jarvis in file names, scripts, or documentation reflect earlier development stages.
+
+NeuroCore is a local-first AI infrastructure project designed to run on my workstation and operate primarily offline using local models, local knowledge, and local automation tools.
 
 The goal is to build a personal AI system capable of:
 
@@ -33,6 +35,7 @@ Working directory:
 ```text
 /mnt/g/ai/projects/jarvis
 ```
+
 Path note:
 
 The AI workspace is located at:
@@ -48,7 +51,7 @@ Use ~/ai in commands for readability.
 Assume:
 
 - VSCode (Remote - WSL) is open  
-- terminal is already inside the Jarvis repo  
+- terminal is already inside the repository  
 - WSL is the primary shell  
 
 ---
@@ -59,7 +62,7 @@ Interface Layer
 (Open WebUI in Docker)
 
 Logic Layer  
-(Jarvis router and orchestration)
+(router and orchestration via jarvis_router.py)
 
 Knowledge Layer  
 (Chroma vector database + LlamaIndex)
@@ -77,7 +80,7 @@ AI Runtime
 
 ## Current State
 
-Jarvis is currently capable of:
+NeuroCore is currently capable of:
 
 - indexing local documents  
 - storing embeddings in Chroma  
@@ -151,7 +154,7 @@ Keep things efficient, practical, and structured.
 
 ## Current Focus
 
-We are continuing Jarvis development.
+We are continuing NeuroCore development.
 
 Focus on:
 
