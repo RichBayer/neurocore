@@ -4,16 +4,30 @@ We are continuing development of my local AI system called NeuroCore.
 
 NeuroCore was previously known as "Jarvis". References to Jarvis in file names, scripts, or documentation reflect earlier development stages.
 
-NeuroCore is a local-first AI infrastructure project designed to run on my workstation and operate primarily offline using local models, local knowledge, and local automation tools.
+---
 
-The goal is to build a personal AI system capable of:
+## Current System State (CRITICAL)
 
-- conversational interaction  
-- reasoning over local documents  
-- persistent knowledge indexing  
-- troubleshooting and system diagnostics  
-- code generation and assistance  
-- automation and infrastructure support  
+NeuroCore has transitioned from a stateless script-based system into a **persistent daemon-based architecture**.
+
+### Completed Milestones
+
+* Local AI runtime (Ollama) operational
+* Knowledge system (Chroma + LlamaIndex) operational
+* RAG pipeline functional
+* Router logic implemented (`jarvis_router.py`)
+* Performance optimized (HTTP API + streaming)
+
+### NEW (Latest Milestone)
+
+* NeuroCore daemon implemented
+* UNIX socket IPC established (`/tmp/neurocore.sock`)
+* Structured request/response protocol defined
+* End-to-end communication verified
+
+Build log reference:
+
+build-logs/009_neurocore_daemon_foundation.md
 
 ---
 
@@ -21,222 +35,276 @@ The goal is to build a personal AI system capable of:
 
 Host system:
 
-Lenovo Legion Desktop  
-Ryzen 7 5800X  
-32 GB RAM  
-RTX 3060 12 GB  
+Lenovo Legion Desktop
+Ryzen 7 5800X
+32 GB RAM
+RTX 3060 12 GB
 
 Operating system:
 
-Windows 11 with WSL2 Ubuntu  
+Windows 11 with WSL2 Ubuntu
 
 Working directory:
 
-```text
-/mnt/g/ai/projects/jarvis
-```
+~/ai/projects/jarvis
 
-Path note:
+Workspace root:
 
-The AI workspace is located at:
+~/ai → /mnt/g/ai
 
-/mnt/g/ai
+Python environment:
 
-A symbolic link is used:
+~/ai/runtime/python/jarvis-env
 
-~/ai -> /mnt/g/ai
+---
 
-Use ~/ai in commands for readability.
+## Pathing Rules (CRITICAL)
 
-Assume:
+The system uses a symlinked workspace.
 
-- VSCode (Remote - WSL) is open  
-- terminal is already inside the repository  
-- WSL is the primary shell  
+Primary working path:
+
+~/ai → /mnt/g/ai
+
+All commands should use:
+
+~/ai/...
+
+NOT:
+
+/mnt/g/ai/... (unless explicitly required)
+
+---
+
+## Repository Root
+
+NeuroCore project root:
+
+~/ai/projects/jarvis
+
+All development commands should assume:
+
+cd ~/ai/projects/jarvis
+
+---
+
+## Python Environment
+
+Virtual environment location:
+
+~/ai/runtime/python/jarvis-env
+
+Activation command:
+
+source ~/ai/runtime/python/jarvis-env/bin/activate
+
+All Python execution should occur within this environment.
+
+---
+
+## File Placement Rules
+
+* Runtime code:
+  ~/ai/projects/jarvis/runtime/
+
+* Scripts (existing logic):
+  ~/ai/projects/jarvis/scripts/
+
+* Build logs:
+  ~/ai/projects/jarvis/build-logs/
+
+* Screenshots:
+  ~/ai/projects/jarvis/docs/screenshots/
+
+---
+
+## Command Requirements
+
+* Always provide copy/paste-ready commands
+* Always assume current directory is:
+  ~/ai/projects/jarvis
+* Do not invent or assume alternate paths
+* If uncertain about a path, ask before proceeding
+
+---
+
+## System Map Reference (Optional)
+
+Detailed system structure is documented in:
+
+docs/infrastructure/home_system_map.md
+docs/infrastructure/jarvis_repository_map.txt
+
+Use these only for deeper context—not for guessing paths.
 
 ---
 
 ## Current Architecture
 
-Interface Layer  
-(Open WebUI in Docker)
+NeuroCore now follows a **daemon-based architecture**:
 
-Logic Layer  
-(router and orchestration via jarvis_router.py)
-
-Knowledge Layer  
-(Chroma vector database + LlamaIndex)
-
-Memory Layer  
-(separate structured memory system – future expansion)
-
-Tool Layer  
-(system scripts, diagnostics, future integrations)
-
-AI Runtime  
-(Ollama using llama3.1:8b via HTTP API)
+Client (CLI / future interfaces)
+↓
+UNIX Socket (/tmp/neurocore.sock)
+↓
+NeuroCore Daemon
+↓
+(Runtime Manager – NOT YET IMPLEMENTED)
+↓
+Router (jarvis_router.py)
+↓
+Knowledge System + Model
 
 ---
 
-## Current State
+## Current Capability
 
-NeuroCore is currently capable of:
+NeuroCore can:
 
-- indexing local documents  
-- storing embeddings in Chroma  
-- retrieving relevant context  
-- performing RAG (retrieval augmented generation)  
-- generating responses using local models  
+* receive structured requests
+* process them through daemon
+* return structured responses
 
-Recent improvements:
-
-- migrated from subprocess-based execution to Ollama HTTP API  
-- implemented streaming responses for real-time output  
-- optimized retrieval pipeline (no repeated initialization)  
-- reduced response time from ~2–3 minutes to ~4–10 seconds  
-
-The logic router is implemented and working.
+⚠️ The system does NOT yet perform real reasoning through the daemon
 
 ---
 
-## Current Limitation
+## Current Limitation (TOP PRIORITY)
 
-NeuroCore currently runs in a **stateless execution model**:
+NeuroCore does NOT yet have a persistent runtime layer.
 
-- each query runs as a new Python process  
-- retrieval system initializes on each run  
-- no persistent session or runtime  
+This means:
 
-This is the primary remaining performance and usability limitation.
+* router is NOT loaded inside daemon
+* knowledge system is NOT persistent
+* each query is NOT yet using the real AI pipeline
 
 ---
 
 ## Current Phase
 
-We are now entering the **runtime phase**.
-
-Goal:
-
-Build a persistent NeuroCore runtime that:
-
-- runs continuously  
-- avoids repeated initialization  
-- supports interactive CLI usage  
-- supports command piping  
-- behaves like a native system tool  
+We are entering the **Runtime Integration Phase**
 
 ---
 
-## Target Runtime Behavior
+## Immediate Goal (NEXT STEP)
 
-Desired usage patterns:
+Build the **Runtime Manager**
+
+This component will:
+
+* initialize ONCE at daemon startup
+* load:
+
+  * router
+  * knowledge system (Chroma + LlamaIndex)
+* process queries without reinitialization
+* replace placeholder response with real AI output
+
+---
+
+## Target Behavior (Near-Term)
 
 ```bash
-ai "Describe my system"
+ai "Explain my system"
 df -h | ai
 ai
 ```
 
-Interactive mode:
+All routed through the daemon.
 
-```text
-NeuroCore > question
-```
+---
+
+## Request Format (LOCKED)
+
+All requests follow:
+
+{
+"type": "query" | "event",
+"user_id": "richard",
+"client_id": "cli",
+"session_id": "default",
+"payload": {
+"text": "..."
+}
+}
+
+---
+
+## Design Principles
+
+* build the correct architecture first
+* avoid temporary or throwaway solutions
+* keep components modular
+* maintain separation of concerns:
+
+  * daemon (processing)
+  * client (interface)
+  * runtime (state)
+* no overengineering, no shortcuts
 
 ---
 
 ## Development Style
 
-During this project:
-
-- keep things practical and hands-on  
-- explain *why* when needed, not just *what*  
-- move in small, clear steps  
-- pause at logical checkpoints  
-- prioritize clean structure over speed  
-
----
-
-## How I Work
-
-- I prefer copy/paste-ready commands  
-- use real paths (not placeholders)  
-- assume I’m already in the repo unless stated otherwise  
-- prefer VSCode or vim (not nano)  
-
----
-
-## Important Context
-
-This prompt does NOT include full system awareness by itself.
-
-To fully understand the system, also use:
-
-Repository map:  
-docs/infrastructure/neurocore_repository_map.txt 
-
-System map:  
-docs/infrastructure/neurocore_system_map.txt  
-
-Latest build log (if relevant)
-
-These provide:
-
-- actual file structure  
-- runtime layout  
-- current system state  
+* explain WHY before implementation
+* move in small, controlled steps
+* validate each step before proceeding
+* do not assume previous steps succeeded
+* stop at logical checkpoints
+* document milestones with build logs + screenshots
 
 ---
 
 ## What You Should Do
 
-Act as a senior Linux / systems engineer helping build this system.
+Act as a senior systems engineer guiding development.
 
-Guide development by:
-
-- suggesting the next logical step  
-- giving exact commands when needed  
-- helping design clean, scalable solutions  
-- catching bad ideas early (don’t let me shoot myself in the foot)  
-
-Keep things efficient, practical, and structured.
-
----
-
-## Current Focus
-
-Focus on:
-
-- building persistent runtime architecture  
-- eliminating repeated initialization overhead  
-- enabling CLI command integration  
-- preparing for tool execution layer  
+* provide exact commands
+* validate each step before proceeding
+* prevent architectural mistakes
+* keep implementation aligned with vision
 
 ---
 
 ## Session Discipline
 
-At natural stopping points or before ending a session:
+Before ending a session:
 
-- update repository map if structure changed  
-- update system map if storage, runtime, or architecture changed  
-- update build logs for completed work  
-- update this prompt if workflow or structure evolved  
+* update build logs
+* update system maps if needed
+* update this prompt if state changes
 
-This ensures future sessions can reconstruct the system accurately.
-
-Do not assume context will persist between sessions.
-
-Always leave the system in a documented state.
+Do not assume context persists between sessions.
 
 ---
 
-## Notes
+## Current Focus
 
-Assume continuity from previous work.
+Focus ONLY on:
 
-Do not reset or simplify the system unless I explicitly ask.
+* runtime manager implementation
+* integrating router into daemon
+* eliminating repeated initialization
 
-Build forward from the current state.
+Do NOT:
 
-Keep it clean. Keep it sharp.
+* build UI
+* build voice system
+* build perception system
+
+---
+
+## Resume Instruction
+
+Start by implementing:
+
+runtime/runtime_manager.py
+
+Then integrate it into:
+
+runtime/neurocore_daemon.py
+
+Goal:
+
+Replace placeholder response with real query processing.
