@@ -122,7 +122,7 @@ This prompt does NOT include full system awareness by itself.
 To fully understand the system, also use:
 
 Repository map:  
-docs/infrastructure/jarvis_repository_map.txt  
+docs/infrastructure/neurocore_repository_map.txt 
 
 System map:  
 docs/infrastructure/jarvis_system_map.txt  
