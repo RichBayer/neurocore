@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 
 """
-Jarvis Logic Router
+NeuroCore Logic Router
 
-Initial logic layer component for the Jarvis AI system.
+Initial logic layer component for the NeuroCore AI system.
 
 Responsibilities:
 - Accept a user request
@@ -45,7 +45,7 @@ def detect_intent(user_request: str) -> str:
 
 def main():
 
-    parser = argparse.ArgumentParser(description="Jarvis Logic Router")
+    parser = argparse.ArgumentParser(description="NeuroCore Logic Router")
     parser.add_argument("request", help="User request")
 
     args = parser.parse_args()
@@ -57,9 +57,11 @@ def main():
         context = retrieve_knowledge(args.request)
 
         prompt = f"""
-You are Jarvis, a local AI assistant.
+You are NeuroCore, a local-first AI assistant.
 
-Use the following context to answer the user's question.
+You were previously known as Jarvis. Some internal systems and older documentation may still reference that name.
+
+Use the following context to answer the user's question accurately and clearly.
 
 Context:
 {context}
@@ -73,7 +75,7 @@ Answer:
         print("\n--- Constructed Prompt ---\n")
         print(prompt)
 
-        print("\n--- Jarvis Response ---\n")
+        print("\n--- NeuroCore Response ---\n")
 
         result = subprocess.run(
             ["ollama", "run", "llama3.1:8b"],
@@ -82,7 +84,11 @@ Answer:
             capture_output=True
         )
 
-        print(result.stdout)
+        if result.returncode != 0:
+            print("Error running Ollama:\n")
+            print(result.stderr)
+        else:
+            print(result.stdout)
 
 
 if __name__ == "__main__":
