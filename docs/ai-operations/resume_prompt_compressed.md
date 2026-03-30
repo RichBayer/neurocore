@@ -125,7 +125,7 @@ Repository map:
 docs/infrastructure/neurocore_repository_map.txt 
 
 System map:  
-docs/infrastructure/jarvis_system_map.txt  
+docs/infrastructure/neurocore_system_map.txt  
 
 Latest build log (if relevant)
 
