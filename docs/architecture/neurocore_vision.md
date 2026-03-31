@@ -39,96 +39,61 @@ NeuroCore is intended to evolve into a **trusted AI partner that grows alongside
 
 ## Local-First Computing
 
-NeuroCore is designed to operate primarily using **local models, local embeddings, and local data storage**.
+NeuroCore operates primarily using:
 
-This ensures:
+* local models
+* local embeddings
+* local data storage
 
-* privacy
-* independence from cloud services
-* predictable performance
-* long-term system durability
-
-External internet services may be used for **optional augmentation**, but the core system must remain functional offline.
+External services may be used for optional augmentation, but the core system must remain fully functional offline.
 
 ---
 
 ## Transparent Filesystem Architecture
 
-NeuroCore memory and system state should be stored in visible filesystem structures whenever possible.
+All memory and system state should remain visible within the filesystem whenever possible.
 
 This enables:
 
-* direct inspection
+* inspection
 * manual editing
-* backup and archival
 * version control
+* backup and archival
 * integration with external tools
-
-The system should avoid hidden or opaque storage mechanisms where possible.
 
 ---
 
 ## Reproducible Infrastructure
 
-The NeuroCore system should be rebuildable from documentation and scripts.
+NeuroCore is designed to be fully rebuildable.
 
-The long-term goal is a **fully reproducible infrastructure** where a complete system rebuild can be performed with minimal manual configuration.
+The long-term goal is a system that can be reconstructed from:
 
-Ideally, the system could be reconstructed using a small set of installation scripts and documentation, enabling:
-
-* hardware migration
-* disaster recovery
-* rapid system replication
-* long-term maintainability
+* documentation
+* scripts
+* repository structure
 
 ---
 
 ## Human-Controlled Memory
 
-NeuroCore memory systems must remain **transparent and user-controlled**.
-
-NeuroCore may remember useful information from conversations such as:
-
-* reminders
-* preferences
-* recurring tasks
-* contextual knowledge about projects
-
-Examples include:
-
-* reminding a household member about scheduled tasks
-* remembering important events or commitments
-* maintaining useful contextual knowledge about ongoing work
-
-However, memory storage must remain:
+Memory must remain:
 
 * visible
 * editable
-* removable by users
+* removable
 
-The system should never silently accumulate hidden personal data.
+NeuroCore must never silently accumulate hidden personal data.
 
 ---
 
-## User Privacy and Memory Boundaries
+## Multi-User Architecture
 
-NeuroCore is designed for **multi-user households**, which requires strong separation of personal information.
+NeuroCore supports multiple users with strict isolation:
 
-The system architecture includes:
-
-* a **shared AI brain** (models, logic layer, tools)
-* **separate user memory spaces**
-
-Each user’s personal data should remain isolated within their own account environment.
-
-Example structure:
-
-Shared NeuroCore System
+Shared System
 ↓
-AI Runtime
-Logic Layer
-Knowledge Tools
-Automation Tools
+Runtime + Logic + Tools
 
 User Memory Spaces
 ↓
@@ -136,191 +101,230 @@ Richard
 Patrice
 Abi
 
-When a user interacts with NeuroCore, conversations and personal memory are stored within that user’s own environment.
+Each user:
 
-Private information shared by one user should **not be accessible to other users unless explicitly shared**.
+* has isolated memory
+* cannot access other users' data without explicit permission
 
 ---
 
 ## Security by Design
 
-Because NeuroCore may eventually index personal information, household data, system logs, and infrastructure details, security must be considered from the beginning.
-
 Security considerations include:
 
 * user isolation
-* restricted memory access
+* controlled memory access
 * secure remote access
 * encrypted backups
-* safe network exposure
 
 ---
 
 # System Identity
 
-NeuroCore is not intended to be a simple chatbot.
+NeuroCore is not a chatbot.
 
-It is designed to become a **personal cognitive infrastructure**.
+It is a **persistent cognitive infrastructure system**.
 
-The primary workstation functions as the **central AI compute node**, while other devices serve as distributed interaction points.
+The primary workstation acts as:
 
-Possible interfaces include:
+> **The central AI compute and reasoning node**
 
-* CLI (command line interface)
-* browser interfaces
-* mobile devices
-* tablets
-* voice nodes
-* home displays
-* development environments
+Other devices act as:
 
-This architecture allows NeuroCore to function as a **central intelligence layer for both household and technical environments**.
+> **Interfaces into the system**
 
 ---
 
 # Core System Architecture
 
-NeuroCore is organized into modular subsystems that separate responsibilities and allow the system to scale cleanly.
+## Central Execution Model
+
+NeuroCore operates as a **persistent daemon-based system**.
+
+All interaction flows through a central runtime layer.
+
+### Execution Flow
+
+Client (CLI / future interfaces)  
+↓  
+UNIX Socket  
+↓  
+NeuroCore Daemon  
+↓  
+Runtime Manager (persistent state)  
+↓  
+Router (intent + prompt construction)  
+↓  
+Knowledge System  
+↓  
+LLM Runtime  
+↓  
+Response  
+
+---
+
+## Key Architectural Principle
+
+NeuroCore must always operate through:
+
+> **a single persistent runtime system**
+
+This ensures:
+
+* no repeated initialization
+* consistent state
+* scalable architecture
+* predictable performance
+
+---
 
 ## AI Runtime System
 
-The runtime system hosts local language models responsible for reasoning and response generation.
-
-Responsibilities include:
+Responsible for:
 
 * model execution
 * prompt processing
 * response generation
 
-Example technologies include local LLM runtimes such as Ollama.
+Example:
+
+* Ollama (local LLM runtime)
 
 ---
 
 ## Knowledge System
 
-The knowledge system enables NeuroCore to reason over local information.
-
-Responsibilities include:
+Responsible for:
 
 * document indexing
-* semantic embedding generation
-* vector database storage
+* embeddings
+* vector storage (Chroma)
 * semantic retrieval
 
-This system enables **retrieval augmented generation (RAG)** so NeuroCore can answer questions using locally indexed knowledge.
+Supports:
+
+> Retrieval-Augmented Generation (RAG)
+
+---
+
+## Runtime Manager (Critical Layer)
+
+The Runtime Manager is the **core control system**.
+
+Responsibilities:
+
+* initialize subsystems once
+* manage system state
+* process all incoming requests
+* prevent repeated loading of heavy components
+
+This layer ensures:
+
+* fast subsequent queries
+* controlled initialization
+* system-wide consistency
 
 ---
 
 ## Tool Execution System
 
-NeuroCore interacts with external capabilities through tools.
+Enables interaction with external systems:
 
-Examples include:
-
-* internet search
 * system diagnostics
-* automation commands
+* automation scripts
+* web scraping
 * development tools
-* data processing utilities
-
-This allows NeuroCore to extend beyond text and interact with real systems.
 
 ---
 
-## Memory Management System
-
-NeuroCore maintains multiple types of memory.
+## Memory System
 
 ### Knowledge Memory
 
-* documentation
+* documents
+* logs
 * repositories
-* PDFs
-* research material
-* system logs
 
 ---
 
 ### Conversation Memory
 
-* summarized context
-* reminders
-* ongoing task awareness
+* context
+* summaries
+* ongoing tasks
 
 ---
 
 ### User Memory
 
 * preferences
-* personal notes
-* private context
-
-Each user’s memory is:
-
-* isolated
-* inspectable
-* editable
+* reminders
+* personal context
 
 ---
 
 # Perception and Environmental Awareness System
 
-NeuroCore is designed to evolve into an **environment-aware cognitive system** capable of observing and responding to real-world conditions.
-
-## Purpose
-
-The perception system allows NeuroCore to:
-
-* observe environments
-* detect meaningful events
-* interpret activity
-* provide proactive assistance
-* respond without explicit prompts
-
-This transforms NeuroCore into a **continuously aware system**.
+NeuroCore is designed to evolve into an **environment-aware cognitive system**.
 
 ---
 
-## Sensor Inputs
+## Core Concept
 
-Potential integrations include:
+NeuroCore processes:
+
+1. **User Queries**
+2. **System Events**
+
+Both follow the SAME pipeline:
+
+event/query  
+↓  
+runtime manager  
+↓  
+reasoning  
+↓  
+response/action  
+
+---
+
+## Sensor Integration (Future)
+
+Potential inputs:
 
 * cameras (security, wildlife, deliveries)
-* microphones (speech, environmental audio)
-* system logs
+* microphones (voice, environment)
 * IoT devices
+* system logs
 * vehicle systems
 
-These inputs are processed outside the core runtime and converted into structured events.
-
 ---
 
-## Event Processing Model
-
-All inputs become structured events.
-
-Examples:
+## Event Examples
 
 * motion detected
-* package delivery
-* wildlife sighting
-* abnormal activity
-* spoken reminder
-* system anomaly
-
-These events are processed the same way as user queries.
+* delivery arrival
+* wildlife activity (hawks near chickens)
+* spoken reminders
+* abnormal system behavior
 
 ---
 
-## Separation of Responsibilities
+## Architectural Separation
 
 ### Perception Layer
 
+Handles:
+
 * sensor ingestion
-* audio/vision processing
-* event detection
+* detection
+* preprocessing
+
+---
 
 ### Cognitive Layer (NeuroCore)
+
+Handles:
 
 * reasoning
 * decision making
@@ -331,54 +335,51 @@ These events are processed the same way as user queries.
 
 ## Proactive Behavior
 
-NeuroCore operates proactively:
+NeuroCore will:
 
-* threat alerts
-* delivery notifications
-* livestock monitoring
-* reminders from observed interactions
-* environmental pattern detection
-
----
-
-## User Awareness and Privacy
-
-* events linked to user context when possible
-* memory remains user-isolated
-* no cross-user data leakage
-* all data remains transparent
+* notify of deliveries
+* detect threats to animals/property
+* remind users based on observed interactions
+* identify patterns over time
 
 ---
 
-## Future Expansion
+## Privacy Enforcement
 
-* real-time video analysis
-* distributed sensors
-* vehicle integration
-* anomaly detection
-* long-term pattern tracking
+* all events tied to user context when possible
+* strict user memory isolation
+* no cross-user leakage
+* all data remains inspectable
 
 ---
 
-## Architectural Implication
+# System Expansion Model
 
-NeuroCore operates as:
+Future systems must NOT bypass the daemon.
 
-* a **central cognitive engine**
-* receiving both **queries and events**
-* producing **responses and actions**
+All integrations must connect through:
+
+> runtime manager → unified processing pipeline
+
+This ensures:
+
+* consistent behavior
+* centralized control
+* scalable architecture
 
 ---
 
 # Long-Term Goal
 
-NeuroCore will evolve into a persistent AI system capable of assisting with:
+NeuroCore will evolve into a **persistent, intelligent system** capable of:
 
 * technical problem solving
 * knowledge organization
-* project development
+* automation
+* environmental awareness
 * household coordination
-* research
 * long-term learning
 
-It will grow into a **trusted cognitive partner for both daily life and technical environments**.
+It will become:
+
+> **a trusted cognitive partner embedded in both digital and physical environments**
