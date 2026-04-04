@@ -14,7 +14,7 @@ Primary machine: Lenovo Legion Desktop
 CPU: AMD Ryzen 7 5800X  
 RAM: 32GB  
 GPU: NVIDIA RTX 3060 12GB  
-OS: Windows 11 with WSL2 Ubuntu
+OS: Windows 11 with WSL2 Ubuntu  
 
 NeuroCore currently runs primarily on this workstation.
 
@@ -26,7 +26,6 @@ Although the system is currently hosted on a single machine, the architecture is
 
 Primary NVMe (G:)
 
-```
 G:\ai
 models
 runtime
@@ -34,7 +33,6 @@ memory
 projects
 logs
 backups
-```
 
 External HDD (4TB)
 
@@ -43,200 +41,322 @@ camera recordings
 AI memory archive  
 system backups  
 
-This storage structure allows NeuroCore data to remain visible and easily backed up.
+This structure keeps all NeuroCore data visible, portable, and easy to back up.
 
 ---
 
-# AI Runtime Layer
+# System Architecture (Layered)
 
-The runtime layer hosts the language models responsible for reasoning and response generation.
+NeuroCore is built as a layered system:
 
-Runs inside WSL Ubuntu.
-
-Core components:
-
-Ollama – local model runtime  
-Whisper – speech-to-text  
-Piper – text-to-speech  
-
-The runtime layer executes AI models and returns generated responses to the logic layer.
-
-Future versions may support multiple models optimized for different tasks.
+Interface Layer  
+↓  
+Transport Layer (Daemon + Socket)  
+↓  
+Runtime Layer  
+↓  
+Logic Layer  
+↓  
+Knowledge Layer  
+↓  
+Model Layer  
 
 ---
 
 # Interface Layer
 
-The interface layer provides ways for users to interact with NeuroCore.
+Provides user interaction with the system.
 
-Examples include:
+Current:
 
-Open WebUI – browser-based interface  
-CLI helper tools (such as `ai`)  
-Mobile devices via Tailscale  
+CLI  
+[scripts/ai_cli.py](../../scripts/ai_cli.py)
+
+Future:
+
+Open WebUI  
+Mobile devices (via Tailscale)  
 Tablets  
-Voice nodes
+Voice nodes  
 
-The interface layer sends user requests to the logic layer.
+The interface layer sends structured requests into the system.
+
+---
+
+# Transport Layer
+
+Components:
+
+Daemon  
+[runtime/neurocore_daemon.py](../../runtime/neurocore_daemon.py)
+
+Socket:
+
+/tmp/neurocore.sock  
+
+Responsibilities:
+
+Maintain persistent process  
+Accept client connections  
+Normalize requests  
+Stream responses back to clients  
+
+This layer decouples the interface from the runtime.
+
+---
+
+# Runtime Layer
+
+File:
+
+[runtime/runtime_manager.py](../../runtime/runtime_manager.py)
+
+Responsibilities:
+
+Process incoming requests  
+Coordinate system behavior  
+Route requests to the logic layer  
+
+This acts as the system’s central controller.
 
 ---
 
 # Logic Layer
 
-The logic layer acts as the control system for NeuroCore.
+File:
 
-It receives requests from the interface layer and determines how the system should respond.
+[scripts/jarvis_router.py](../../scripts/jarvis_router.py)
 
-Responsibilities include:
+Responsibilities:
 
 Interpret user requests  
-Determine system intent  
-Select appropriate tools or data sources  
-Assemble context for AI models  
-Return responses to the interface layer
+Determine intent  
+Build prompts  
+Interact with AI models  
+Stream responses  
 
-Possible routing targets include:
+Key functions:
 
-Knowledge retrieval  
-System diagnostics  
-Home automation commands  
-Internet search  
-External AI services
-
-Conceptual request flow:
-
-```
-User request
-↓
-Intent detection
-↓
-Tool selection
-↓
-Data retrieval
-↓
-AI reasoning
-↓
-Response returned to interface
-```
+run_query()  
+run_query_stream()  
 
 ---
 
 # Knowledge Layer
 
-The knowledge layer allows NeuroCore to retrieve and use information from local data sources rather than relying only on model training.
+File:
+
+[scripts/query_knowledge.py](../../scripts/query_knowledge.py)
 
 Core components:
 
-Chroma – vector database for semantic embeddings  
-LlamaIndex – document ingestion and retrieval framework
+Chroma – vector database  
+Embedding model  
 
-Responsibilities include:
+Responsibilities:
 
-Index local documents and notes  
-Store semantic embeddings for retrieval  
-Provide relevant context to the AI during queries
+Index documents  
+Store embeddings  
+Retrieve relevant context  
 
-Typical knowledge sources include:
+Data location:
 
-Personal documentation  
-GitHub repositories  
-System logs  
-Technical notes  
-Project files  
+/mnt/g/ai/memory/knowledge  
+/mnt/g/ai/memory/chroma  
 
-Conceptual workflow:
+This enables retrieval augmented generation (RAG).
 
-```
-documents
-↓
-text chunking
-↓
-embedding generation
-↓
-vector database storage
-↓
-semantic retrieval
-↓
-context injected into AI prompt
-```
+---
 
-This layer enables **retrieval augmented generation (RAG)**.
+# Model Layer
+
+Runtime:
+
+Ollama (local LLM runtime)
+
+Endpoint:
+
+http://localhost:11434
+
+Responsibilities:
+
+Generate responses  
+Provide streaming output  
+
+---
+
+# Streaming Pipeline (Core Feature)
+
+Streaming is implemented across the full system:
+
+Ollama (streaming API)  
+↓  
+Router (generator yields chunks)  
+↓  
+Daemon (forwards chunks over socket)  
+↓  
+CLI (prints in real time)  
+
+This enables:
+
+Real-time responses  
+Improved user experience  
+Foundation for future interfaces (UI, voice, API)
+
+---
+
+# Execution Flow (Current System)
+
+1. User runs:
+
+   ai "query"
+
+2. CLI sends request to daemon via UNIX socket
+
+3. Daemon:
+   - normalizes request
+   - forwards to runtime manager
+
+4. Runtime Manager:
+   - routes to logic layer
+
+5. Logic Layer:
+   - retrieves knowledge context
+   - builds prompt
+   - sends request to Ollama
+
+6. Ollama streams response
+
+7. Response propagates back:
+
+   Router → Daemon → CLI
+
+8. CLI prints output in real time
+
+---
+
+# Runtime Behavior
+
+Cold Start:
+
+Embedding model loads  
+Vector database initializes  
+First query slower  
+
+Warm State:
+
+No reinitialization  
+Fast streaming responses  
 
 ---
 
 # Memory Layer
 
-The memory layer stores contextual information generated through interaction with NeuroCore.
+Separate from knowledge system.
 
-This layer is separate from the knowledge system.
+Types:
 
-Memory types may include:
+Conversation memory  
+User memory  
+System memory  
 
-Conversation memory – summarized context from past interactions  
-User memory – reminders, preferences, personal notes  
-System memory – operational state or environment context
-
-User memory must remain **isolated per user** so private information cannot be accessed by other users.
+Memory must remain isolated per user.
 
 ---
 
 # Tool Execution Layer
 
-The tool layer allows NeuroCore to interact with external systems and perform actions beyond simple text responses.
+Allows interaction with external systems.
 
-Examples include:
+Examples:
 
-System diagnostics tools  
-Internet search tools  
+System diagnostics  
+Internet search  
 Automation commands  
 Development tools  
-Log analysis utilities  
 
-The logic layer determines when a tool should be used, and the tool layer executes the requested operation.
+The logic layer determines when tools are used.
 
 ---
 
-# Perception Layer
+# Perception Layer (Future)
 
-Sensors feeding data into the system may include:
+Potential inputs:
 
 Microphones  
 Cameras  
-Motion sensors  
-Door sensors  
-Smart devices
+Sensors  
+Smart devices  
 
-This layer allows NeuroCore to perceive events occurring in the physical environment.
+This enables environmental awareness.
 
 ---
 
-# Automation Layer
+# Automation Layer (Future)
 
-Home Assistant provides integration with household devices and automation systems.
+Powered by Home Assistant.
 
-Examples include:
+Controls:
 
 Lights  
 Cameras  
 Sensors  
-Automation rules
+Automation rules  
 
-Communication occurs through MQTT or other automation protocols.
+Communication via MQTT or similar protocols.
 
 ---
 
 # Distributed Architecture (Future)
 
-Although NeuroCore currently runs primarily on one workstation, the architecture allows components to be distributed across multiple machines.
+Planned node roles:
 
-Possible future node roles include:
+AI compute node  
+Knowledge node  
+Automation node  
+Interface nodes  
 
-AI compute node – hosts language models and GPU workloads  
-Knowledge node – stores vector databases and indexing systems  
-Automation node – runs Home Assistant and device integrations  
-Interface nodes – tablets, mobile devices, voice terminals
+This allows horizontal scaling over time.
 
-This distributed design allows NeuroCore to scale as data size and system complexity increase.
+---
+
+# Design Principles
+
+Local-first computing  
+Transparent filesystem-based state  
+Modular architecture  
+Persistent runtime  
+Real-time streaming  
+
+---
+
+# Current Capabilities
+
+Interactive CLI  
+Real-time streaming responses  
+Semantic knowledge retrieval (RAG)  
+Persistent daemon-based runtime  
+
+---
+
+# Related Documentation
+
+System Map  
+[neurocore_system_map.txt](../infrastructure/neurocore_system_map.txt)
+
+Repository Map  
+[neurocore_repository_map.txt](../infrastructure/neurocore_repository_map.txt)
+
+Resume Prompt  
+[resume_prompt_compressed.md](../ai-operations/resume_prompt_compressed.md)
+
+---
+
+# Next Phase
+
+STDIN ingestion (df -h | ai)  
+Session memory  
+Tool execution expansion  
 
 ---
 
@@ -244,4 +364,4 @@ This distributed design allows NeuroCore to scale as data size and system comple
 
 Centralized intelligence with distributed interaction points.
 
-One powerful AI brain supported by specialized subsystems and lightweight terminals.
+One powerful AI core supported by modular subsystems and flexible interfaces.
