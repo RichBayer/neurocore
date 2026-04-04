@@ -22,7 +22,7 @@ NeuroCore was previously known as "Jarvis". References to Jarvis in file names, 
 
 # 🧠 CURRENT SYSTEM STATE (CRITICAL)
 
-NeuroCore is now a **persistent, stateful daemon-based AI system**
+NeuroCore is now a **persistent, stateful daemon-based AI system with a functional CLI interface**
 
 ---
 
@@ -35,7 +35,13 @@ NeuroCore is now a **persistent, stateful daemon-based AI system**
 * Embedding model loads ONLY on first query
 * Chroma vector DB persists across queries
 * Full request → response pipeline operational
-* Second query executes in ~3 seconds (no re-init)
+* CLI interface implemented (`scripts/ai_cli.py`)
+* System command available:
+
+    ai "your query"
+
+* Stable IPC communication (no deadlocks, no crashes)
+* Second query executes in ~3–5 seconds (no re-init)
 
 ---
 
@@ -53,6 +59,27 @@ Now:
 
 ---
 
+## 🔥 NEW ARCHITECTURAL WIN (CLI + IPC)
+
+The system now includes a fully functional interface layer.
+
+Key fixes implemented:
+
+* request normalization (daemon boundary)
+* full socket read handling (no partial reads)
+* client request termination (`shutdown(SHUT_WR)`)
+* daemon response signaling
+* broken pipe protection (no daemon crashes)
+* deadlock between client and daemon resolved
+
+Result:
+
+* stable request/response lifecycle
+* persistent daemon never crashes
+* CLI communicates reliably with runtime
+
+---
+
 # ⚠️ LESSONS LEARNED (DO NOT REPEAT THESE MISTAKES)
 
 ### 1. Python Module Execution
@@ -65,11 +92,6 @@ ALWAYS run:
 
 python -m runtime.neurocore_daemon ✅
 
-Reason:
-
-* ensures correct package resolution
-* prevents import failures
-
 ---
 
 ### 2. Absolute Imports ONLY
@@ -78,10 +100,6 @@ All internal imports must be:
 
 from scripts.query_knowledge import ...
 from runtime.runtime_manager import ...
-
-NEVER:
-
-from query_knowledge import ... ❌
 
 ---
 
@@ -94,12 +112,6 @@ chroma_client = ...
 retriever = ...
 
 at global scope ❌
-
-Instead:
-
-* wrap in class
-* initialize lazily
-* control from runtime manager
 
 ---
 
@@ -115,6 +127,8 @@ Startup:
 First query:
 
 * initializes knowledge system
+* may take longer
+* CLI may timeout
 
 Second query:
 
@@ -123,9 +137,29 @@ Second query:
 
 ---
 
+### 5. Socket Communication Rules
+
+Client MUST signal end of request:
+
+client.shutdown(socket.SHUT_WR)
+
+Daemon MUST handle:
+
+* partial reads
+* client disconnects
+* response completion
+
+Failure to do this results in:
+
+* deadlocks
+* broken pipe crashes
+* inconsistent behavior
+
+---
+
 # 🏗️ CURRENT ARCHITECTURE
 
-Client
+CLI (`ai` command)
 ↓
 UNIX Socket (/tmp/neurocore.sock)
 ↓
@@ -188,13 +222,17 @@ Activate environment:
 
 source ~/ai/runtime/python/jarvis-env/bin/activate
 
-Shortcut available:
+Shortcut:
 
 jarvisenv
 
 Run daemon:
 
 python -m runtime.neurocore_daemon
+
+Run CLI:
+
+ai "your query"
 
 ---
 
@@ -218,9 +256,9 @@ Every milestone MUST include:
 
 Screenshots must prove behavior:
 
-1. Startup (no initialization)
-2. First query (initialization)
-3. Second query (fast path)
+1. CLI timeout (cold start)
+2. Daemon initialization
+3. CLI fast response (warm state)
 
 Naming format:
 
@@ -230,7 +268,7 @@ neurocore-<component>-<behavior>.png
 
 # 📦 REQUIRED FILES FOR NEW SESSION
 
-If context is missing, request these:
+If context is missing, request:
 
 * System State File
 * Home System Map
@@ -241,8 +279,6 @@ Located in:
 
 docs/infrastructure/
 docs/architecture/
-
-DO NOT assume these are loaded
 
 ---
 
@@ -257,46 +293,50 @@ Act as a senior systems engineer.
   * daemon = communication
   * runtime = state
   * router = logic
+
 * verify before moving forward
 
 ---
 
 # 🎯 CURRENT PHASE
 
-Runtime Integration COMPLETE ✅
+CLI Interface Layer COMPLETE ✅
 
 ---
 
 # 🚀 NEXT PHASE
 
-CLI Interface Layer
+CLI Usability + Interaction Layer
 
 ---
 
 # 🎯 NEXT OBJECTIVE
 
-Replace manual socket interaction with CLI tool
+Improve CLI usability beyond single-command execution.
 
 Target usage:
 
-ai "Explain SELinux"
-df -h | ai
 ai
+> interactive session
+
+df -h | ai   (future)
 
 ---
 
 # 🔧 NEXT IMPLEMENTATION TARGET
 
-Create:
+Enhance CLI to support:
 
-scripts/ai_cli.py
+1. Interactive mode
 
-Responsibilities:
+   ai
+   > continuous conversation
 
-* connect to UNIX socket
-* send structured request
-* receive response
-* support stdin piping
+2. Improved usability
+
+   * persistent session loop
+   * clean prompt handling
+   * graceful exit
 
 ---
 
@@ -304,13 +344,12 @@ Responsibilities:
 
 Start with:
 
-CLI interface design
+Interactive CLI design
 
 Then implement:
 
-scripts/ai_cli.py
+Interactive mode inside scripts/ai_cli.py
 
 Goal:
 
-Natural command-line interaction with NeuroCore without manual Python socket usage.
-
+Transform CLI from single-command tool into a usable conversational interface.
