@@ -26,7 +26,7 @@ def query_ollama(prompt: str) -> str:
         "prompt": prompt,
         "stream": False,
         "options": {
-            "num_predict": 200
+            "num_predict": 600  # 🔥 increased for full responses
         }
     }
 
@@ -40,7 +40,7 @@ def query_ollama(prompt: str) -> str:
 
 
 # ----------------------------
-# STREAMING (FIXED)
+# STREAMING
 # ----------------------------
 
 def query_ollama_stream(prompt: str):
@@ -51,7 +51,7 @@ def query_ollama_stream(prompt: str):
         "prompt": prompt,
         "stream": True,
         "options": {
-            "num_predict": 200
+            "num_predict": 600  # 🔥 increased for full responses
         }
     }
 
@@ -68,13 +68,11 @@ def query_ollama_stream(prompt: str):
         try:
             data = json.loads(line)
 
-            # 🔥 Yield only real text
             chunk = data.get("response", "")
 
             if chunk:
                 yield chunk
 
-            # 🔥 Stop cleanly when done
             if data.get("done"):
                 break
 
@@ -83,14 +81,21 @@ def query_ollama_stream(prompt: str):
 
 
 # ----------------------------
-# PROMPT
+# PROMPT (UPGRADED FOR DEPTH)
 # ----------------------------
 
 def build_prompt(user_request: str, context: str) -> str:
     return f"""
-You are NeuroCore.
+You are NeuroCore, a Linux systems assistant.
 
-Answer clearly and concisely.
+You MUST base your answer on the provided context.
+
+Rules:
+- Use ONLY the provided context to answer
+- Do NOT hallucinate or invent details
+- If the context is insufficient, say "Insufficient context"
+- Be precise, technical, and thorough
+- Provide a complete explanation, not a short summary
 
 Context:
 {context}

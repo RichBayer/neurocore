@@ -1,35 +1,20 @@
 #!/usr/bin/env python3
 
-"""
-NeuroCore Knowledge Retrieval Module
-
-Responsibilities:
-- Initialize embedding model and vector store (once)
-- Provide fast retrieval interface
-- Avoid heavy initialization at import time
-
-This module is now controlled by the Runtime Manager.
-"""
-
 from llama_index.core import VectorStoreIndex
 from llama_index.vector_stores.chroma import ChromaVectorStore
 from llama_index.embeddings.huggingface import HuggingFaceEmbedding
 from llama_index.core import Settings
 import chromadb
+import re
 
 
 class KnowledgeBase:
     def __init__(self):
-        """
-        Initialize placeholders (no heavy loading yet)
-        """
         self.retriever = None
         self.initialized = False
+        self.collection = None
 
     def initialize(self):
-        """
-        Perform heavy initialization ONCE.
-        """
         if self.initialized:
             return
 
@@ -45,29 +30,50 @@ class KnowledgeBase:
             path="/mnt/g/ai/memory/chroma"
         )
 
-        collection = chroma_client.get_collection("jarvis_knowledge")
+        self.collection = chroma_client.get_or_create_collection(
+            name="jarvis_knowledge"
+        )
 
         vector_store = ChromaVectorStore(
-            chroma_collection=collection
+            chroma_collection=self.collection
         )
 
         index = VectorStoreIndex.from_vector_store(vector_store)
 
-        self.retriever = index.as_retriever(similarity_top_k=2)
+        self.retriever = index.as_retriever(similarity_top_k=6)
 
         self.initialized = True
 
         print("[Knowledge] Initialization complete.")
 
+    # 🔥 SIMPLE COMMAND DETECTION
+    def extract_command(self, question: str):
+        match = re.search(r"\b([a-z]+)\b", question.lower())
+        if match:
+            return match.group(1)
+        return None
+
     def retrieve(self, question: str) -> str:
-        """
-        Retrieve relevant knowledge.
-        """
         if not self.initialized:
             self.initialize()
 
-        results = self.retriever.retrieve(question)
+        command = self.extract_command(question)
 
+        # 🔥 METADATA FILTERED SEARCH
+        if command:
+            results = self.collection.query(
+                query_texts=[question],
+                n_results=5,
+                where={"command": command}
+            )
+
+            docs = results.get("documents", [[]])[0]
+
+            if docs:
+                return "\n\n".join(docs)
+
+        # fallback (no match or no results)
+        results = self.retriever.retrieve(question)
         context = "\n\n".join(r.text for r in results)
 
         return context

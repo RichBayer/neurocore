@@ -20,6 +20,34 @@ NeuroCore was previously known as "Jarvis". References to Jarvis in file names, 
 
 ---
 
+# 🧠 EDITING RULES (CRITICAL)
+
+* ALWAYS provide **complete file replacements**
+* NEVER provide partial edits or "find/replace" instructions
+* ALL file edits must be delivered in **a single code block**
+* Use **four backticks (````)** for file blocks to preserve triple backticks inside files
+* This rule applies to:
+  - code files
+  - markdown files
+  - configs
+  - scripts
+
+---
+
+# 🧠 ENVIRONMENT ASSUMPTIONS
+
+* User is working inside **VSCode**
+* A terminal is already open
+* Current working directory is:
+
+```
+/mnt/g/ai/projects/neurocore
+```
+
+* Commands should assume no navigation is required unless explicitly stated
+
+---
+
 # 🧠 CURRENT SYSTEM STATE (CRITICAL)
 
 NeuroCore is now a persistent, streaming, daemon-based AI system with an interactive CLI
@@ -129,7 +157,7 @@ Workspace root:
 ~/ai  
 
 Project root:  
-~/ai/projects/jarvis  
+~/ai/projects/neurocore  
 
 ---
 

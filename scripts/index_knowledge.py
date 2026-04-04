@@ -3,39 +3,88 @@ from llama_index.vector_stores.chroma import ChromaVectorStore
 from llama_index.embeddings.huggingface import HuggingFaceEmbedding
 from llama_index.core import Settings
 import chromadb
+import os
 
-# Use the same embedding model everywhere in Jarvis
+
+# ----------------------------
+# CONFIG
+# ----------------------------
+
+KNOWLEDGE_PATH = "/mnt/g/ai/memory/knowledge"
+CHROMA_PATH = "/mnt/g/ai/memory/chroma"
+COLLECTION_NAME = "jarvis_knowledge"
+
+
+# ----------------------------
+# EMBEDDING MODEL
+# ----------------------------
+
 Settings.embed_model = HuggingFaceEmbedding(
     model_name="sentence-transformers/all-MiniLM-L6-v2"
 )
 
-# Load documents from the knowledge directory
-documents = SimpleDirectoryReader("/mnt/g/ai/memory/knowledge").load_data()
 
-# Start the persistent Chroma client
+# ----------------------------
+# LOAD + TAG DOCUMENTS
+# ----------------------------
+
+documents = SimpleDirectoryReader(
+    KNOWLEDGE_PATH,
+    recursive=True
+).load_data()
+
+print(f"Loaded {len(documents)} documents.")
+
+
+# 🔥 ADD METADATA BASED ON FILE PATH
+for doc in documents:
+    file_path = doc.metadata.get("file_path", "")
+
+    # Example:
+    # /mnt/g/ai/memory/knowledge/linux/filesystems/df.txt
+
+    parts = file_path.split("/")
+
+    try:
+        command = os.path.splitext(parts[-1])[0]
+        category = parts[-2]
+
+        doc.metadata["command"] = command
+        doc.metadata["category"] = category
+
+    except Exception:
+        doc.metadata["command"] = "unknown"
+        doc.metadata["category"] = "unknown"
+
+
+# ----------------------------
+# CHROMA SETUP
+# ----------------------------
+
 chroma_client = chromadb.PersistentClient(
-    path="/mnt/g/ai/memory/chroma"
+    path=CHROMA_PATH
 )
 
-# Create or get the Jarvis knowledge collection
 collection = chroma_client.get_or_create_collection(
-    name="jarvis_knowledge"
+    name=COLLECTION_NAME
 )
 
-# Connect LlamaIndex to Chroma
 vector_store = ChromaVectorStore(
     chroma_collection=collection
 )
 
-# Storage context for the vector store
 storage_context = StorageContext.from_defaults(
     vector_store=vector_store
 )
 
-# Build the index
+
+# ----------------------------
+# BUILD INDEX
+# ----------------------------
+
 index = VectorStoreIndex.from_documents(
     documents,
     storage_context=storage_context
 )
 
-print("Knowledge indexed successfully.")
+print("Knowledge indexed successfully with metadata.")
