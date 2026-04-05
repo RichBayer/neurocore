@@ -8,68 +8,95 @@ NeuroCore was previously known as "Jarvis". References to Jarvis in file names, 
 
 # 🚨 CRITICAL OPERATING RULES (DO NOT BREAK)
 
-* Do NOT guess system state, paths, or architecture
-* If something is unclear → ASK before proceeding
-* Always use real paths from this system
-* Always provide copy/paste-ready commands
-* Deliver full production-quality implementations (no toy or partial builds)
-* Execution should be guided step-by-step when applying changes (one command at a time when needed)
-* Prioritize clean, complete solutions over incremental or temporary approaches
-* Never introduce temporary fixes that break architecture later
-* Assume system is evolving toward production-grade architecture, not experimentation
+* Do NOT guess system state, paths, or architecture  
+* If something is unclear → ASK before proceeding  
+* Always use real paths from this system  
+* Always provide copy/paste-ready commands  
+* Deliver full production-quality implementations (no toy or partial builds)  
+* Execution should be guided step-by-step when applying changes (one command at a time when needed)  
+* Prioritize clean, complete solutions over incremental or temporary approaches  
+* Never introduce temporary fixes that break architecture later  
+* Assume system is evolving toward production-grade architecture, not experimentation  
 
 ---
 
 # 🧠 EDITING RULES (CRITICAL)
 
-* ALWAYS provide **complete file replacements**
-* NEVER provide partial edits or "find/replace" instructions
-* ALL file edits must be delivered in **a single code block**
-* Use **four backticks (````)** for file blocks to preserve triple backticks inside files
+* ALWAYS provide **complete file replacements**  
+* NEVER provide partial edits or "find/replace" instructions  
+* ALL file edits must be delivered in **a single code block**  
+* Use **four backticks (````)** for file blocks to preserve triple backticks inside files  
 * This rule applies to:
-  - code files
-  - markdown files
-  - configs
-  - scripts
+  - code files  
+  - markdown files  
+  - configs  
+  - scripts  
 
 ---
 
 # 🧠 ENVIRONMENT ASSUMPTIONS
 
-* User is working inside **VSCode**
-* A terminal is already open
+* User is working inside **VSCode**  
+* A terminal is already open  
 * Current working directory is:
 
 ```
 /mnt/g/ai/projects/neurocore
 ```
 
-* Commands should assume no navigation is required unless explicitly stated
+* Commands should assume no navigation is required unless explicitly stated  
 
 ---
 
 # 🧠 CURRENT SYSTEM STATE (CRITICAL)
 
-NeuroCore is now a persistent, streaming, daemon-based AI system with an interactive CLI
+NeuroCore is now a **persistent, streaming, context-aware AI system** with:
+
+- session memory  
+- query rewriting  
+- metadata-aligned retrieval  
+- normalized operational knowledge  
 
 ---
 
 ## ✅ COMPLETED CAPABILITIES
 
-* UNIX socket daemon (/tmp/neurocore.sock)
-* Runtime Manager (persistent processing layer)
-* Router integrated into runtime
-* Knowledge system with lazy initialization
-* Chroma vector DB persistence
-* CLI interface installed as system command (ai)
-* Interactive CLI mode (multi-query session)
-* Streaming response pipeline (end-to-end)
+### Core Runtime
+* UNIX socket daemon (/tmp/neurocore.sock)  
+* Runtime Manager (persistent processing layer)  
+* Router integrated into runtime  
+* Streaming response pipeline (end-to-end)  
+
+### CLI
+* Installed as system command (`ai`)  
+* One-shot mode: `ai "query"`  
+* Interactive mode (multi-query session)  
+* Real-time streaming output  
+
+### Knowledge System (RAG)
+* Chroma vector DB (persistent)  
+* HuggingFace embeddings (MiniLM)  
+* Lazy-loaded KnowledgeBase  
+* Metadata-based indexing  
+* Command-aware retrieval (df, ps, etc.)  
+* Knowledge normalization (clean operational docs, not raw man pages)  
+
+### Memory System
+* Session memory stored at:  
+  /mnt/g/ai/memory/sessions/richard/session.json  
+* Rolling conversation history  
+* Multi-turn context support  
+
+### Reasoning Layer
+* Query rewriting (resolves follow-up ambiguity)  
+* Metadata-aligned retrieval (prevents cross-command contamination)  
+* Exact field-level precision (e.g., `Use%`)  
 
 ---
 
-## 🔥 MAJOR ARCHITECTURAL WIN (STREAMING PIPELINE)
+## 🔥 MAJOR ARCHITECTURAL WINS
 
-Streaming is now implemented across the entire system:
+### 1. Streaming Pipeline (Complete)
 
 Ollama (streaming API)  
 ↓  
@@ -77,57 +104,85 @@ Router (generator-based streaming)
 ↓  
 Daemon (chunk forwarding over socket)  
 ↓  
-CLI (real-time output)
+CLI (real-time output)  
 
-This enables:
+---
 
-* real-time responses
-* improved UX
-* foundation for API + UI streaming
-* future voice integration
+### 2. Context-Aware Reasoning (NEW)
+
+NeuroCore now correctly handles:
+
+* Follow-up questions  
+* Context resolution  
+* Command-specific retrieval  
+* Structured output reasoning  
+
+Example:
+
+"What column shows disk usage percentage?"
+
+→ rewritten to:
+
+"What column in df -h output shows disk usage percentage?"
+
+---
+
+### 3. Retrieval Stability (NEW)
+
+* No cross-command contamination  
+* Command-aware filtering  
+* Deterministic retrieval behavior  
 
 ---
 
 ## 🔥 CLI CAPABILITIES
 
-NeuroCore CLI now supports:
+NeuroCore CLI supports:
 
 One-shot mode:
 ai "your query"
 
 Interactive mode:
 ai
-> query
-> query
-> exit
+> query  
+> query  
+> exit  
 
 Exit methods:
 
-* exit / quit
-* CTRL + C
-* CTRL + D
+* exit / quit  
+* CTRL + C  
+* CTRL + D  
 
 ---
 
 ## ⚠️ LESSONS LEARNED
 
+### Core System Lessons
+
 1. Streaming must originate at source  
-Do NOT print inside router  
-Use generators → propagate through system  
+   → generators must propagate through system  
 
 2. CLI naming conflicts  
-Shell functions can override binaries  
-Always verify with: type ai  
+   → always verify with: `type ai`  
 
-3. Silent failures in streaming  
-If no chunks appear:  
-* verify generator output  
-* inspect daemon streaming loop  
+3. Silent streaming failures  
+   → debug generator + daemon loop  
 
 4. Clean separation of concerns  
-* Router = data generation  
-* Daemon = transport  
-* CLI = interface  
+   * Router = logic  
+   * Daemon = transport  
+   * CLI = interface  
+
+---
+
+### Advanced System Lessons (NEW)
+
+5. Raw documentation ≠ usable knowledge  
+6. Retrieval must be constrained (metadata matters)  
+7. Follow-up questions require rewriting  
+8. Memory without interpretation is insufficient  
+9. Precision requires clean knowledge + strict prompting  
 
 ---
 
@@ -141,9 +196,9 @@ NeuroCore Daemon
 ↓  
 Runtime Manager  
 ↓  
-Router (run_query / run_query_stream)  
+Router (rewrite + memory + prompt)  
 ↓  
-KnowledgeBase (lazy-loaded)  
+KnowledgeBase (metadata-aware retrieval)  
 ↓  
 Chroma + Embeddings  
 ↓  
@@ -159,29 +214,36 @@ Workspace root:
 Project root:  
 ~/ai/projects/neurocore  
 
+Knowledge:  
+/mnt/g/ai/memory/knowledge  
+
+Chroma DB:  
+/mnt/g/ai/memory/chroma  
+
+Session Memory:  
+/mnt/g/ai/memory/sessions/richard/session.json  
+
 ---
 
 # 🎯 CURRENT PHASE
 
-Streaming + Interactive CLI COMPLETE
+Session memory + query rewriting + metadata-aligned RAG COMPLETE  
 
 ---
 
 # 🚀 NEXT PHASE
 
-CLI Enhancement + System Integration
+Tool Execution Layer  
 
 ---
 
 # 🎯 NEXT OBJECTIVES
 
-1. STDIN ingestion  
-df -h | ai  
-cat logs.txt | ai  
-
-2. Session memory (multi-turn context)
-
-3. Tool execution integration
+1. Execute real system commands (df, ps, etc.)  
+2. Capture and stream command output  
+3. Parse structured CLI output  
+4. Route queries between tools vs LLM  
+5. Add safe execution boundaries  
 
 ---
 
@@ -201,4 +263,4 @@ Act as a senior systems engineer.
 
 Start with:
 
-STDIN ingestion design and implementation
+Design and implementation of Tool Execution Layer
