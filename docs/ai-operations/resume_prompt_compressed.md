@@ -140,7 +140,7 @@ NeuroCore is:
 - a local-first AI system  
 - a persistent daemon-based runtime  
 - a streaming, context-aware reasoning system  
-- governed by a runtime control plane  
+- a **control plane governed execution system**  
 
 It is NOT:
 
@@ -155,7 +155,7 @@ It is NOT:
 ## Runtime
 - Persistent daemon (UNIX socket: /tmp/neurocore.sock)  
 - Runtime Manager (control + orchestration layer)  
-- Control Plane (enforces all behavior)  
+- Control Plane (enforces all behavior and execution policy)  
 - Streaming pipeline (end-to-end)  
 
 ## CLI
@@ -172,20 +172,50 @@ ai "question"
 ### Interactive
 ai → session
 
-## Piped Input
-
+### Piped Input
 command | ai
 
-Example:
-du -f | ai
+- classified as external input  
+- analyzed only  
+- never executed  
 
-Status:
+---
 
-- fully integrated into control plane
-- classified as external input
-- executed in analysis mode only
-- NOT executable
-- isolated from normal context
+## Execution Layer (NEW)
+
+- Tool-based execution system  
+- Execution Engine (single execution entry point)  
+- Tool Registry (controlled tool availability)  
+- BaseTool contract (structured tool interface)  
+
+### Current Tool
+
+- service_manager
+  - start / stop / restart / status (SIMULATED)
+
+---
+
+## Execution Behavior
+
+- execution intent detected by control plane  
+- execution is NOT automatic  
+- execution requires explicit confirmation for manual tools  
+
+### Example
+
+```
+ai "restart nginx"
+→ confirmation required
+
+ai "confirm restart nginx"
+→ execution allowed
+```
+
+## Execution Modes
+
+- auto  
+- manual (requires confirmation)  
+- dry-run (blocked)  
 
 ---
 
@@ -202,7 +232,6 @@ Status:
 
 - Session memory (short-term only)  
 - Supports multi-turn context  
-- Controlled during validation scenarios  
 
 ---
 
@@ -218,7 +247,7 @@ Status:
 
 The system does NOT yet have:
 
-- tool execution layer  
+- real system command execution (tools are simulated)  
 - full policy engine  
 - observability / logging  
 - task persistence  
@@ -238,12 +267,8 @@ Daemon
 Runtime Manager  
 ↓  
 Control Plane  
-↓  
-Router  
-↓  
-Knowledge System  
-↓  
-Ollama  
+├── Execution Path → Execution Engine → Tool  
+└── Reasoning Path → Router → Knowledge → LLM  
 ↓  
 Streaming Response  
 
@@ -257,18 +282,20 @@ Phase 5 – Execution & Control Architecture
 
 # 🎯 CURRENT STATUS
 
-Phase 5A – Runtime Control Plane  
+Phase 5B – Tool Execution Layer + Safety Model  
 Status: COMPLETE  
 
 ---
 
 # 🎯 IMMEDIATE OBJECTIVE
 
-Begin implementing:
+Transition from:
 
-- Tool Execution Layer  
-- Structured tool interface  
-- Controlled execution routing  
+- simulated execution  
+
+To:
+
+- controlled real system execution  
 
 ---
 
@@ -288,30 +315,30 @@ Act as a senior systems engineer:
 
 Start with:
 
-Design for Phase 5B – Tool Execution Layer
+Design for Phase 6 – Real Execution + Policy Expansion
 
 ---
 
-# 🧭 SESSION CONTINUITY (UPDATE EACH BUILD SESSION)
+# 🧭 SESSION CONTINUITY
 
 ## Current Phase
 Phase 5 – Execution & Control Architecture
 
 ## Last Completed Milestone
 
-Phase 5A complete:
+Phase 5B complete:
 
-- runtime control plane implemented
-- request classification enforced
-- piped input isolated and controlled
-- execution intent detection implemented
-- ambiguity handling enforced at runtime level
-- system behavior made deterministic
+- tool execution layer implemented  
+- execution engine integrated  
+- control plane governs execution  
+- confirmation-based safety model implemented  
+- CLI integrated with execution system  
+- reasoning and execution paths separated  
 
 ## Current Focus
 
-Transition from controlled reasoning system → controlled execution system
+Transition from simulated execution → real execution  
 
 ## Next Step
 
-Design and implement Phase 5B – Tool Execution Layer
+Design and implement safe real system command execution

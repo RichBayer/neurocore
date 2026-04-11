@@ -31,7 +31,8 @@ BUILD LOGS (PROJECT HISTORY)
 │   ├── 013_rag_metadata_and_grounding.md
 │   ├── 014_session_memory_query_rewriting_and_knowledge_correction.md
 │   ├── 015_cli_piped_input_ingestion.md
-│   └── 016_runtime_control_plane_enforcement.md
+│   ├── 016_runtime_control_plane_enforcement.md
+│   └── 017_execution_layer_and_control_integration.md
 
 ---
 
@@ -74,6 +75,11 @@ DOCUMENTATION
 │   │   │   ├── 03_ambiguous_query_fail.png
 │   │   │   ├── 04_final_clean_validation.png
 │   │   │   └── 05_normal_query.png
+│   │   ├── execution-layer/              ← Phase 5B screenshots
+│   │   │   ├── 01_execution_raw_engine_test.png
+│   │   │   ├── 02_control_plane_execution_test.png
+│   │   │   ├── 03_cli_execution_and_confirmation_flow.png
+│   │   │   └── 04_reasoning_still_operational.png
 │   │   ├── daemon/
 │   │   ├── interface/
 │   │   ├── knowledge/
@@ -112,10 +118,15 @@ LOGIC + INTERFACE
 
 ---
 
-TOOLS (FUTURE EXECUTION LAYER)
+TOOLS (EXECUTION LAYER)
 
 ├── tools/
-│   └── (tool implementations will live here)
+│   ├── __init__.py
+│   ├── base_tool.py
+│   ├── execution_engine.py
+│   ├── tool_registry.py
+│   └── system/
+│       └── service_manager.py
 
 ---
 
@@ -133,10 +144,11 @@ CURRENT SYSTEM CHARACTERISTICS
 - RAG with metadata filtering
 - Query rewriting + session memory
 - Control plane enforced execution model
+- Tool-based execution system
+- Confirmation-based execution safety model
 - Piped input classified and isolated
-- Execution intent detection and blocking
+- Execution intent detection
 - Ambiguity handling at runtime level
-- No tool execution layer (yet)
 
 ---
 
@@ -144,4 +156,12 @@ SYSTEM INVARIANT
 
 All execution flows through:
 
-daemon → runtime_manager → control_plane → router → systems → model
+daemon → runtime_manager → control_plane → system
+
+Execution is split into:
+
+Execution Path:
+control_plane → execution_engine → tool
+
+Reasoning Path:
+control_plane → router → knowledge → model

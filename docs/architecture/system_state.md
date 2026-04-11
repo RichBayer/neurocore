@@ -32,7 +32,7 @@ It is NOT:
 
 - a stateless chatbot
 - a request/response script
-- a tool execution system (yet)
+- an uncontrolled execution system
 
 ---
 
@@ -49,12 +49,8 @@ NeuroCore Daemon
 Runtime Manager  
 ↓  
 Control Plane  
-↓  
-Router (reasoning + rewriting)  
-↓  
-Knowledge System (RAG)  
-↓  
-LLM Runtime (Ollama)  
+├── Execution Path → Execution Engine → Tool  
+└── Reasoning Path → Router → Knowledge System → LLM  
 ↓  
 Streaming Response  
 
@@ -77,6 +73,22 @@ Responsibilities:
 - request classification
 - execution enforcement
 - ambiguity interception
+
+---
+
+## Execution Layer (NEW)
+
+- `tools/base_tool.py`
+- `tools/tool_registry.py`
+- `tools/execution_engine.py`
+- `tools/system/service_manager.py`
+
+Responsibilities:
+
+- structured tool interface
+- controlled execution entry point
+- validation and normalization
+- policy-aligned execution
 
 ---
 
@@ -183,47 +195,14 @@ ai
 command | ai
 ```
 
-Example:
-
-```
-du -f | ai
-```
-
 ---
 
 ### Behavior
 
-- CLI receives raw piped input
-- forwarded to runtime as external input
-- classified by control plane
-- executed in **analysis mode only**
-
----
-
-### Current Status
-
-- fully integrated into control plane
 - classified as external input
-- NOT executable
-- isolated from normal conversational context
-- not automatically stored in session memory
-
----
-
-### Interpretation
-
-This is a **controlled analysis interface**
-
-It enables:
-
-- command output analysis
-- external data ingestion
-
-It will later evolve into:
-
-- structured tool execution
-- controlled input parsing
-- policy-governed execution
+- analyzed only
+- never executed
+- isolated from normal context
 
 ---
 
@@ -233,25 +212,56 @@ It will later evolve into:
 
 Requests implying system action are:
 
+- detected by control plane
 - classified as execution intent
-- NOT executed
 
 ---
 
-## Handling
+## Execution Policy
 
-Requests are:
+Execution is governed by tool execution modes:
 
-- denied OR
-- downgraded into advisory responses
+- auto
+- manual
+- dry-run
 
-Example:
+---
 
-Input:
-"restart nginx"
+## Current Execution Model
 
-Output:
-manual instructions
+- execution is NOT automatic
+- execution requires explicit confirmation for manual tools
+- no background execution
+
+---
+
+## Example Execution Flow
+
+```
+ai "restart nginx"
+→ confirmation required
+
+ai "confirm restart nginx"
+→ tool execution (simulated)
+```
+
+---
+
+## Current Tool
+
+### service_manager
+
+Capabilities:
+
+- start
+- stop
+- restart
+- status
+
+Behavior:
+
+- simulated execution only
+- no real system interaction
 
 ---
 
@@ -353,7 +363,9 @@ NeuroCore currently supports:
 - query rewriting
 - session memory (short-term)
 - control plane enforcement
-- execution intent detection and blocking
+- execution intent detection
+- controlled tool execution
+- confirmation-based execution safety model
 - ambiguity handling at runtime level
 
 ---
@@ -362,13 +374,12 @@ NeuroCore currently supports:
 
 NeuroCore does NOT yet have:
 
-- tool execution layer
+- real system command execution
 - full policy system
 - observability / logging system
 - task persistence
 - long-term memory
 - session lifecycle management
-- structured execution model
 
 ---
 
@@ -380,24 +391,25 @@ Phase 5 – Execution & Control Architecture
 
 # Current Status
 
-Phase 5A – Runtime Control Plane: COMPLETE
+Phase 5B – Tool Execution Layer + Safety Model  
+Status: COMPLETE
 
 ---
 
 # Immediate Focus
 
-- Tool execution system
-- structured tool interface
-- controlled execution routing
+- real system execution
+- policy expansion
+- observability
 
 ---
 
 # Development Rules
 
 - do not bypass daemon
-- do not assume tools exist yet
+- do not bypass control plane
+- do not assume automatic execution
 - do not assume safe execution
-- do not assume persistent tasks
 - always validate behavior against runtime
 
 ---
