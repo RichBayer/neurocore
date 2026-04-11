@@ -29,7 +29,9 @@ BUILD LOGS (PROJECT HISTORY)
 │   ├── 011_cli_interface_layer.md
 │   ├── 012_streaming_pipeline_and_cli_behavior.md
 │   ├── 013_rag_metadata_and_grounding.md
-│   └── 014_session_memory_query_rewriting_and_knowledge_correction.md
+│   ├── 014_session_memory_query_rewriting_and_knowledge_correction.md
+│   ├── 015_cli_piped_input_ingestion.md
+│   └── 016_runtime_control_plane_enforcement.md
 
 ---
 
@@ -66,6 +68,12 @@ DOCUMENTATION
 │   │   └── (network-related docs)
 
 │   ├── screenshots/
+│   │   ├── runtime-control-plane/        ← Phase 5A screenshots
+│   │   │   ├── 01_daemon_start.png
+│   │   │   ├── 02_pipe_input_test.png
+│   │   │   ├── 03_ambiguous_query_fail.png
+│   │   │   ├── 04_final_clean_validation.png
+│   │   │   └── 05_normal_query.png
 │   │   ├── daemon/
 │   │   ├── interface/
 │   │   ├── knowledge/
@@ -86,7 +94,8 @@ RUNTIME (CORE EXECUTION ENGINE)
 
 ├── runtime/
 │   ├── neurocore_daemon.py     ← persistent daemon
-│   ├── runtime_manager.py      ← control layer (future control plane)
+│   ├── runtime_manager.py      ← orchestration + control enforcement
+│   ├── control_plane.py        ← request classification + policy layer
 │   └── __init__.py
 
 ---
@@ -95,7 +104,7 @@ LOGIC + INTERFACE
 
 ├── scripts/
 │   ├── ai_cli.py               ← CLI interface (streaming + piping)
-│   ├── jarvis_router.py        ← reasoning + routing layer
+│   ├── jarvis_router.py        ← reasoning + routing layer (constrained)
 │   ├── query_knowledge.py      ← RAG system
 │   ├── session_memory.py       ← session memory
 │   ├── index_knowledge.py
@@ -123,8 +132,11 @@ CURRENT SYSTEM CHARACTERISTICS
 - CLI + piped input support (`| ai`)
 - RAG with metadata filtering
 - Query rewriting + session memory
+- Control plane enforced execution model
+- Piped input classified and isolated
+- Execution intent detection and blocking
+- Ambiguity handling at runtime level
 - No tool execution layer (yet)
-- No control plane enforcement (yet)
 
 ---
 
@@ -132,4 +144,4 @@ SYSTEM INVARIANT
 
 All execution flows through:
 
-daemon → runtime_manager → router → systems → model
+daemon → runtime_manager → control_plane → router → systems → model
