@@ -52,11 +52,80 @@ We are continuing development of my local AI system: **NeuroCore**
 
 ---
 
+# 🧠 GITHUB DOCUMENTATION RULES (MANDATORY)
+
+## Purpose
+
+All documentation must:
+
+- reflect REAL system behavior (not intended behavior)
+- be written for humans (natural tone, not robotic)
+- explain reasoning, not just outcomes
+
+---
+
+## Build Logs
+
+All build logs MUST:
+
+- follow sequential numbering (e.g. 016_*.md)
+- include:
+  - problem
+  - troubleshooting process
+  - root cause
+  - fix
+  - validation
+- include only meaningful troubleshooting (no noise)
+- read like a human wrote them
+
+---
+
+## Screenshot Workflow
+
+- define screenshot filenames BEFORE capture  
+- use consistent naming:
+
+```
+01_name.png
+02_name.png
+```
+
+- store under:
+
+```
+docs/screenshots/<feature>/
+```
+
+- embed using:
+
+```markdown
+![Description](../docs/screenshots/<folder>/<file>.png)
+```
+
+- screenshots must:
+  - be cropped
+  - show only relevant output
+  - support the narrative (problem → fix → validation)
+
+---
+
+## Documentation Consistency Rule
+
+Docs must ALWAYS match:
+
+- actual system behavior
+- implemented features
+
+If system changes → docs must be updated in same commit
+
+---
+
 # 🧠 ENVIRONMENT ASSUMPTIONS
 
 - Working in VS Code (Remote WSL)  
 - Terminal already open  
-- Current directory:
+
+Current directory:
 
 ```
 /mnt/g/ai/projects/neurocore
@@ -71,12 +140,13 @@ NeuroCore is:
 - a local-first AI system  
 - a persistent daemon-based runtime  
 - a streaming, context-aware reasoning system  
+- governed by a runtime control plane  
 
 It is NOT:
 
 - a chatbot  
 - a stateless script  
-- a tool execution system (yet)  
+- a direct LLM wrapper  
 
 ---
 
@@ -84,7 +154,8 @@ It is NOT:
 
 ## Runtime
 - Persistent daemon (UNIX socket: /tmp/neurocore.sock)  
-- Runtime Manager (central processing layer)  
+- Runtime Manager (control + orchestration layer)  
+- Control Plane (enforces all behavior)  
 - Streaming pipeline (end-to-end)  
 
 ## CLI
@@ -101,7 +172,7 @@ ai "question"
 ### Interactive
 ai → session
 
-## Piped Input (EXPERIMENTAL)
+## Piped Input
 
 command | ai
 
@@ -110,20 +181,11 @@ du -f | ai
 
 Status:
 
-- transport layer works (stdin → runtime)
-- CLI handling is unstable for real command output
-- input is not isolated from session memory
-- execution model is not yet defined
-
-Interpretation:
-
-This is an experimental capability that exposes the need for:
-
-- input classification
-- execution mode separation
-- context isolation
-
-This will be properly implemented in Phase 5.
+- fully integrated into control plane
+- classified as external input
+- executed in analysis mode only
+- NOT executable
+- isolated from normal context
 
 ---
 
@@ -140,13 +202,13 @@ This will be properly implemented in Phase 5.
 
 - Session memory (short-term only)  
 - Supports multi-turn context  
-- Used for query rewriting  
+- Controlled during validation scenarios  
 
 ---
 
 ## Reasoning
 
-- Query rewriting (resolves ambiguity)  
+- Query rewriting  
 - Context-aware responses  
 - Grounded retrieval  
 
@@ -157,16 +219,11 @@ This will be properly implemented in Phase 5.
 The system does NOT yet have:
 
 - tool execution layer  
-- control plane enforcement  
-- security / policy system  
+- full policy engine  
 - observability / logging  
 - task persistence  
 - long-term memory  
-
-Piped input is:
-
-- unstructured  
-- not yet part of formal tool system  
+- session lifecycle management  
 
 ---
 
@@ -180,7 +237,9 @@ Daemon
 ↓  
 Runtime Manager  
 ↓  
-Router (rewrite + logic)  
+Control Plane  
+↓  
+Router  
 ↓  
 Knowledge System  
 ↓  
@@ -196,13 +255,20 @@ Phase 5 – Execution & Control Architecture
 
 ---
 
+# 🎯 CURRENT STATUS
+
+Phase 5A – Runtime Control Plane  
+Status: COMPLETE  
+
+---
+
 # 🎯 IMMEDIATE OBJECTIVE
 
 Begin implementing:
 
-- Runtime Control Plane  
 - Tool Execution Layer  
-- Security & Policy System  
+- Structured tool interface  
+- Controlled execution routing  
 
 ---
 
@@ -222,7 +288,7 @@ Act as a senior systems engineer:
 
 Start with:
 
-Design for Phase 5A – Runtime Control Plane
+Design for Phase 5B – Tool Execution Layer
 
 ---
 
@@ -232,18 +298,20 @@ Design for Phase 5A – Runtime Control Plane
 Phase 5 – Execution & Control Architecture
 
 ## Last Completed Milestone
-Context-aware reasoning system completed:
-- session memory implemented
-- query rewriting integrated
-- metadata-aligned retrieval stabilized
-- knowledge normalization applied
-- streaming CLI fully operational
-- piped input ingestion enabled (`| ai`)
+
+Phase 5A complete:
+
+- runtime control plane implemented
+- request classification enforced
+- piped input isolated and controlled
+- execution intent detection implemented
+- ambiguity handling enforced at runtime level
+- system behavior made deterministic
 
 ## Current Focus
-Transition from reasoning system → execution system
+
+Transition from controlled reasoning system → controlled execution system
 
 ## Next Step
-Design and implement Phase 5A – Runtime Control Plane
 
----
+Design and implement Phase 5B – Tool Execution Layer
