@@ -1,4 +1,3 @@
-
 NeuroCore System Map
 
 Root:
@@ -19,61 +18,23 @@ Root:
 │   │       ├── length.bin
 │   │       └── link_lists.bin
 │   │
-│   └── knowledge
-│       ├── home_infrastructure.md
-│       └── linux_notes.txt
+│   ├── knowledge
+│   │   ├── home_infrastructure.md
+│   │   └── linux_notes.txt
+│   │
+│   └── sessions
+│       └── (session memory JSON files)
 
 ├── models
 │   └── (managed by Ollama)
 
 ├── projects
-│   └── jarvis
-│       ├── .gitignore
-│       │
-│       ├── bootstrap
-│       │
+│   └── neurocore
 │       ├── build-logs
-│       │   ├── 000_foundation.md
-│       │   ├── 001_runtime_stack.md
-│       │   ├── 002_interface_layer.md
-│       │   ├── 003_knowledge_layer.md
-│       │   ├── 004_knowledge_retrieval.md
-│       │   ├── 005_logic_layer_router.md
-│       │   ├── 006_rag_reasoning_integration.md
-│       │   ├── 007_backup_and_rebuild_foundations.md
-│       │   ├── 008_runtime_performance_and_api_migration.md
-│       │   ├── 009_neurocore_daemon_foundation.md
-│       │   ├── 010_runtime_integration.md
-│       │   ├── 011_cli_interface_layer.md
-│       │   └── 012_streaming_pipeline_and_cli_behavior.md
-│       │
-│       ├── diagrams
-│       │
 │       ├── docs
-│       │   ├── ai-operations
-│       │   ├── ai-stack
-│       │   ├── architecture
-│       │   ├── hardware
-│       │   ├── infrastructure
-│       │   ├── network
-│       │   ├── neurocore_development_notebook.md
-│       │   ├── screenshots
-│       │   ├── security
-│       │   ├── vision
-│       │   └── voice
-│       │
 │       ├── runtime
-│       │   ├── neurocore_daemon.py     ← persistent daemon (streaming enabled)
-│       │   └── runtime_manager.py      ← request handling + system state
-│       │
 │       ├── scripts
-│       │   ├── ai_cli.py               ← CLI interface (interactive + streaming)
-│       │   ├── index_knowledge.py
-│       │   ├── jarvis_router.py        ← logic layer (streaming + non-streaming)
-│       │   └── query_knowledge.py      ← KnowledgeBase (lazy-loaded)
-│       │
 │       └── tools
-│           └── (future integrations)
 
 ├── runtime
 │   └── python
@@ -81,11 +42,11 @@ Root:
 │           └── (Python virtual environment)
 
 ├── system
-│   └── system_state.md
+│   └── (system state + configs)
 
 ---
 
-Runtime Execution Flow
+# Runtime Execution Flow
 
 CLI (ai command)
     scripts/ai_cli.py
@@ -94,12 +55,10 @@ CLI (ai command)
     - streaming output
 
 ↓
-
 UNIX Socket
     /tmp/neurocore.sock
 
 ↓
-
 NeuroCore Daemon
     runtime/neurocore_daemon.py
     - persistent process
@@ -107,88 +66,106 @@ NeuroCore Daemon
     - streaming transport layer
 
 ↓
-
 Runtime Manager
     runtime/runtime_manager.py
     - request routing
     - system coordination
 
 ↓
-
-Logic Layer (Router)
-    scripts/jarvis_router.py
-    - intent detection
-    - prompt construction
-    - streaming generator (run_query_stream)
-
-↓
-
-Knowledge System
-    scripts/query_knowledge.py
-    - lazy initialization
-    - embedding model load
-    - semantic retrieval
+Control Plane
+    runtime/control_plane.py
+    - request classification
+    - execution policy enforcement
+    - routing authority
 
 ↓
-
-Vector Store (Chroma)
-    /mnt/g/ai/memory/chroma
-    - persistent embeddings
+┌───────────────────────────────┬───────────────────────────────┐
+│                               │                               │
+│        Execution Path         │        Reasoning Path          │
+│                               │                               │
+│  Execution Engine             │  Logic Layer (Router)          │
+│  tools/execution_engine.py    │  scripts/jarvis_router.py      │
+│                               │                               │
+│  Tool                         │  Knowledge System              │
+│  tools/system/service_manager │  scripts/query_knowledge.py    │
+│                               │                               │
+│  (Simulated Execution)        │  Vector Store (Chroma)         │
+│                               │  /mnt/g/ai/memory/chroma      │
+│                               │                               │
+│                               │  Model Runtime (Ollama)        │
+│                               │  http://localhost:11434        │
+└───────────────────────────────┴───────────────────────────────┘
 
 ↓
-
-Model Runtime (Ollama)
-    http://localhost:11434
-    - local LLM
-    - streaming API
-
-↓
-
 Response Flow (Streaming)
 
-    Ollama
+    Tool / Model
     ↓
-    Router (yields chunks)
+    Runtime Manager
     ↓
-    Daemon (forwards chunks)
+    Daemon
     ↓
-    CLI (prints in real time)
+    CLI (real-time output)
 
 ---
 
-System Behavior
+# System Behavior
 
 Cold Start:
     - embeddings + vector DB initialize
-    - slower first query
+    - slower first reasoning query
 
 Warm State:
     - no reinitialization
     - fast streaming responses
 
+Execution Path:
+    - no model required
+    - deterministic
+    - immediate response
+
 ---
 
-System Properties
+# System Properties
 
 - persistent daemon
 - stateless CLI
 - lazy-loaded knowledge system
 - real-time streaming pipeline
-- local-first execution
+- control plane governed execution
+- tool-based execution system
+- confirmation-based execution safety model
 
 ---
 
-Current Capabilities
+# Current Capabilities
 
 - semantic retrieval (RAG)
 - streaming LLM responses
 - interactive CLI
 - persistent runtime
+- execution engine
+- tool registry
+- structured tool interface
+- controlled execution (confirmation required)
 
 ---
 
-Next Phase
+# Current Limitations
 
-- stdin ingestion (df -h | ai)
-- session memory
-- tool execution layer
+- execution is simulated only
+- no real system command execution yet
+- no observability / logging layer
+- no task persistence
+- no long-term memory
+- no session-aware confirmation
+
+---
+
+# Next Phase
+
+- real system execution (systemctl integration)
+- policy expansion
+- observability layer
+- execution logging
+- task persistence
