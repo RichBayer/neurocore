@@ -13,6 +13,7 @@ We are continuing development of my local AI system: **NeuroCore**
 - Deliver full implementations (no partial solutions)  
 - Do NOT introduce temporary fixes that break architecture later  
 - Respect existing system design — do not bypass core components  
+- When documents are provided, ingest them silently unless instructed otherwise  
 
 ---
 
@@ -96,11 +97,29 @@ ai "question"
 ### Interactive
 ai → session
 
-### Piped Input (IMPORTANT)
+## Piped Input (EXPERIMENTAL)
+
 command | ai
 
 Example:
 du -f | ai
+
+Status:
+
+- transport layer works (stdin → runtime)
+- CLI handling is unstable for real command output
+- input is not isolated from session memory
+- execution model is not yet defined
+
+Interpretation:
+
+This is an experimental capability that exposes the need for:
+
+- input classification
+- execution mode separation
+- context isolation
+
+This will be properly implemented in Phase 5.
 
 ---
 
