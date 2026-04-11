@@ -26,6 +26,7 @@ NeuroCore is a:
 - local-first AI system
 - persistent daemon-based runtime
 - streaming, context-aware reasoning system
+- control plane governed execution system
 
 It is NOT:
 
@@ -47,6 +48,8 @@ NeuroCore Daemon
 ↓  
 Runtime Manager  
 ↓  
+Control Plane  
+↓  
 Router (reasoning + rewriting)  
 ↓  
 Knowledge System (RAG)  
@@ -63,11 +66,17 @@ Streaming Response
 
 - `runtime/neurocore_daemon.py`
 - `runtime/runtime_manager.py`
+- `runtime/control_plane.py`
 
 Responsibilities:
+
 - persistent process
 - request handling
 - streaming output
+- request validation
+- request classification
+- execution enforcement
+- ambiguity interception
 
 ---
 
@@ -76,10 +85,17 @@ Responsibilities:
 - `scripts/jarvis_router.py`
 
 Responsibilities:
+
 - query rewriting
 - context handling
 - routing decisions
 - prompt construction
+
+Constraints:
+
+- must operate within control plane constraints
+- cannot trigger execution
+- cannot bypass policy enforcement
 
 ---
 
@@ -90,6 +106,7 @@ Responsibilities:
 - HuggingFace embeddings (MiniLM)
 
 Capabilities:
+
 - semantic retrieval
 - metadata-aligned filtering
 - command-aware knowledge lookup
@@ -102,9 +119,11 @@ Capabilities:
 - installed command: `ai`
 
 Capabilities:
+
 - one-shot queries
 - interactive mode
 - real-time streaming output
+- piped input ingestion
 
 ---
 
@@ -124,6 +143,7 @@ Capabilities:
 - retriever initializes
 
 Behavior:
+
 - slower response (~1–2 minutes)
 
 ---
@@ -157,7 +177,7 @@ ai
 
 ---
 
-## Piped Input (IMPORTANT)
+## Piped Input
 
 ```
 command | ai
@@ -174,34 +194,80 @@ du -f | ai
 ### Behavior
 
 - CLI receives raw piped input
-- forwards input to runtime
-- model interprets output
+- forwarded to runtime as external input
+- classified by control plane
+- executed in **analysis mode only**
 
 ---
 
 ### Current Status
 
-- unstructured ingestion
-- no schema
-- no validation layer
-- no tool abstraction
+- fully integrated into control plane
+- classified as external input
+- NOT executable
+- isolated from normal conversational context
+- not automatically stored in session memory
 
 ---
 
 ### Interpretation
 
-This is an **early-stage execution interface**
+This is a **controlled analysis interface**
 
 It enables:
 
 - command output analysis
 - external data ingestion
 
-It will later be replaced by:
+It will later evolve into:
 
 - structured tool execution
 - controlled input parsing
 - policy-governed execution
+
+---
+
+# Execution Behavior
+
+## Execution Intent Detection
+
+Requests implying system action are:
+
+- classified as execution intent
+- NOT executed
+
+---
+
+## Handling
+
+Requests are:
+
+- denied OR
+- downgraded into advisory responses
+
+Example:
+
+Input:
+"restart nginx"
+
+Output:
+manual instructions
+
+---
+
+# Ambiguity Handling
+
+Ambiguous queries such as:
+
+- "what does that mean?"
+- "explain that"
+
+Are:
+
+- detected at runtime level
+- intercepted before processing
+- prevented from using context or memory
+- responded to safely
 
 ---
 
@@ -229,7 +295,8 @@ Location:
 
 - short-term only
 - no long-term memory system
-- no structured memory layers yet
+- no session boundary control
+- manual reset required for clean context
 
 ---
 
@@ -253,6 +320,7 @@ Location:
 
 - grounded in retrieved knowledge
 - supports structured explanations
+- constrained by control plane
 
 ---
 
@@ -279,11 +347,14 @@ NeuroCore currently supports:
 - persistent daemon runtime
 - streaming responses
 - CLI interface (`ai`)
-- piped input ingestion (`| ai`)
+- piped input analysis (`| ai`)
 - RAG-based knowledge retrieval
 - metadata-aligned retrieval
 - query rewriting
 - session memory (short-term)
+- control plane enforcement
+- execution intent detection and blocking
+- ambiguity handling at runtime level
 
 ---
 
@@ -292,11 +363,11 @@ NeuroCore currently supports:
 NeuroCore does NOT yet have:
 
 - tool execution layer
-- control plane enforcement
-- security / policy system
+- full policy system
 - observability / logging system
 - task persistence
 - long-term memory
+- session lifecycle management
 - structured execution model
 
 ---
@@ -307,11 +378,17 @@ Phase 5 – Execution & Control Architecture
 
 ---
 
+# Current Status
+
+Phase 5A – Runtime Control Plane: COMPLETE
+
+---
+
 # Immediate Focus
 
-- control plane (runtime authority)
-- tool execution system
-- security and policy enforcement
+- Tool execution system
+- structured tool interface
+- controlled execution routing
 
 ---
 
@@ -333,4 +410,4 @@ Update this document whenever:
 - architecture evolves
 - major features are added
 
-This document must always reflect **actual system behavior**.
+This document must always reflect **actual system behavior**
