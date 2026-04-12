@@ -1,572 +1,332 @@
-# NeuroCore – Personal Local AI System
-
-> NOTE:  
-> This system was originally named "Jarvis".  
-> It has since been renamed to "NeuroCore".  
-> References to "Jarvis" reflect the original name during development.
+# NeuroCore – System Architecture
 
 ---
 
-## Project Owner
+# Purpose
 
-Richard Bayer
+This document defines the architectural structure of NeuroCore, including:
 
----
+- system layers
+- execution flow
+- component responsibilities
+- system boundaries
 
-# Project Objective
-
-NeuroCore is a **local-first personal AI infrastructure system** designed to run primarily on privately owned hardware using local models, local knowledge, and local automation tools.
-
-The purpose of NeuroCore is to build a long-term **personal cognitive system** capable of assisting with:
-
-- knowledge management  
-- software development  
-- technical troubleshooting  
-- home infrastructure  
-- daily life tasks  
-
-Unlike cloud-based assistants, NeuroCore prioritizes:
-
-- privacy  
-- local computation  
-- transparent architecture  
-- inspectable memory  
-- reproducible infrastructure  
-
-NeuroCore is intended to evolve into a **trusted AI partner that grows alongside its owner's projects, knowledge, and household environment.**
+This document reflects actual system design, not future assumptions.
 
 ---
 
-# Core Design Philosophy
+# System Definition
 
-## Local-First Computing
+NeuroCore is a:
 
-NeuroCore operates primarily using:
+- persistent daemon-based system
+- local-first cognitive runtime
+- control-plane governed execution system
 
-- local models  
-- local embeddings  
-- local data storage  
+It is NOT:
 
-External services may be used for optional augmentation, but the core system must remain fully functional offline.
-
----
-
-## Transparent Filesystem Architecture
-
-All memory and system state should remain visible within the filesystem whenever possible.
-
-This enables:
-
-- inspection  
-- manual editing  
-- version control  
-- backup and archival  
-- integration with external tools  
+- a stateless request/response tool
+- a simple chatbot
+- a direct command execution engine
 
 ---
 
-## Reproducible Infrastructure
+# Architectural Model
 
-NeuroCore is designed to be fully rebuildable.
-
-The long-term goal is a system that can be reconstructed from:
-
-- documentation  
-- scripts  
-- repository structure  
+NeuroCore is composed of layered systems.
 
 ---
 
-## Human-Controlled Memory
+## Layer 1 – Distribution Layer (NEW)
 
-Memory must remain:
+This layer defines how NeuroCore is exposed and packaged for users.
 
-- visible  
-- editable  
-- removable  
+Examples:
 
-NeuroCore must never silently accumulate hidden personal data.
+- Argus (system intelligence distribution)
 
----
+This layer:
 
-## Multi-User Architecture
+- defines user experience
+- constrains system behavior
+- selects capabilities
 
-NeuroCore supports multiple users with strict isolation:
+This layer does NOT:
 
-Shared System  
-↓  
-Runtime + Logic + Tools  
-
-User Memory Spaces  
-↓  
-Richard  
-Patrice  
-Abi  
-
-Each user:
-
-- has isolated memory  
-- cannot access other users' data without explicit permission  
+- modify runtime behavior
+- bypass control plane
+- directly execute commands
 
 ---
 
-## Security by Design
+## Layer 2 – Interface Layer
 
-Security considerations include:
+Handles all user interaction.
 
-- user isolation  
-- controlled memory access  
-- secure remote access  
-- encrypted backups  
+Examples:
 
----
-
-# System Identity
-
-NeuroCore is not a chatbot.
-
-It is a **persistent cognitive infrastructure system**.
-
-The primary workstation acts as:
-
-> **The central AI compute and reasoning node**
-
-Other devices act as:
-
-> **Distributed interfaces and perception points into the system**
-
----
-
-# Core System Architecture
-
-## Central Execution Model
-
-NeuroCore operates as a **persistent daemon-based system**.
-
-All interaction flows through a central runtime layer.
-
-### Execution Flow
-
-Client (CLI / Interfaces)  
-↓  
-UNIX Socket / Network Interface  
-↓  
-NeuroCore Daemon  
-↓  
-Runtime Manager (persistent state)  
-↓  
-Router (intent + prompt construction)  
-↓  
-Knowledge System / Tool System  
-↓  
-LLM Runtime  
-↓  
-Response  
-
----
-
-## Key Architectural Principle
-
-NeuroCore must always operate through:
-
-> **a single persistent runtime system**
-
-This ensures:
-
-- no repeated initialization  
-- consistent state  
-- scalable architecture  
-- predictable performance  
-
----
-
-## AI Runtime System
-
-Responsible for:
-
-- model execution  
-- prompt processing  
-- response generation  
-
-Example:
-
-- Ollama (local LLM runtime)
-
----
-
-## Knowledge System
-
-Responsible for:
-
-- document indexing  
-- embeddings  
-- vector storage (Chroma)  
-- semantic retrieval  
-
-Supports:
-
-> Retrieval-Augmented Generation (RAG)
-
----
-
-## Tool Execution System
-
-Responsible for:
-
-- system diagnostics  
-- command execution  
-- automation control  
-- external integrations  
-
-This system enables NeuroCore to interact with real-world systems in a controlled and deterministic manner.
-
----
-
-## Runtime Manager (Critical Layer)
-
-The Runtime Manager is the **core control system**.
+- CLI (ai)
+- Argus CLI (future wrapper)
+- future UI / voice interfaces
 
 Responsibilities:
 
-- initialize subsystems once  
-- manage system state  
-- process all incoming requests  
-- prevent repeated loading of heavy components  
-
-This layer ensures:
-
-- fast subsequent queries  
-- controlled initialization  
-- system-wide consistency  
+- input collection
+- output streaming
+- session handling
 
 ---
 
-## Memory System
+## Layer 3 – Runtime Layer (Core System)
 
-### Knowledge Memory
+The central execution system.
 
-- documents  
-- logs  
-- repositories  
+Components:
 
----
+- NeuroCore Daemon
+- Runtime Manager
+- Control Plane
 
-### Conversation Memory
+Responsibilities:
 
-- context  
-- summaries  
-- ongoing tasks  
+- persistent system state
+- request lifecycle management
+- routing authority
+- policy enforcement
 
----
-
-### User Memory
-
-- preferences  
-- reminders  
-- personal context  
+All system activity must pass through this layer.
 
 ---
 
-# Perception and Environmental Awareness System
+## Layer 4 – Execution Layer
 
-NeuroCore is designed to evolve into an **environment-aware cognitive system**.
+Handles controlled system interaction.
 
----
+Components:
 
-## Core Concept
+- Execution Engine
+- Tool Registry
+- Tool Interface
 
-NeuroCore processes:
+Responsibilities:
 
-1. **User Queries**  
-2. **System Events**
+- structured tool execution
+- controlled system access
+- enforcement of execution rules
 
-Both follow the SAME pipeline:
+Execution Path:
 
-event/query  
-↓  
-runtime manager  
-↓  
-reasoning  
-↓  
-response/action  
+    control_plane → execution_engine → tool
 
 ---
 
-## Sensor Integration
+## Layer 5 – Logic Layer
 
-NeuroCore integrates with physical sensors to perceive its environment:
+Responsible for reasoning and routing.
 
-- cameras (security, identity, wildlife, deliveries)  
-- microphones (voice interaction and environmental awareness)  
-- IoT devices (lighting, sensors, smart systems)  
-- system logs and infrastructure signals  
+Components:
 
----
+- Router (jarvis_router.py)
 
-## Distributed Interaction Nodes
+Responsibilities:
 
-NeuroCore operates through **room-based interaction nodes**.
+- query rewriting
+- context resolution
+- prompt construction
+- routing decisions
 
-Each node consists of:
+Constraints:
 
-- microphone array (voice input)  
-- speaker system (audio output)  
-- local compute node (edge processing)  
-- tablet interface (visual interaction and system presence)  
-
-These nodes allow NeuroCore to:
-
-- hear users anywhere in the home  
-- respond locally within the same room  
-- maintain spatial awareness  
-- provide visual and conversational interaction  
+- cannot execute commands
+- must obey control plane
 
 ---
 
-## Localized Response Model
+## Layer 6 – Knowledge Layer
 
-NeuroCore delivers responses based on **interaction origin**.
+Responsible for retrieval and contextual understanding.
 
-> The node that detects user interaction is responsible for responding.
+Components:
+
+- Chroma vector database
+- embedding model
+- retrieval system
+
+Capabilities:
+
+- semantic search
+- metadata filtering
+- contextual grounding
+
+---
+
+## Layer 7 – Model Layer
+
+Responsible for AI processing.
+
+Components:
+
+- local LLM runtime (Ollama)
+
+Responsibilities:
+
+- response generation
+- reasoning support
+
+---
+
+## Layer 8 – System Config Layer
+
+Location:
+
+    /mnt/g/ai/system/
+
+Contains:
+
+- personalities
+- profiles
+- system state
+
+Responsibilities:
+
+- define system behavior configuration
+- define user-level behavior patterns
+- support distribution customization
+
+---
+
+# Execution Flow
+
+All system interaction follows a strict pipeline:
+
+    Interface Layer
+        ↓
+    UNIX Socket
+        ↓
+    NeuroCore Daemon
+        ↓
+    Runtime Manager
+        ↓
+    Control Plane
+        ↓
+
+        [ Execution Path ]                 [ Reasoning Path ]
+
+        Execution Engine                  Logic Layer (Router)
+        ↓                                 ↓
+        Tool                              Knowledge System
+                                          ↓
+                                          Model Runtime (Ollama)
+
+        ↓
+    Streaming Response
+
+---
+
+# Core Architectural Rule
+
+All behavior must pass through:
+
+    daemon → runtime_manager → control_plane
+
+Nothing:
+
+- executes
+- accesses memory
+- interacts with system resources
+
+without passing through the control plane.
+
+---
+
+# System Invariants
+
+## Forbidden
+
+- bypassing the runtime
+- raw command execution
+- uncontrolled tool usage
+- hidden memory modification
+
+---
+
+## Required
+
+- structured inputs
+- structured outputs
+- policy enforcement
+- observable execution
+- controlled system access
+
+---
+
+# Argus Integration
+
+Argus is NOT part of the core runtime.
+
+Argus is:
+
+A distribution layer built on top of NeuroCore.
+
+Argus defines:
+
+- system intelligence behavior
+- read-only constraints
+- user-facing interface style
+
+Argus does NOT:
+
+- modify execution engine
+- bypass control plane
+- introduce new execution paths
+
+---
+
+# Platform vs Distribution Model
+
+NeuroCore is:
+
+The platform (core system)
+
+Argus is:
+
+A distribution (product layer)
 
 This enables:
 
-- room-specific responses  
-- natural conversational flow  
-- reduced noise across the home  
-
-Example:
-
-User speaks in kitchen  
-→ Kitchen node responds  
-→ Other rooms remain silent  
+- multiple system configurations
+- different user experiences
+- reuse of core architecture
 
 ---
 
-## Multi-Room Audio and Interaction
+# Future Expansion Model
 
-NeuroCore supports distributed audio behavior:
+Additional distributions may be created:
 
-- play music in specific rooms  
-- play music across all rooms  
-- route audio dynamically  
+- Argus (system intelligence)
+- HomeCore (home automation)
+- DevCore (development assistant)
 
-Future capabilities include:
+All distributions must:
 
-- user-following audio  
-- context-aware volume adjustment  
-- per-user preferences  
-
----
-
-## Identity Recognition System
-
-NeuroCore establishes identity through **multi-modal recognition**:
-
-- voice recognition  
-- facial recognition  
-- contextual awareness  
-
-Identity is determined through combined confidence across these signals.
+- use the same runtime
+- obey the same control plane
+- use the same execution system
 
 ---
 
-### User Enrollment
+# Design Principle
 
-Users can be introduced naturally:
-
-Example:
-
-> "NeuroCore, this is my mom"
-
-NeuroCore creates a new identity profile including:
-
-- facial embeddings  
-- voice signature  
-- associated metadata  
+NeuroCore = Cognitive Runtime Platform  
+Argus = System Intelligence Distribution
 
 ---
 
-### Persistent Recognition
+# Final Rule
 
-Upon future interactions:
+There is only ONE runtime.
 
-NeuroCore can:
+Distributions must never create parallel systems.
 
-- recognize returning individuals  
-- greet them appropriately  
-- recall relevant context  
-
-Example:
-
-> "Welcome back, Mom"
-
----
-
-## Behavioral Context Recognition
-
-NeuroCore classifies events based on observed behavior patterns.
-
----
-
-### Delivery Behavior
-
-- approaches entry point  
-- places object  
-- leaves immediately  
-
-→ classified as delivery  
-
----
-
-### Suspicious Behavior
-
-- prolonged presence  
-- irregular movement  
-- exploration of property  
-
-→ classified as potential threat  
-
----
-
-## Zone-Based Environmental Awareness
-
-The environment is divided into logical zones:
-
-- front yard  
-- driveway  
-- garage side  
-- backyard  
-- interior rooms  
-
-NeuroCore tracks movement across zones using sensor correlation.
-
-Example:
-
-Person detected in driveway  
-→ moves to backyard  
-→ NeuroCore updates location in real time  
-
----
-
-## Real-Time Internal Alert System
-
-NeuroCore delivers alerts through internal audio systems.
-
-Example:
-
-- "Person detected near garage"  
-- "Movement now behind garage"  
-
-This enables:
-
-- immediate awareness  
-- hands-free monitoring  
-- reduced reliance on mobile devices  
-
----
-
-## External Deterrence Integration
-
-NeuroCore can interact with external systems to deter threats:
-
-- motion-activated lighting  
-- outdoor speakers  
-- camera tracking systems  
-
-Example:
-
-> "You are being recorded. Leave immediately."
-
----
-
-## Visual Interface Layer
-
-NeuroCore provides visual interaction through tablet interfaces deployed throughout the home.
-
-These interfaces are a core component of the system and provide:
-
-- animated avatar representation  
-- visual feedback during interaction  
-- system status and alerts  
-- camera feeds and environmental awareness  
-
----
-
-### Avatar-Based Interaction
-
-NeuroCore presents a visual identity through tablet interfaces:
-
-- facial expressions  
-- lip-synced speech  
-- responsive behavior  
-
-This enables:
-
-- more natural interaction  
-- increased engagement  
-- improved usability  
-
----
-
-## Discreet Hardware Integration
-
-All hardware components are designed to be:
-
-- visually unobtrusive  
-- integrated into the home environment  
-- consistent with modern interior design  
-
-Examples include:
-
-- recessed tablet mounts  
-- in-wall media enclosures  
-- concealed wiring  
-- discreet camera placement  
-
----
-
-## Design Principle: Invisible Infrastructure
-
-The system should feel:
-
-- always present  
-- always aware  
-- never intrusive  
-
-NeuroCore should behave as:
-
-> **an integrated part of the home, not an added system**
-
----
-
-# System Expansion Model
-
-Future systems must NOT bypass the daemon.
-
-All integrations must connect through:
-
-> runtime manager → unified processing pipeline  
-
-This ensures:
-
-- consistent behavior  
-- centralized control  
-- scalable architecture  
-
----
-
-# Long-Term Goal
-
-NeuroCore will evolve into a **persistent, intelligent system** capable of:
-
-- technical problem solving  
-- knowledge organization  
-- automation  
-- environmental awareness  
-- household coordination  
-- long-term learning  
-
-It will become:
-
-> **a trusted cognitive partner embedded in both digital and physical environments**
+All intelligence, execution, and control must remain centralized.

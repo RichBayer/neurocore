@@ -18,7 +18,7 @@ We are continuing development of my local AI system: **NeuroCore**
   - ingest them silently
   - do NOT analyze, summarize, or act on them
   - wait until the user explicitly provides a Task before responding with analysis or implementation
-  
+
 ---
 
 # 🧠 EDITING RULES (CRITICAL)
@@ -141,12 +141,36 @@ NeuroCore is:
 - a persistent daemon-based runtime  
 - a streaming, context-aware reasoning system  
 - a **control plane governed execution system**  
+- a **cognitive runtime platform**
 
 It is NOT:
 
 - a chatbot  
 - a stateless script  
 - a direct LLM wrapper  
+
+---
+
+# 🧠 PLATFORM MODEL (NEW)
+
+NeuroCore is the **platform**.
+
+Distributions are built on top of it.
+
+---
+
+## Distribution Layer
+
+Example:
+
+- Argus – system intelligence distribution
+
+Distributions:
+
+- define user experience
+- constrain behavior
+- use the same runtime
+- never bypass the control plane
 
 ---
 
@@ -256,6 +280,64 @@ The system does NOT yet have:
 
 ---
 
+# 🧩 ARGUS (NEW – NOT IMPLEMENTED)
+
+Argus is the first distribution built on NeuroCore.
+
+---
+
+## Definition
+
+Argus is:
+
+- a read-only system intelligence interface
+- built on top of NeuroCore runtime
+
+---
+
+## Purpose
+
+Argus will provide:
+
+- system diagnostics  
+- service analysis  
+- log analysis  
+- network inspection  
+- security awareness  
+- file discovery  
+- plain-English explanations  
+- executive-level summaries  
+
+---
+
+## Constraints
+
+Argus MUST:
+
+- remain read-only  
+- use controlled tool execution  
+- never bypass control plane  
+- never modify system state  
+
+---
+
+## Current Status
+
+- defined at architecture level  
+- not yet implemented  
+
+---
+
+## Dependency on NeuroCore
+
+Argus requires:
+
+- real tool execution  
+- safe system tools  
+- structured tool registry  
+
+---
+
 # 🏗️ CURRENT ARCHITECTURE
 
 CLI / Input  
@@ -287,7 +369,7 @@ Status: COMPLETE
 
 ---
 
-# 🎯 IMMEDIATE OBJECTIVE
+# 🎯 IMMEDIATE OBJECTIVE (UPDATED)
 
 Transition from:
 
@@ -296,6 +378,28 @@ Transition from:
 To:
 
 - controlled real system execution  
+- build Argus V1 tool foundation  
+
+---
+
+# 🎯 PRIORITY SHIFT (IMPORTANT)
+
+Current development priority is:
+
+1. real read-only system tools  
+2. execution engine completion  
+3. tool standardization  
+4. safe execution enforcement  
+
+---
+
+## Deferred (Intentional)
+
+- perception systems  
+- home automation  
+- multi-user features  
+- long-term memory  
+- external integrations  
 
 ---
 
@@ -315,7 +419,12 @@ Act as a senior systems engineer:
 
 Start with:
 
-Design for Phase 6 – Real Execution + Policy Expansion
+Design and implement Phase 5H–5I:
+
+- real tool execution  
+- safe local system tools  
+
+Aligned with Argus V1 requirements
 
 ---
 
@@ -338,7 +447,8 @@ Phase 5B complete:
 ## Current Focus
 
 Transition from simulated execution → real execution  
+Build Argus V1 foundation  
 
 ## Next Step
 
-Design and implement safe real system command execution
+Design safe real system command execution

@@ -1,171 +1,225 @@
-NeuroCore System Map
-
-Root:
- /mnt/g/ai
-
-├── backups
-│   └── (system backups)
-
-├── logs
-│   └── (runtime logs)
-
-├── memory
-│   ├── chroma
-│   │   ├── chroma.sqlite3        ← vector database
-│   │   └── <uuid>/
-│   │       ├── data_level0.bin
-│   │       ├── header.bin
-│   │       ├── length.bin
-│   │       └── link_lists.bin
-│   │
-│   ├── knowledge
-│   │   ├── home_infrastructure.md
-│   │   └── linux_notes.txt
-│   │
-│   └── sessions
-│       └── (session memory JSON files)
-
-├── models
-│   └── (managed by Ollama)
-
-├── projects
-│   └── neurocore
-│       ├── build-logs
-│       ├── docs
-│       ├── runtime
-│       ├── scripts
-│       └── tools
-
-├── runtime
-│   └── python
-│       └── jarvis-env
-│           └── (Python virtual environment)
-
-├── system
-│   └── (system state + configs)
+NeuroCore System Map (Updated with Distribution Layer)
 
 ---
 
-# Runtime Execution Flow
+ROOT:
+ /mnt/g/ai
 
-CLI (ai command)
-    scripts/ai_cli.py
-    - user interface
-    - interactive + one-shot modes
-    - streaming output
+├── backups
+├── logs
+├── memory
+│   ├── chroma
+│   ├── knowledge
+│   └── sessions
+├── models
+├── projects
+│   └── neurocore
+├── runtime
+│   └── python (virtual environment)
+├── system
+│   ├── personalities
+│   ├── profiles
+│   └── system_state.md
 
-↓
-UNIX Socket
-    /tmp/neurocore.sock
+---
 
-↓
+# SYSTEM LAYERS
+
+NeuroCore is composed of the following logical layers:
+
+---
+
+## 1. Distribution Layer (NEW)
+
+This layer defines how NeuroCore is packaged and exposed to users.
+
+Examples:
+
+- Argus (system intelligence distribution)
+- Future distributions (automation, home, etc.)
+
+This layer does NOT modify the runtime.
+
+It provides:
+
+- entrypoint behavior
+- feature constraints
+- user-facing experience
+
+---
+
+## 2. Interface Layer
+
+Entry points into the system.
+
+Examples:
+
+- CLI (`ai`)
+- Argus CLI (future wrapper)
+- future UI / voice interfaces
+
+---
+
+## 3. Runtime Layer (Core System)
+
+Persistent system responsible for all processing.
+
+Components:
+
+- NeuroCore Daemon
+- Runtime Manager
+- Control Plane
+
+All requests MUST pass through this layer.
+
+---
+
+## 4. Execution Layer
+
+Handles controlled system interaction.
+
+Components:
+
+- Execution Engine
+- Tool Registry
+- Tool Interface
+
+Execution Path:
+control_plane → execution_engine → tool
+
+---
+
+## 5. Logic Layer
+
+Responsible for reasoning and routing.
+
+Components:
+
+- Router (query rewriting, intent handling)
+
+Constraints:
+
+- cannot execute commands
+- must obey control plane
+
+---
+
+## 6. Knowledge Layer
+
+Handles retrieval and context.
+
+Components:
+
+- Chroma vector database
+- embedding model
+- retrieval system
+
+---
+
+## 7. Model Layer
+
+LLM runtime:
+
+- Ollama (local models)
+
+---
+
+## 8. System Config Layer
+
+Location:
+ /mnt/g/ai/system/
+
+Defines:
+
+- personalities
+- hardware profiles
+- system state
+
+---
+
+# EXECUTION FLOW (UPDATED)
+
+Argus CLI / ai CLI
+    ↓
+Interface Layer
+    ↓
+UNIX Socket (/tmp/neurocore.sock)
+    ↓
 NeuroCore Daemon
-    runtime/neurocore_daemon.py
-    - persistent process
-    - request normalization
-    - streaming transport layer
-
-↓
+    ↓
 Runtime Manager
-    runtime/runtime_manager.py
-    - request routing
-    - system coordination
-
-↓
+    ↓
 Control Plane
-    runtime/control_plane.py
-    - request classification
-    - execution policy enforcement
-    - routing authority
-
-↓
+    ↓
 ┌───────────────────────────────┬───────────────────────────────┐
 │                               │                               │
 │        Execution Path         │        Reasoning Path          │
 │                               │                               │
 │  Execution Engine             │  Logic Layer (Router)          │
-│  tools/execution_engine.py    │  scripts/jarvis_router.py      │
 │                               │                               │
 │  Tool                         │  Knowledge System              │
-│  tools/system/service_manager │  scripts/query_knowledge.py    │
-│                               │                               │
-│  (Simulated Execution)        │  Vector Store (Chroma)         │
-│                               │  /mnt/g/ai/memory/chroma      │
 │                               │                               │
 │                               │  Model Runtime (Ollama)        │
-│                               │  http://localhost:11434        │
 └───────────────────────────────┴───────────────────────────────┘
 
-↓
-Response Flow (Streaming)
-
-    Tool / Model
     ↓
-    Runtime Manager
+Streaming Response
     ↓
-    Daemon
-    ↓
-    CLI (real-time output)
+Interface Layer
 
 ---
 
-# System Behavior
+# SYSTEM INVARIANT (UNCHANGED)
 
-Cold Start:
-    - embeddings + vector DB initialize
-    - slower first reasoning query
+All execution flows through:
 
-Warm State:
-    - no reinitialization
-    - fast streaming responses
+daemon → runtime_manager → control_plane
 
-Execution Path:
-    - no model required
-    - deterministic
-    - immediate response
+This rule is NEVER bypassed.
 
 ---
 
-# System Properties
+# KEY ADDITION
 
-- persistent daemon
-- stateless CLI
-- lazy-loaded knowledge system
-- real-time streaming pipeline
-- control plane governed execution
-- tool-based execution system
-- confirmation-based execution safety model
+Argus is:
 
----
+- NOT part of runtime
+- NOT part of control plane
+- NOT part of execution engine
 
-# Current Capabilities
+Argus is:
 
-- semantic retrieval (RAG)
-- streaming LLM responses
-- interactive CLI
-- persistent runtime
-- execution engine
-- tool registry
-- structured tool interface
-- controlled execution (confirmation required)
+> a distribution and interface constraint layer that defines how NeuroCore is used
 
 ---
 
-# Current Limitations
+# DESIGN PRINCIPLE
 
-- execution is simulated only
-- no real system command execution yet
-- no observability / logging layer
-- no task persistence
-- no long-term memory
-- no session-aware confirmation
+NeuroCore = Core Cognitive System  
+Argus = Controlled System Intelligence Interface
 
 ---
 
-# Next Phase
+# FUTURE EXPANSION MODEL
 
-- real system execution (systemctl integration)
-- policy expansion
-- observability layer
-- execution logging
-- task persistence
+Additional distributions may be introduced:
+
+- Argus (system intelligence)
+- HomeCore (home automation)
+- DevCore (development assistant)
+
+All must:
+
+- use the same runtime
+- obey the same control plane
+- share the same execution system
+
+---
+
+# FINAL RULE
+
+The runtime is singular.
+
+Distributions are interchangeable.
+
+The system must never fragment into multiple runtimes.

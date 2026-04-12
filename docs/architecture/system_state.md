@@ -4,18 +4,16 @@
 
 # Purpose
 
-This document represents the **current implementation state of NeuroCore only**.
+This document defines the CURRENT state of the NeuroCore system.
 
-It defines:
+It answers:
 
 - what exists
-- how it behaves
-- what is working
-- what is NOT yet implemented
+- what is implemented
+- what is partially implemented
+- what is planned but not yet built
 
-This document is used to guide development decisions.
-
-If this document is incorrect, development decisions will be incorrect.
+This document must remain accurate at all times.
 
 ---
 
@@ -23,403 +21,328 @@ If this document is incorrect, development decisions will be incorrect.
 
 NeuroCore is a:
 
-- local-first AI system
-- persistent daemon-based runtime
-- streaming, context-aware reasoning system
-- control plane governed execution system
+- persistent daemon-based system
+- local-first cognitive runtime
+- control-plane governed system
 
-It is NOT:
+It is currently:
 
-- a stateless chatbot
-- a request/response script
-- an uncontrolled execution system
+> a reasoning system with structured execution capabilities under development
 
 ---
 
-# Current Architecture
+# Core System Status
 
-All interaction flows through:
+## Runtime System
 
-CLI / Input  
-↓  
-UNIX Socket (/tmp/neurocore.sock)  
-↓  
-NeuroCore Daemon  
-↓  
-Runtime Manager  
-↓  
-Control Plane  
-├── Execution Path → Execution Engine → Tool  
-└── Reasoning Path → Router → Knowledge System → LLM  
-↓  
-Streaming Response  
+Status: IMPLEMENTED
+
+Components:
+
+- NeuroCore Daemon (persistent UNIX socket)
+- Runtime Manager (central coordination layer)
+- Control Plane (classification + routing enforcement)
+
+Capabilities:
+
+- persistent execution
+- centralized request handling
+- enforced execution path
 
 ---
 
-# Core Components
+## CLI Interface
 
-## Runtime Layer
+Status: IMPLEMENTED
 
-- `runtime/neurocore_daemon.py`
-- `runtime/runtime_manager.py`
-- `runtime/control_plane.py`
+Components:
 
-Responsibilities:
+- ai_cli.py
 
-- persistent process
-- request handling
+Capabilities:
+
+- interactive queries
+- one-shot queries
+- piped input support
 - streaming output
-- request validation
-- request classification
-- execution enforcement
-- ambiguity interception
-
----
-
-## Execution Layer (NEW)
-
-- `tools/base_tool.py`
-- `tools/tool_registry.py`
-- `tools/execution_engine.py`
-- `tools/system/service_manager.py`
-
-Responsibilities:
-
-- structured tool interface
-- controlled execution entry point
-- validation and normalization
-- policy-aligned execution
 
 ---
 
 ## Logic Layer
 
-- `scripts/jarvis_router.py`
+Status: IMPLEMENTED
 
-Responsibilities:
+Components:
+
+- jarvis_router.py
+
+Capabilities:
 
 - query rewriting
-- context handling
+- intent handling
 - routing decisions
-- prompt construction
 
 Constraints:
 
-- must operate within control plane constraints
-- cannot trigger execution
-- cannot bypass policy enforcement
+- does not execute commands
+- controlled by control plane
 
 ---
 
-## Knowledge System
+## Knowledge System (RAG)
 
-- `scripts/query_knowledge.py`
-- Chroma (vector DB)
-- HuggingFace embeddings (MiniLM)
+Status: IMPLEMENTED
+
+Components:
+
+- vector database (Chroma)
+- embedding model
+- retrieval pipeline
 
 Capabilities:
 
-- semantic retrieval
-- metadata-aligned filtering
-- command-aware knowledge lookup
+- semantic search
+- metadata filtering
+- contextual augmentation
 
 ---
-
-## Interface Layer
-
-- `scripts/ai_cli.py`
-- installed command: `ai`
-
-Capabilities:
-
-- one-shot queries
-- interactive mode
-- real-time streaming output
-- piped input ingestion
-
----
-
-# Runtime Behavior
-
-## Startup
-
-- daemon starts instantly
-- no heavy components loaded
-
----
-
-## First Query (Cold Start)
-
-- embedding model loads
-- Chroma initializes
-- retriever initializes
-
-Behavior:
-
-- slower response (~1–2 minutes)
-
----
-
-## Warm State
-
-- no reinitialization
-- fast responses (~1–3 seconds)
-- streaming active
-
----
-
-# Input Capabilities
-
-## Direct Query
-
-```
-ai "your query"
-```
-
----
-
-## Interactive Mode
-
-```
-ai
-> query
-> query
-> exit
-```
-
----
-
-## Piped Input
-
-```
-command | ai
-```
-
----
-
-### Behavior
-
-- classified as external input
-- analyzed only
-- never executed
-- isolated from normal context
-
----
-
-# Execution Behavior
-
-## Execution Intent Detection
-
-Requests implying system action are:
-
-- detected by control plane
-- classified as execution intent
-
----
-
-## Execution Policy
-
-Execution is governed by tool execution modes:
-
-- auto
-- manual
-- dry-run
-
----
-
-## Current Execution Model
-
-- execution is NOT automatic
-- execution requires explicit confirmation for manual tools
-- no background execution
-
----
-
-## Example Execution Flow
-
-```
-ai "restart nginx"
-→ confirmation required
-
-ai "confirm restart nginx"
-→ tool execution (simulated)
-```
-
----
-
-## Current Tool
-
-### service_manager
-
-Capabilities:
-
-- start
-- stop
-- restart
-- status
-
-Behavior:
-
-- simulated execution only
-- no real system interaction
-
----
-
-# Ambiguity Handling
-
-Ambiguous queries such as:
-
-- "what does that mean?"
-- "explain that"
-
-Are:
-
-- detected at runtime level
-- intercepted before processing
-- prevented from using context or memory
-- responded to safely
-
----
-
-# Memory System
 
 ## Session Memory
 
+Status: IMPLEMENTED
+
+Capabilities:
+
+- short-term context tracking
+- query rewriting support
+
+---
+
+## Execution Layer
+
+Status: PARTIALLY IMPLEMENTED
+
+Components:
+
+- execution_engine.py
+- tool_registry.py
+- base_tool.py
+
+Capabilities:
+
+- structured tool interface defined
+- execution pipeline integrated with control plane
+
+Limitations:
+
+- execution is currently simulated
+- real system command execution not fully implemented
+- tool set not fully developed
+
+---
+
+## Tooling Layer
+
+Status: EARLY IMPLEMENTATION
+
+Capabilities:
+
+- basic tool structure exists
+- service_manager prototype exists
+
+Limitations:
+
+- limited real-world system interaction
+- incomplete tool coverage
+- no standardized tool manifest enforcement yet
+
+---
+
+## Observability
+
+Status: NOT IMPLEMENTED
+
+Planned:
+
+- execution logs
+- tracing
+- structured system logging
+
+---
+
+## Task / Workflow System
+
+Status: NOT IMPLEMENTED
+
+Planned:
+
+- persistent tasks
+- multi-step workflows
+- execution tracking
+
+---
+
+## Security / Policy Layer
+
+Status: PARTIALLY IMPLEMENTED
+
+Capabilities:
+
+- control plane enforces routing
+- execution intent classification exists
+
+Limitations:
+
+- full policy engine not implemented
+- permission model not implemented
+- approval system not implemented
+
+---
+
+# System Config Layer
+
 Location:
 
-```
-/mnt/g/ai/memory/sessions/richard/session.json
-```
+    /mnt/g/ai/system/
+
+Status: IMPLEMENTED (STRUCTURAL)
+
+Contents:
+
+- system_state.md
+- personalities (empty / planned)
+- profiles (empty / planned)
+
+Purpose:
+
+- central configuration layer for system behavior
+- foundation for distribution customization
 
 ---
 
-## Capabilities
+# Distribution Layer (Argus)
 
-- rolling conversation history
-- multi-turn context
-- supports query rewriting
+Status: DEFINED, NOT IMPLEMENTED
 
----
+Argus is:
 
-## Limitations
+> a system intelligence distribution built on top of NeuroCore
 
-- short-term only
-- no long-term memory system
-- no session boundary control
-- manual reset required for clean context
+Argus will:
 
----
+- provide read-only system diagnostics
+- analyze logs, services, and system health
+- explain system state in plain English
+- provide executive-level summaries
 
-# Reasoning Capabilities
+Argus will NOT:
 
-## Query Rewriting
-
-- resolves ambiguous follow-ups
-- injects missing context
+- modify system state
+- execute destructive actions
+- bypass control plane
 
 ---
 
-## Retrieval Control
+## Argus Dependency on NeuroCore
 
-- metadata filtering
-- prevents cross-command contamination
+Argus requires:
 
----
-
-## Response Behavior
-
-- grounded in retrieved knowledge
-- supports structured explanations
-- constrained by control plane
+- runtime manager (complete)
+- control plane (complete baseline)
+- execution layer (real execution required)
+- tool system (must be expanded)
 
 ---
 
-# Knowledge System Behavior
+## Argus Readiness Status
 
-- lazy initialization
-- persistent vector database
-- optimized after first query
+Current readiness: NOT READY
 
----
+Blocking requirements:
 
-# Communication Model
-
-- UNIX socket-based communication
-- full request/response lifecycle
-- streaming supported end-to-end
+- real tool execution (Phase 5H) :contentReference[oaicite:1]{index=1}  
+- safe local tools (Phase 5I) :contentReference[oaicite:2]{index=2}  
+- structured tool manifest enforcement  
+- core system inspection tools  
 
 ---
 
-# Current Capabilities Summary
+# Current System Capabilities
 
-NeuroCore currently supports:
+NeuroCore can currently:
 
-- persistent daemon runtime
-- streaming responses
-- CLI interface (`ai`)
-- piped input analysis (`| ai`)
-- RAG-based knowledge retrieval
-- metadata-aligned retrieval
-- query rewriting
-- session memory (short-term)
-- control plane enforcement
-- execution intent detection
-- controlled tool execution
-- confirmation-based execution safety model
-- ambiguity handling at runtime level
+- process natural language queries
+- retrieve contextual knowledge
+- maintain session context
+- stream responses in real time
+- classify intent via control plane
+- route requests through a centralized runtime
 
 ---
 
-# Known Limitations
+# Current System Limitations
 
-NeuroCore does NOT yet have:
+NeuroCore currently cannot:
 
-- real system command execution
-- full policy system
-- observability / logging system
-- task persistence
-- long-term memory
-- session lifecycle management
-
----
-
-# Current Phase
-
-Phase 5 – Execution & Control Architecture
+- execute real system commands safely
+- perform reliable system diagnostics
+- maintain long-term persistent tasks
+- enforce full security policies
+- provide production-level observability
 
 ---
 
-# Current Status
+# Next Phase (Active Focus)
 
-Phase 5B – Tool Execution Layer + Safety Model  
-Status: COMPLETE
+NeuroCore is currently in:
 
----
+> Phase 5 – Execution & Control Architecture :contentReference[oaicite:3]{index=3}  
 
-# Immediate Focus
+Active focus:
 
-- real system execution
-- policy expansion
-- observability
-
----
-
-# Development Rules
-
-- do not bypass daemon
-- do not bypass control plane
-- do not assume automatic execution
-- do not assume safe execution
-- always validate behavior against runtime
+- transition from simulated to real execution
+- build safe read-only system tools
+- expand execution engine capabilities
+- enforce structured tool interfaces
 
 ---
 
-# Maintenance
+# Immediate Priorities
 
-Update this document whenever:
+1. Implement real read-only tool execution  
+2. Build core system inspection tools  
+3. Standardize tool definitions and registry  
+4. Integrate execution safety mechanisms  
+5. Prepare system for Argus distribution layer  
 
-- capabilities change
-- architecture evolves
-- major features are added
+---
 
-This document must always reflect **actual system behavior**
+# Definition of Progress
+
+Progress is measured by:
+
+- increased execution capability
+- improved system observability
+- safe expansion of tool set
+- adherence to control plane rules
+
+---
+
+# Definition of Stability
+
+The system is considered stable when:
+
+- execution is predictable
+- behavior is observable
+- failures are controlled
+- system can be reasoned about easily
+
+---
+
+# Final Rule
+
+This document must always reflect reality.
+
+If this document becomes inaccurate:
+
+> system integrity is compromised
