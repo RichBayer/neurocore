@@ -2,33 +2,74 @@
 
 ---
 
-# What This Becomes
+# Purpose
 
-This system evolves into a **real-world troubleshooting training platform**.
+This document defines a **primary application of the NeuroCore system**:
 
-Not a course.  
-Not a simulator.  
-Not a chatbot.
+> A real-world troubleshooting and training platform built on top of a controlled cognitive runtime.
 
-It is:
+It describes:
 
-> A system where users learn by diagnosing and fixing real systems under realistic conditions.
+- how NeuroCore is used in practice  
+- how Argus functions within that system  
+- how real-world skill development emerges from it  
+
+This document does NOT define NeuroCore itself.  
+It defines what NeuroCore **enables**.
+
+---
+
+# Context
+
+NeuroCore is the core system.
+
+It provides:
+
+- a persistent runtime  
+- a control plane  
+- reasoning and execution systems  
+- structured memory  
+- local-first operation  
+
+This platform vision describes one major outcome of that system:
+
+> A training and troubleshooting environment grounded in real systems.
 
 ---
 
 # The Core Idea
 
-Most training teaches theory first and application second.
+Most technical training follows this model:
 
-This system flips that.
+- learn theory  
+- follow guided steps  
+- simulate outcomes  
+
+This system reverses that.
 
 Users are placed directly into:
 
-- broken systems  
 - real environments  
-- real failure scenarios  
+- broken systems  
+- incomplete information  
 
-And they must figure out what is wrong.
+And must determine:
+
+- what is wrong  
+- why it is wrong  
+- how to fix it  
+
+---
+
+# What This Becomes
+
+This evolves into:
+
+> A platform for developing real-world troubleshooting ability through direct system interaction
+
+Not a course.  
+Not a tutorial system.  
+Not an AI that solves problems for the user.
 
 ---
 
@@ -38,14 +79,14 @@ A user enters a scenario.
 
 Inside that scenario:
 
-- services may be down  
-- logs contain clues  
-- systems behave incorrectly  
+- services may be failing  
+- logs contain relevant signals  
+- systems behave inconsistently  
 - dependencies may be broken  
 
-The system is not simplified.
+Nothing is simplified.
 
-It behaves like a real environment.
+The system behaves like a real environment.
 
 ---
 
@@ -53,12 +94,12 @@ It behaves like a real environment.
 
 The user must:
 
-- investigate the system  
+- investigate  
 - run commands  
-- read logs  
-- analyze behavior  
+- inspect logs  
+- form hypotheses  
 - identify root cause  
-- fix the issue  
+- resolve the issue  
 
 This is real troubleshooting.
 
@@ -66,30 +107,33 @@ This is real troubleshooting.
 
 # The Role of Argus
 
-Argus acts as a **senior administrator standing beside the user**.
+Argus is the **distribution layer built on NeuroCore**.
 
-It does not take control.  
-It does not fix the issue.
+It provides system intelligence without taking control.
 
-It assists.
+---
+
+## Behavior Model
+
+Argus acts as:
+
+> A senior administrator guiding the user
+
+It does NOT:
+
+- execute fixes  
+- modify system state  
+- bypass the control plane  
 
 ---
 
 ## What Argus Does
 
 - analyzes system state  
-- summarizes logs  
+- interprets logs  
 - identifies anomalies  
-- provides guidance when asked  
-- explains findings in plain language  
-
----
-
-## What Argus Does NOT Do
-
-- does not execute fixes  
-- does not modify system state  
-- does not remove the need to think  
+- explains findings clearly  
+- suggests next steps  
 
 ---
 
@@ -97,200 +141,199 @@ It assists.
 
 The user can:
 
-- ask for hints  
-- ask for clarification  
-- request guidance  
+- ask questions  
+- request clarification  
+- ask for guidance  
 
-If the user is completely stuck:
+Argus responds based on context and need.
 
-> Argus can walk them through the issue step-by-step using a structured troubleshooting approach
+---
+
+### Guidance Progression
+
+Argus operates in stages:
+
+#### 1. Initial Response
+
+- frames the problem  
+- suggests where to investigate  
+- encourages independent reasoning  
+
+---
+
+#### 2. Assisted Guidance
+
+If prompted:
+
+- narrows investigation  
+- explains errors  
+- interprets outputs  
+
+---
+
+#### 3. Full Coaching (when needed)
+
+If the user is stuck:
+
+- provides step-by-step guidance  
+- explains reasoning  
+- walks through resolution  
 
 ---
 
 # Scenario Flow
 
-Each scenario follows a consistent pattern.
-
 ---
 
-## 1. Scenario Start
+## 1. Scenario Initialization
 
-- system is initialized in a broken state  
-- user is given minimal context (like a real ticket)  
+- system is deployed in a broken or degraded state  
+- user receives minimal context  
 
 ---
 
 ## 2. Investigation Phase
 
 - user explores freely  
-- runs commands  
-- inspects logs  
-- tests hypotheses  
-
-Argus is available but does not interrupt.
+- Argus remains passive unless engaged  
 
 ---
 
-## 3. Guidance (Optional)
+## 3. Optional Guidance
 
-If needed:
-
-- user asks for hints  
-- Argus provides direction, not answers  
-
-If the user gives up:
-
-- Argus walks through:
-  - what is wrong  
-  - why it happened  
-  - how to fix it  
-  - how to think about it  
+- user requests help  
+- Argus responds proportionally  
 
 ---
 
 ## 4. Resolution
 
-- user fixes the issue  
-- system returns to working state  
+- user identifies and fixes the issue  
+- system returns to expected behavior  
 
 ---
 
-## 5. Evaluation
+## 5. Evaluation (Future)
 
-The system tracks:
+The system may track:
 
 - commands executed  
 - investigation path  
 - time to resolution  
-- efficiency of approach  
+- efficiency  
 
 ---
 
-## 6. Feedback
+## 6. Feedback (Future)
 
-User receives:
+Users receive:
 
-- what they did well  
-- what they missed  
-- inefficient steps  
-- better approaches  
-- explanation of optimal troubleshooting flow  
-
----
-
-## 7. Post-Scenario Learning
-
-After completion:
-
-- user can ask additional questions  
-- explore deeper explanations  
-- reinforce understanding  
+- strengths  
+- missed signals  
+- improved approaches  
+- explanation of optimal flow  
 
 ---
 
-## 8. Reset
+## 7. Reset
 
-- environment is reset  
-- ready for next scenario  
-
----
-
-# Key System Behaviors
+- environment resets  
+- scenario can be repeated or advanced  
 
 ---
 
-## Realism First
+# Role of the Homelab
 
-Environments are:
+The homelab provides:
 
-- not simplified  
-- not scripted step-by-step  
-- not artificially guided  
+- real Linux environments  
+- reproducible system states  
+- controlled failure injection  
 
-They behave like real systems.
+It is used to:
 
----
-
-## Non-Interruptive Assistance
-
-Argus:
-
-- does not interfere  
-- does not push hints automatically  
-- only responds when engaged  
+- validate Argus behavior  
+- generate realistic scenarios  
+- support skill development  
 
 ---
 
-## Full Observability
+# Realism as a Design Constraint
 
-The system tracks:
+The system must remain:
 
-- every command  
-- every action  
-- every decision path  
+- unscripted  
+- non-linear  
+- reflective of real-world behavior  
 
-Nothing is lost.
-
----
-
-## Performance Tracking
-
-Each session produces measurable data:
-
-- time to resolution  
-- accuracy  
-- decision quality  
-- troubleshooting efficiency  
+Users are not guided step-by-step unless necessary.
 
 ---
 
-## Adaptive Learning (Future)
+# System Relationship
 
-Over time, the system can:
-
-- identify weak areas  
-- generate more targeted scenarios  
-- adjust difficulty  
+This platform exists within the larger ecosystem:
 
 ---
 
-# Product Progression
+## NeuroCore (Platform)
+
+- runtime  
+- control  
+- reasoning  
+- execution  
 
 ---
 
-## Stage 1 – Argus CLI
+## Argus (Distribution)
 
-- installable tool  
-- system diagnostics  
-- troubleshooting assistance  
-
----
-
-## Stage 2 – Local Training Environment
-
-- Argus + lab environment  
-- prebuilt scenarios  
-- runs on user machine  
+- system intelligence interface  
+- read-only diagnostics  
+- user interaction  
 
 ---
 
-## Stage 3 – Cloud Training Platform
+## Homelab (Validation)
+
+- environment simulation  
+- failure generation  
+- training scenarios  
+
+---
+
+# Product Evolution
+
+---
+
+## Stage 1 — Argus CLI
+
+- installable diagnostic tool  
+- production troubleshooting  
+
+---
+
+## Stage 2 — Local Training Environment
+
+- Argus + scenarios  
+- runs on user systems  
+
+---
+
+## Stage 3 — Scalable Training Platform
 
 - hosted environments  
-- scalable access  
-- structured scenario progression  
+- structured progression  
 
 ---
 
-## Stage 4 – Advanced Training System
+## Stage 4 — Advanced Systems
 
-- multi-system environments  
-- enterprise-level scenarios  
-- architecture-level troubleshooting  
+- multi-system troubleshooting  
+- infrastructure-level scenarios  
 
 ---
 
-## Stage 5 – Performance-Based Certification (Future)
+## Stage 5 — Performance-Based Evaluation
 
 Users are evaluated based on:
 
@@ -298,18 +341,16 @@ Users are evaluated based on:
 - real system interaction  
 - real troubleshooting ability  
 
-Not multiple choice.
-
 ---
 
 # What This Is Not
 
-This system is not:
+This is not:
 
-- a video course platform  
-- a certification cram tool  
-- a guided tutorial system  
-- an automated AI fixer  
+- a tutorial system  
+- a scripted lab  
+- a chatbot that gives answers  
+- an automated fixer  
 
 ---
 
@@ -317,22 +358,34 @@ This system is not:
 
 It is:
 
-> A platform for building real-world troubleshooting skill through direct system interaction
+> A system that develops real technical ability through controlled exposure to real problems
 
 ---
 
 # Final Principle
 
-You do not learn by being told the answer.
+Skill is not built by being told the answer.
 
-You learn by:
+It is built by:
 
 - encountering failure  
 - investigating it  
 - understanding it  
-- fixing it  
+- resolving it  
 
-Then repeating that process until it becomes instinct.
+Then repeating that process.
+
+---
+
+# Relationship to NeuroCore
+
+This platform exists because NeuroCore provides:
+
+- controlled execution  
+- structured reasoning  
+- persistent system state  
+
+Without NeuroCore, this system does not exist.
 
 ---
 
