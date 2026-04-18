@@ -6,9 +6,11 @@ from tools.execution_engine import ExecutionEngine
 
 # Import tools
 from tools.system.service_manager import ServiceManager
+from tools.system.system_info import SystemInfo
 
 # Register tools
 registry.register(ServiceManager())
+registry.register(SystemInfo())
 
 __all__ = [
     "BaseTool",

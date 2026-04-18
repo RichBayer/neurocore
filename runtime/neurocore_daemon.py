@@ -29,14 +29,6 @@ signal.signal(signal.SIGTERM, handle_exit)
 
 
 def normalize_request(message):
-    """
-    Normalize incoming client messages into the runtime request shape.
-
-    Important:
-    - Preserve CLI compatibility
-    - Preserve trace context for end-to-end observability
-    """
-
     input_text = None
 
     if "data" in message and isinstance(message["data"], dict):
@@ -54,7 +46,6 @@ def normalize_request(message):
     if source is None:
         source = "cli_pipe" if mode == "pipe" else "cli_direct"
 
-    # 🔥 PRESERVE TRACE CONTEXT (critical for end-to-end tracing)
     trace = message.get("trace")
 
     return {
@@ -109,10 +100,9 @@ def main():
             normalized = normalize_request(message)
 
             if normalized.get("stream") is True:
-                for chunk in runtime.handle_stream_request(normalized):
-                    if chunk:
-                        conn.sendall(chunk.encode("utf-8"))
-
+                # 🔥 FIX: send full JSON response, not iteration
+                response = runtime.handle_stream_request(normalized)
+                conn.sendall(json.dumps(response).encode())
                 conn.shutdown(socket.SHUT_WR)
                 continue
 

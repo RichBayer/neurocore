@@ -23,24 +23,40 @@ def send_request(payload):
     client.sendall(json.dumps(payload).encode())
     client.shutdown(socket.SHUT_WR)
 
-    last_char = None
+    buffer = ""
 
     while True:
         chunk = client.recv(4096)
         if not chunk:
             break
 
-        decoded = chunk.decode()
-        print(decoded, end="")
-
-        if decoded:
-            last_char = decoded[-1]
-
-    # ensure clean newline before prompt
-    if last_char != "\n":
-        print()
+        buffer += chunk.decode()
 
     client.close()
+
+    # Try to parse JSON response
+    try:
+        response = json.loads(buffer)
+
+        status = response.get("status")
+        output = response.get("response")
+        error = response.get("error")
+
+        if status == "success":
+            print(output)
+
+        elif status == "confirmation_required":
+            print(output)
+
+        elif status == "error":
+            print(f"[ERROR] {error}")
+
+        else:
+            print(buffer)
+
+    except json.JSONDecodeError:
+        # fallback for reasoning / non-JSON responses
+        print(buffer, end="")
 
 
 def is_pipe():

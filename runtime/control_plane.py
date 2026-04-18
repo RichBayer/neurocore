@@ -24,7 +24,7 @@ class AuthorizedRequest:
 
 class ControlPlane:
 
-    EXECUTION_KEYWORDS = {"start", "stop", "restart", "status"}
+    EXECUTION_KEYWORDS = {"start", "stop", "restart", "status", "info"}
     CONFIRM_PREFIX = "confirm "
 
     def __init__(self) -> None:
@@ -242,12 +242,22 @@ class ControlPlane:
         words = request.get("query", "").lower().split()
 
         action = words[0] if len(words) > 0 else ""
-        service = words[1] if len(words) > 1 else ""
+        target = words[1] if len(words) > 1 else ""
 
+        # 🔥 NEW: route "info" to system_info tool
+        if action == "info":
+            return {
+                "tool": "system_info",
+                "input": {
+                    "target": target,
+                },
+            }
+
+        # default: service_manager
         return {
             "tool": "service_manager",
             "input": {
                 "action": action,
-                "service": service,
+                "service": target,
             },
         }

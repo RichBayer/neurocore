@@ -17,6 +17,8 @@ class ToolExecutionError(Exception):
 class BaseTool(ABC):
     """
     Base contract for all tools.
+
+    Tools receive the full request object during execution.
     """
 
     name: str = ""
@@ -74,7 +76,17 @@ class BaseTool(ABC):
         pass
 
     @abstractmethod
-    def execute(self, tool_input: Dict[str, Any]) -> Dict[str, Any]:
+    def execute(self, request: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Execute the tool using the full request object.
+
+        The request includes:
+        - "tool": tool name
+        - "input": validated input data
+        - "trace": tracing context (if present)
+
+        Tools are responsible for extracting request["input"].
+        """
         pass
 
     def build_result(
