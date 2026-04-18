@@ -3,8 +3,17 @@
 import sys
 import json
 import socket
+import uuid
 
 SOCKET_PATH = "/tmp/neurocore.sock"
+
+
+def build_trace(source: str) -> dict:
+    return {
+        "request_id": str(uuid.uuid4()),
+        "source": source,
+        "metadata": {}
+    }
 
 
 def send_request(payload):
@@ -27,7 +36,7 @@ def send_request(payload):
         if decoded:
             last_char = decoded[-1]
 
-    # 🔥 FIX: ensure clean newline before prompt
+    # ensure clean newline before prompt
     if last_char != "\n":
         print()
 
@@ -48,7 +57,8 @@ def main():
             },
             "mode": "pipe",
             "source": "cli_pipe",
-            "stream": True
+            "stream": True,
+            "trace": build_trace("cli_pipe")
         }
 
         send_request(payload)
@@ -66,7 +76,8 @@ def main():
         },
         "mode": "cli",
         "source": "cli_direct",
-        "stream": True
+        "stream": True,
+        "trace": build_trace("cli_direct")
     }
 
     send_request(payload)

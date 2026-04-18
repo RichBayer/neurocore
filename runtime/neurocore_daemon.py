@@ -33,9 +33,10 @@ def normalize_request(message):
     Normalize incoming client messages into the runtime request shape.
 
     Important:
-    We preserve current CLI compatibility while adding the source hint
-    needed by the control plane.
+    - Preserve CLI compatibility
+    - Preserve trace context for end-to-end observability
     """
+
     input_text = None
 
     if "data" in message and isinstance(message["data"], dict):
@@ -51,8 +52,10 @@ def normalize_request(message):
     mode = message.get("mode", "cli")
 
     if source is None:
-        # Current CLI does not explicitly send source. Use mode as the best available hint.
         source = "cli_pipe" if mode == "pipe" else "cli_direct"
+
+    # 🔥 PRESERVE TRACE CONTEXT (critical for end-to-end tracing)
+    trace = message.get("trace")
 
     return {
         "type": "query",
@@ -60,6 +63,7 @@ def normalize_request(message):
         "mode": mode,
         "stream": message.get("stream", False),
         "source": source,
+        "trace": trace,
         "data": {
             "input": input_text
         }
