@@ -1,366 +1,210 @@
-# NeuroCore – Tool Execution Architecture
+NeuroCore Repository Map
 
 ---
 
-# Purpose
+ROOT
 
-The Tool Execution layer is responsible for performing controlled system actions inside NeuroCore.
-
-It ensures that:
-
-- all execution flows through a single controlled path
-- no component executes system actions directly
-- execution is validated, authorized, and observable
-- system safety is enforced at all times
-
-At this stage, this layer is no longer theoretical. It is now actively executing real system commands through a controlled interface.
+.
+├── .gitignore
+├── README.md
+├── bootstrap/
 
 ---
 
-# Core Principle
+BUILD LOGS (PROJECT HISTORY)
 
-All execution must pass through the execution engine.
-
-No tool is called directly by:
-
-- the router
-- the model
-- the CLI
-- any external input
-
-Execution flow is strictly enforced.
-
----
-
-# Execution Flow
-
-All execution follows this path:
-
-```
-client
-→ daemon
-→ runtime manager
-→ control plane
-→ execution engine
-→ tool
-→ command_runner (if real execution)
-→ execution engine
-→ control plane
-→ runtime manager
-```
+├── build-logs/
+│   ├── 000_foundation.md
+│   ├── 001_runtime_stack.md
+│   ├── 002_interface_layer.md
+│   ├── 003_knowledge_layer.md
+│   ├── 004_knowledge_retrieval.md
+│   ├── 005_logic_layer_router.md
+│   ├── 006_rag_reasoning_integration.md
+│   ├── 007_backup_and_rebuild_foundations.md
+│   ├── 008_runtime_performance_and_api_migration.md
+│   ├── 009_neurocore_daemon_foundation.md
+│   ├── 010_runtime_integration.md
+│   ├── 011_cli_interface_layer.md
+│   ├── 012_streaming_pipeline_and_cli_behavior.md
+│   ├── 013_rag_metadata_and_grounding.md
+│   ├── 014_session_memory_query_rewriting_and_knowledge_correction.md
+│   ├── 015_cli_piped_input_ingestion.md
+│   ├── 016_runtime_control_plane_enforcement.md
+│   ├── 017_execution_layer_and_control_integration.md
+│   ├── 018_observability_and_tracing.md
+│   ├── 019_real_tool_execution_and_system_info.md
+│   └── 020 – NeuroCore System Tool Expansion.md
 
 ---
 
-# Architectural Role
+DISTRIBUTIONS (FUTURE PRODUCTIZATION)
 
-The Tool Execution layer consists of:
-
-- Execution Engine (orchestration)
-- Tool Registry (tool discovery)
-- BaseTool contract (standard interface)
-- Tools (implementation layer)
-- CommandRunner (system execution layer)
-
----
-
-# Execution Engine
-
-Location:
-
-```
-tools/execution_engine.py
-```
-
-Responsibilities:
-
-- receive authorized execution requests from control plane
-- resolve the correct tool from registry
-- validate tool input
-- invoke tool execution
-- return structured results
-- propagate trace context
-
-The execution engine is the ONLY component allowed to invoke tools.
+├── distributions/
+│   └── argus/
+│       ├── cli/
+│       ├── config/
+│       └── manifests/
+│           └── argus_tool_manifest.md
 
 ---
 
-# Tool Registry
+DOCUMENTATION
 
-Location:
+├── docs/
 
-```
-tools/tool_registry.py
-```
+│   ├── README.md
 
-Responsibilities:
+│   ├── ai-operations/
+│   │   ├── context_loading_strategy.md
+│   │   └── resume_prompt_compressed.md   ← PRIMARY resume doc
 
-- maintain list of available tools
-- resolve tools by name
-- enforce controlled tool availability
+│   ├── ai-stack/
 
----
+│   ├── architecture/
+│   │   ├── control_plane.md
+│   │   ├── evaluation_framework.md
+│   │   ├── neurocore_master_blueprint.md
+│   │   ├── neurocore_vision.md
+│   │   ├── observability.md
+│   │   ├── platform_ecosystem.md
+│   │   ├── platform_vision.md
+│   │   ├── security_policy.md
+│   │   ├── system_architecture.md
+│   │   ├── system_state.md
+│   │   ├── task_engine.md
+│   │   ├── tool_execution.md
+│   │   └── tool_pattern.md
 
-# BaseTool Contract
+│   ├── design/
+│   │   ├── phase_5i_real_execution.md
+│   │   └── phase_5j_argus_core_tool_expansion.md
 
-Location:
+│   ├── distributions/
+│   │   ├── argus/
+│   │   │   └── acli_spec.md
+│   │   └── argus_v1_blueprint.md
 
-```
-tools/base_tool.py
-```
+│   ├── hardware/
+│   │   └── home_ai_hardware.md
 
-Defines:
+│   ├── infrastructure/
+│   │   ├── neurocore_repository_map.txt
+│   │   ├── neurocore_system_map.txt
+│   │   ├── home_system_map.md
+│   │   └── home_infrastructure.md
 
-- tool identity
-- input schema
-- validation logic
-- execution behavior
-- result structure
+│   ├── network/
 
-All tools must inherit from BaseTool.
+│   ├── screenshots/
+│   │   ├── argus-core-tools/
+│   │   ├── argus-tools/
+│   │   ├── system-info-tool/
+│   │   ├── execution-layer/
+│   │   ├── runtime-control-plane/
+│   │   ├── observability-tracing/
+│   │   ├── runtime/
+│   │   ├── runtime-behavior/
+│   │   ├── interface/
+│   │   ├── knowledge/
+│   │   ├── logic/
+│   │   ├── rag/
+│   │   ├── daemon/
+│   │   └── backups/
 
----
+│   ├── neurocore_development_notebook.md
 
-# Tool Interface (UPDATED)
-
-Tools no longer receive only input.
-
-They now receive the full execution request.
-
-## Previous Model (deprecated)
-
-```
-tool.execute(input)
-```
-
-## Current Model
-
-```
-tool.execute(request)
-```
-
----
-
-# Request Structure Passed to Tools
-
-Tools receive a structured request:
-
-```json
-{
-  "tool": "...",
-  "input": { ... },
-  "trace": {
-    "request_id": "...",
-    "source": "...",
-    "metadata": {}
-  }
-}
-```
+│   ├── security/
+│   ├── vision/
+│   └── voice/
 
 ---
 
-# Command Execution Layer (NEW)
+RUNTIME (CORE EXECUTION ENGINE)
 
-Location:
-
-```
-tools/system/command_runner.py
-```
-
-This is the layer that actually interfaces with the operating system.
-
-Responsibilities:
-
-- execute subprocess commands
-- enforce timeout limits (10 seconds default)
-- capture stdout, stderr, and return codes
-
-Important:
-
-- Tools do NOT call subprocess directly
-- All real execution flows through CommandRunner
+├── runtime/
+│   ├── neurocore_daemon.py
+│   ├── runtime_manager.py
+│   ├── control_plane.py
+│   ├── tracing.py
+│   └── __init__.py
 
 ---
 
-# Why This Matters
+LOGIC + INTERFACE
 
-This introduces real system interaction while still preserving control.
-
-Without this layer:
-
-- tools would directly execute system commands
-- safety and consistency would break
-- observability would be harder to maintain
-
-With it:
-
-- execution remains centralized
-- behavior stays predictable
-- system remains safe and debuggable
+├── scripts/
+│   ├── ai_cli.py
+│   ├── jarvis_router.py
+│   ├── query_knowledge.py
+│   ├── session_memory.py
+│   ├── index_knowledge.py
+│   └── __init__.py
 
 ---
 
-# Tool Responsibilities
+TOOLS (EXECUTION LAYER)
 
-Each tool must:
+├── tools/
+│   ├── __init__.py
+│   ├── base_tool.py
+│   ├── execution_engine.py
+│   ├── tool_registry.py
 
-- validate input using BaseTool contract
-- extract required data from `request["input"]`
-- NOT modify trace context
-- emit trace events using provided context
-- return structured results
+│   ├── system/                         ← NeuroCore system tool layer
+│   │   ├── command_runner.py
+│   │   ├── system_info.py
+│   │   ├── process_top.py
+│   │   ├── disk_usage.py
+│   │   ├── memory_usage.py
+│   │   ├── disk_layout.py
+│   │   ├── network_interfaces.py
+│   │   ├── network_connections.py
+│   │   ├── uptime_load.py
+│   │   ├── system_logs.py
+│   │   ├── users_sessions.py
+│   │   ├── recent_logins.py
+│   │   └── service_manager.py
 
-Tools must NOT:
-
-- generate new request_ids
-- bypass execution engine
-- execute system commands directly (must use CommandRunner)
-
----
-
-# Execution Modes
-
-Each tool defines an execution mode:
-
-## auto
-- executes immediately
-- used for safe, read-only operations
-
-## manual
-- requires confirmation before execution
-
-## dry-run
-- never executes
-- returns advisory response only
+│   ├── argus/                          ← Argus tool layer (NEW)
+│   │   └── (empty – tools not yet implemented)
 
 ---
 
-# Confirmation Model
+IGNORED / RUNTIME ARTIFACTS
 
-For manual tools:
-
-1. user issues command  
-2. control plane detects execution intent  
-3. execution is blocked  
-4. confirmation required  
-5. user confirms  
-6. execution engine proceeds  
+- __pycache__/ directories
+- .git internal structure
 
 ---
 
-# Safety Model
+CURRENT SYSTEM CHARACTERISTICS
 
-The execution system enforces:
-
-- no execution without control plane approval
-- no direct execution from model or router
-- no execution from piped input
-- no bypass of confirmation model
-- strict tool validation before execution
-
-Additionally:
-
-- real system execution is restricted to tool definitions
-- execution behavior is explicit and auditable
-
----
-
-# Observability Integration
-
-Execution is fully traceable.
-
-Each step emits structured trace events:
-
-- execution detection
-- tool resolution
-- validation
-- execution start
-- execution completion
-
-All events:
-
-- share the same request_id
-- are logged centrally
-- allow full request lifecycle inspection
+- Persistent daemon architecture
+- Streaming + structured JSON responses
+- CLI + piped input support (`| ai`)
+- RAG with metadata filtering
+- Query rewriting + session memory
+- Control plane enforced execution model
+- Tool-based execution system
+- Execution intent detection
+- Real system command execution via CommandRunner
+- Auto-execution for safe read-only tools
+- CLI JSON parsing and output formatting
+- Full system observability and trace propagation
 
 ---
 
-# Example Execution Trace
+SYSTEM INVARIANT
 
-```
-runtime_manager → execution detected
-control_plane   → execution allowed (auto tool)
-execution_engine → execution started
-execution_engine → tool resolved
-execution_engine → validation passed
-system_info      → tool invoked
-command_runner   → system command executed
-execution_engine → execution completed
-```
+All execution flows through:
 
----
+daemon → runtime_manager → control_plane → system
 
-# Current Tools
+Execution is split into:
 
-## service_manager
+Execution Path:
+control_plane → execution_engine → tool → command_runner → OS
 
-Capabilities:
-
-- start
-- stop
-- restart
-- status
-
-Behavior:
-
-- simulated execution
-- confirmation-based
-- full trace support
-
----
-
-## system_info (NEW)
-
-Capabilities:
-
-- hostname
-- uptime
-- OS info
-- CPU
-- memory
-- disk
-
-Behavior:
-
-- real system execution via CommandRunner
-- read-only
-- auto execution mode
-- full trace support
-
----
-
-# Outcome
-
-The tool execution system now provides:
-
-- controlled execution flow
-- strict safety enforcement
-- standardized tool interface
-- full trace visibility
-- real system interaction (NEW)
-
----
-
-# Status
-
-Execution Engine: COMPLETE  
-Tool Contract: COMPLETE  
-Trace Integration: COMPLETE  
-Real Execution Layer: ACTIVE  
-
----
-
-# Next Step
-
-- expand system toolset (process, network, logs)
-- introduce more granular execution controls
-- improve output formatting for usability
+Reasoning Path:
+control_plane → router → knowledge → model

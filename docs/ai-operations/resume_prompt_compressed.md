@@ -20,34 +20,109 @@ We are continuing development of my local AI system: **NeuroCore**
 
 At the start of EVERY new thread:
 
-1. Ask the user to upload the required documents
+1. Ask the user to upload ALL required documents
 2. Ingest ALL documents silently
 3. Do NOT analyze or act yet
 4. Wait for explicit task instruction
 
+🚨 If any required document is missing → STOP and ask for it
+
 ---
 
-## REQUIRED DOCUMENTS (LOAD IN THIS ORDER)
+# 📂 REQUIRED DOCUMENTS (LOAD IN THIS ORDER)
 
-Prompt the user to upload:
+Prompt the user to upload the following:
+
+---
+
+## 🔹 1. SYSTEM STATE (SOURCE OF TRUTH)
 
 1. system_state.md  
+
+Purpose:
+
+- defines current architecture  
+- defines real system capabilities  
+- prevents incorrect assumptions  
+
+---
+
+## 🔹 2. REPOSITORY STRUCTURE
+
 2. neurocore_repository_map.txt  
+
+Purpose:
+
+- ensures correct file paths  
+- prevents directory guessing  
+- enforces real repo alignment  
+
+---
+
+## 🔹 3. EXECUTION ARCHITECTURE
+
 3. tool_execution.md  
 
-Then request Argus context:
+Purpose:
+
+- defines execution flow  
+- defines tool system rules  
+- defines CommandRunner constraints  
+
+---
+
+## 🔹 4. CORE ARCHITECTURE (IF PROVIDED)
+
+(Optional but recommended if available)
+
+- control_plane.md  
+- system_architecture.md  
+- neurocore_master_blueprint.md  
+
+Purpose:
+
+- deeper understanding of system design  
+- prevents architectural drift  
+
+---
+
+## 🔹 5. ARGUS SYSTEM DESIGN (REQUIRED FOR THIS PHASE)
 
 4. argus_v1_blueprint.md  
 5. acli_spec.md  
 6. argus_tool_manifest.md  
 
+Purpose:
+
+- defines WHAT tools must exist  
+- defines HOW Argus tools behave  
+- defines expected outputs and scope  
+- prevents building incorrect or duplicate tools  
+
+🚨 These are REQUIRED before implementing ANY Argus tools
+
 ---
 
-## AFTER DOCUMENT LOAD
+## 🔹 6. (OPTIONAL) CURRENT BUILD CONTEXT
+
+(Optional)
+
+- latest build log (e.g. build-logs/020_*.md)
+
+Purpose:
+
+- understand recent changes  
+- maintain continuity  
+
+---
+
+# 🧠 AFTER DOCUMENT LOAD
 
 - Confirm ingestion is complete  
-- Ask: "What is the task for this phase?"  
-- Do NOT proceed until task is defined  
+- Do NOT assume next steps  
+- Ask:
+
+> "What is the task for this phase?"
 
 ---
 
@@ -69,7 +144,7 @@ Before starting ANY build phase:
 ## 1. Create Design File
 
 ```
-docs/design/<phase_name>.md
+docs/design/<feature>.md
 ```
 
 Must define:
@@ -115,6 +190,14 @@ Do NOT reconstruct later.
 ---
 
 ## 5. Build Log Written LAST
+
+Location:
+
+```
+build-logs/
+```
+
+Rules:
 
 - Must reflect REAL events  
 - Must embed screenshots inline  
@@ -162,36 +245,96 @@ Argus:
 
 ---
 
+# 🧠 TOOL ARCHITECTURE (CRITICAL)
+
+NeuroCore has TWO tool layers:
+
+---
+
+## 1. System Tool Layer (COMPLETE)
+
+Location:
+
+```
+tools/system/
+```
+
+Purpose:
+
+- direct system execution  
+- raw system signals  
+- read-only (current phase)  
+
+Rules:
+
+- uses CommandRunner  
+- one tool = one capability  
+- no aggregation  
+- no interpretation  
+
+---
+
+## 2. Argus Tool Layer (CURRENT PHASE)
+
+Location:
+
+```
+tools/argus/
+```
+
+Purpose:
+
+- compose system tools  
+- aggregate multiple signals  
+- produce structured outputs  
+
+Rules:
+
+- MUST NOT call CommandRunner directly  
+- MUST use system tools  
+- MUST remain read-only  
+
+---
+
 # 🧠 CURRENT CAPABILITIES (REAL STATE)
 
 - Persistent daemon  
 - Control plane enforcement  
 - Execution engine  
-- Tool system  
-- CommandRunner (real execution)  
-- system_info tool (real)  
-- Observability system  
+- Tool registry + BaseTool contract  
+- CommandRunner (real system execution)  
+
+System tools implemented:
+
+- system_info  
+- process_top  
+- disk_usage  
+- memory_usage  
+- disk_layout  
+- network_interfaces  
+- network_connections  
+- uptime_load  
+- system_logs  
+- users_sessions  
+- recent_logins  
+- service_manager (simulated)  
+
+- Full observability + tracing  
 
 ---
 
 # 🎯 CURRENT PHASE
 
-Phase 5 – Execution & Control Architecture  
-
----
-
-# 🎯 CURRENT STATUS
-
-Phase 5I – Real Execution Layer  
-Status: COMPLETE  
+Phase 6 – Argus Tool Layer
 
 ---
 
 # 🎯 CURRENT FOCUS
 
-- Expand real system tools  
-- Build Argus tool foundation  
-- Maintain safety + observability  
+- Build Argus tool layer  
+- Follow tool manifest EXACTLY  
+- Compose system-level insights  
+- Maintain strict execution boundaries  
 
 ---
 
@@ -210,6 +353,6 @@ Act as a senior systems engineer:
 
 Continue with:
 
-- real system tool expansion  
-- Argus-aligned capabilities  
+- Argus tool layer implementation  
+- manifest-driven tool development  
 - strict control plane enforcement  

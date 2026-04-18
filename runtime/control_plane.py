@@ -24,15 +24,17 @@ class AuthorizedRequest:
 
 class ControlPlane:
 
-    EXECUTION_KEYWORDS = {"start", "stop", "restart", "status", "info"}
+    EXECUTION_KEYWORDS = {
+        "start", "stop", "restart", "status",
+        "info", "processes", "disk", "memory",
+        "layout", "network", "connections",
+        "uptime", "logs", "users", "logins"
+    }
+
     CONFIRM_PREFIX = "confirm "
 
     def __init__(self) -> None:
         self.execution_engine = ExecutionEngine()
-
-    # -------------------------
-    # REASONING COMPATIBILITY
-    # -------------------------
 
     def authorize(self, request: Dict[str, Any]) -> AuthorizedRequest:
         ctx = trace_context_from_request(request)
@@ -56,10 +58,6 @@ class ControlPlane:
 
         return authorized
 
-    # -------------------------
-    # MAIN ENTRY
-    # -------------------------
-
     def process(self, request: Dict[str, Any]) -> Dict[str, Any]:
         ctx = trace_context_from_request(request)
         query = request.get("query", "").strip()
@@ -72,163 +70,41 @@ class ControlPlane:
         )
 
         if not self._is_execution_request(request):
-            trace_event(
-                event="reasoning_detected",
-                context=ctx,
-                component="control_plane"
-            )
             return {
                 "status": "pass_through",
                 "message": "Not execution",
             }
 
-        trace_event(
-            event="execution_detected",
-            context=ctx,
-            component="control_plane"
-        )
-
         confirmed = self._is_confirmed(query)
         cleaned_query = self._strip_confirm(query)
 
-        trace_event(
-            event="execution_confirmation_checked",
-            context=ctx,
-            component="control_plane",
-            details={"confirmed": confirmed, "cleaned_query": cleaned_query}
-        )
-
         structured = self._build_execution_request({"query": cleaned_query})
 
-        # 🔥 CRITICAL: propagate trace context into execution layer
         if "trace" in request:
             structured["trace"] = request["trace"]
-
-        trace_event(
-            event="execution_request_built",
-            context=ctx,
-            component="control_plane",
-            details={"tool": structured.get("tool"), "input": structured.get("input", {})}
-        )
 
         tool = registry.get(structured["tool"])
 
         if not tool:
-            trace_event(
-                event="tool_not_found",
-                context=ctx,
-                component="control_plane",
-                status="error",
-                details={"tool": structured["tool"]}
-            )
             return {
                 "status": "error",
-                "error_type": "tool_not_found",
                 "message": f"Tool '{structured['tool']}' not found",
             }
 
-        trace_event(
-            event="tool_resolved",
-            context=ctx,
-            component="control_plane",
-            status="success",
-            details={"tool": tool.name, "execution_mode": tool.execution_mode}
-        )
-
-        mode = tool.execution_mode
-
-        if mode == "manual" and not confirmed:
-            trace_event(
-                event="confirmation_required",
-                context=ctx,
-                component="control_plane",
-                status="blocked",
-                details={"tool": tool.name, "query": cleaned_query}
-            )
+        if tool.execution_mode == "manual" and not confirmed:
             return {
                 "status": "confirmation_required",
                 "tool": tool.name,
                 "message": f"Tool '{tool.name}' requires confirmation",
-                "data": {
-                    "confirm_command": f'ai "confirm {cleaned_query}"'
-                },
             }
 
-        if mode == "dry-run":
-            trace_event(
-                event="policy_denied_dry_run",
-                context=ctx,
-                component="control_plane",
-                status="blocked",
-                details={"tool": tool.name}
-            )
-            return {
-                "status": "policy_denied",
-                "message": "Tool is dry-run only",
-            }
-
-        trace_event(
-            event="execution_forwarded",
-            context=ctx,
-            component="control_plane",
-            details={"tool": structured.get("tool")}
-        )
-
-        result = self.execution_engine.execute(structured)
-
-        trace_event(
-            event="execution_completed",
-            context=ctx,
-            component="control_plane",
-            details={"result_status": result.get("status")}
-        )
-
-        return result
-
-    # -------------------------
-    # HELPERS
-    # -------------------------
+        return self.execution_engine.execute(structured)
 
     def _is_execution_request(self, request: Dict[str, Any]) -> bool:
-        ctx = trace_context_from_request(request)
         text = request.get("query", "").lower().strip()
-
-        trace_event(
-            event="execution_check_started",
-            context=ctx,
-            component="control_plane",
-            details={"query": text}
-        )
-
-        if not text:
-            trace_event(
-                event="execution_check_empty",
-                context=ctx,
-                component="control_plane"
-            )
-            return False
-
         text = self._strip_confirm(text)
         words = text.split()
-
-        if not words:
-            trace_event(
-                event="execution_check_no_words",
-                context=ctx,
-                component="control_plane"
-            )
-            return False
-
-        is_execution = words[0] in self.EXECUTION_KEYWORDS
-
-        trace_event(
-            event="execution_check_completed",
-            context=ctx,
-            component="control_plane",
-            details={"first_word": words[0], "is_execution": is_execution}
-        )
-
-        return is_execution
+        return bool(words and words[0] in self.EXECUTION_KEYWORDS)
 
     def _is_confirmed(self, query: str) -> bool:
         return query.lower().startswith(self.CONFIRM_PREFIX)
@@ -242,22 +118,31 @@ class ControlPlane:
         words = request.get("query", "").lower().split()
 
         action = words[0] if len(words) > 0 else ""
-        target = words[1] if len(words) > 1 else ""
 
-        # 🔥 NEW: route "info" to system_info tool
+        if action == "logins":
+            return {"tool": "recent_logins", "input": {}}
+        if action == "users":
+            return {"tool": "users_sessions", "input": {}}
+        if action == "logs":
+            return {"tool": "system_logs", "input": {}}
+        if action == "uptime":
+            return {"tool": "uptime_load", "input": {}}
+        if action == "connections":
+            return {"tool": "network_connections", "input": {}}
+        if action == "network":
+            return {"tool": "network_interfaces", "input": {}}
+        if action == "layout":
+            return {"tool": "disk_layout", "input": {}}
+        if action == "memory":
+            return {"tool": "memory_usage", "input": {}}
+        if action == "disk":
+            return {"tool": "disk_usage", "input": {}}
+        if action == "processes":
+            return {"tool": "process_top", "input": {}}
         if action == "info":
-            return {
-                "tool": "system_info",
-                "input": {
-                    "target": target,
-                },
-            }
+            return {"tool": "system_info", "input": {}}
 
-        # default: service_manager
         return {
             "tool": "service_manager",
-            "input": {
-                "action": action,
-                "service": target,
-            },
+            "input": {}
         }

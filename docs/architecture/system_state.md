@@ -103,7 +103,7 @@ runtime/control_plane.py
 Responsibilities:
 
 - Request classification (execution vs reasoning)
-- Execution keyword detection (e.g. `info`)
+- Execution keyword detection (e.g. `info`, `processes`, `disk`, `memory`, etc.)
 - Policy enforcement
 - Confirmation handling (when required)
 - Tool selection and validation
@@ -144,12 +144,22 @@ tools/base_tool.py
 tools/system/
 ```
 
-Current Tools:
+#### Current Tools
 
 - `service_manager` (simulated)
-- `system_info` (real execution)
+- `system_info`
+- `process_top`
+- `disk_usage`
+- `memory_usage`
+- `disk_layout`
+- `network_interfaces`
+- `network_connections`
+- `uptime_load`
+- `system_logs`
+- `users_sessions`
+- `recent_logins`
 
-Capabilities:
+#### Capabilities
 
 - Structured input validation
 - Execution mode handling:
@@ -160,7 +170,7 @@ Capabilities:
 
 ---
 
-### 7. Command Execution Layer (NEW)
+### 7. Command Execution Layer
 
 Location:
 ```
@@ -178,7 +188,7 @@ Responsibilities:
 
 Notes:
 
-- This is the first direct interface to the operating system
+- This is the direct interface to the operating system
 - All real system interaction flows through this layer
 
 ---
@@ -277,7 +287,14 @@ NeuroCore now supports:
 - Session memory with query rewriting
 - Control-plane enforced execution
 - Tool-based execution framework
-- Real system command execution (NEW)
+- Real system command execution across multiple domains:
+  - process inspection
+  - memory usage
+  - disk usage and layout
+  - network interfaces and connections
+  - system logs
+  - uptime and load
+  - user session visibility
 - JSON-based daemon response model
 - CLI-side JSON parsing and formatting
 - Full system observability and tracing
@@ -300,18 +317,17 @@ No component bypasses the control plane.
 
 NeuroCore is now:
 
-- Executing real system commands
+- Executing real system commands across multiple system domains
 - Fully observable end-to-end
 - Deterministic in execution flow
 - Structurally stable for expansion
-
-This is the first point where the system moves beyond architecture and into real capability.
 
 ---
 
 ## Next Phase
 
-- Expand system toolset (process, network, disk health, logs)
+- Introduce Argus tool layer (composed tools)
+- Aggregate system signals into structured outputs
 - Improve output formatting for usability
 - Introduce intelligent tool selection (natural language → tool mapping)
 - Maintain strict control plane enforcement as capabilities grow
