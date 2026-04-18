@@ -13,6 +13,8 @@ It ensures that:
 - execution is validated, authorized, and observable
 - system safety is enforced at all times
 
+At this stage, this layer is no longer theoretical. It is now actively executing real system commands through a controlled interface.
+
 ---
 
 # Core Principle
@@ -41,6 +43,7 @@ client
 → control plane
 → execution engine
 → tool
+→ command_runner (if real execution)
 → execution engine
 → control plane
 → runtime manager
@@ -56,6 +59,7 @@ The Tool Execution layer consists of:
 - Tool Registry (tool discovery)
 - BaseTool contract (standard interface)
 - Tools (implementation layer)
+- CommandRunner (system execution layer)
 
 ---
 
@@ -143,10 +147,7 @@ Tools receive a structured request:
 ```json
 {
   "tool": "...",
-  "input": {
-    "action": "...",
-    "service": "..."
-  },
+  "input": { ... },
   "trace": {
     "request_id": "...",
     "source": "...",
@@ -157,19 +158,44 @@ Tools receive a structured request:
 
 ---
 
-# Why This Change Matters
+# Command Execution Layer (NEW)
 
-Passing the full request enables:
+Location:
 
-- trace context propagation (request_id continuity)
-- full observability inside tools
-- consistent execution behavior across all layers
+```
+tools/system/command_runner.py
+```
 
-Without this:
+This is the layer that actually interfaces with the operating system.
 
-- tools generate new request_ids
-- trace continuity breaks
-- system becomes harder to debug
+Responsibilities:
+
+- execute subprocess commands
+- enforce timeout limits (10 seconds default)
+- capture stdout, stderr, and return codes
+
+Important:
+
+- Tools do NOT call subprocess directly
+- All real execution flows through CommandRunner
+
+---
+
+# Why This Matters
+
+This introduces real system interaction while still preserving control.
+
+Without this layer:
+
+- tools would directly execute system commands
+- safety and consistency would break
+- observability would be harder to maintain
+
+With it:
+
+- execution remains centralized
+- behavior stays predictable
+- system remains safe and debuggable
 
 ---
 
@@ -178,7 +204,7 @@ Without this:
 Each tool must:
 
 - validate input using BaseTool contract
-- extract required data from request["input"]
+- extract required data from `request["input"]`
 - NOT modify trace context
 - emit trace events using provided context
 - return structured results
@@ -187,7 +213,7 @@ Tools must NOT:
 
 - generate new request_ids
 - bypass execution engine
-- perform unauthorized actions
+- execute system commands directly (must use CommandRunner)
 
 ---
 
@@ -197,6 +223,7 @@ Each tool defines an execution mode:
 
 ## auto
 - executes immediately
+- used for safe, read-only operations
 
 ## manual
 - requires confirmation before execution
@@ -230,9 +257,14 @@ The execution system enforces:
 - no bypass of confirmation model
 - strict tool validation before execution
 
+Additionally:
+
+- real system execution is restricted to tool definitions
+- execution behavior is explicit and auditable
+
 ---
 
-# Observability Integration (NEW)
+# Observability Integration
 
 Execution is fully traceable.
 
@@ -256,19 +288,18 @@ All events:
 
 ```
 runtime_manager → execution detected
-control_plane   → confirmation required
-control_plane   → execution allowed
+control_plane   → execution allowed (auto tool)
 execution_engine → execution started
 execution_engine → tool resolved
 execution_engine → validation passed
-service_manager  → tool invoked
-service_manager  → execution simulated
+system_info      → tool invoked
+command_runner   → system command executed
 execution_engine → execution completed
 ```
 
 ---
 
-# Current Tool (Phase 5H)
+# Current Tools
 
 ## service_manager
 
@@ -279,11 +310,31 @@ Capabilities:
 - restart
 - status
 
-Current behavior:
+Behavior:
 
 - simulated execution
+- confirmation-based
 - full trace support
-- confirmation-based execution
+
+---
+
+## system_info (NEW)
+
+Capabilities:
+
+- hostname
+- uptime
+- OS info
+- CPU
+- memory
+- disk
+
+Behavior:
+
+- real system execution via CommandRunner
+- read-only
+- auto execution mode
+- full trace support
 
 ---
 
@@ -295,7 +346,7 @@ The tool execution system now provides:
 - strict safety enforcement
 - standardized tool interface
 - full trace visibility
-- architecture ready for real system tools
+- real system interaction (NEW)
 
 ---
 
@@ -304,9 +355,12 @@ The tool execution system now provides:
 Execution Engine: COMPLETE  
 Tool Contract: COMPLETE  
 Trace Integration: COMPLETE  
+Real Execution Layer: ACTIVE  
 
 ---
 
 # Next Step
 
-Replace simulated tools with real read-only system tools
+- expand system toolset (process, network, logs)
+- introduce more granular execution controls
+- improve output formatting for usability
