@@ -1,4 +1,3 @@
-`````markdown
 # NeuroCore Development – Resume Prompt (Compressed)
 
 We are continuing development of my local AI system: **NeuroCore**
@@ -387,4 +386,3 @@ Continue with:
 - Argus tool layer expansion  
 - manifest-driven tool development  
 - strict control plane enforcement  
-`````
