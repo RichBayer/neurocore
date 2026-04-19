@@ -1,9 +1,8 @@
-````markdown
 # 021 – Argus Tool Layer Initial Implementation
 
 ---
 
-# Objective
+## Objective
 
 This phase introduces the Argus tool layer on top of NeuroCore.
 
@@ -18,7 +17,7 @@ This marks the transition from a command execution framework to a system capable
 
 ---
 
-# Starting State
+## Starting State
 
 At the start of this phase:
 
@@ -42,7 +41,7 @@ Initial Argus tool:
 
 ---
 
-# Step 1 – Argus Tool Layer Design
+## Step 1 – Argus Tool Layer Design
 
 Created:
 
@@ -58,7 +57,7 @@ Defined:
 
 ---
 
-# Step 2 – First Argus Tool Execution
+## Step 2 – First Argus Tool Execution
 
 The initial implementation of `system_summary` confirmed that:
 
@@ -67,15 +66,15 @@ The initial implementation of `system_summary` confirmed that:
 - the tool registry resolved the tool correctly  
 - the Argus tool successfully called a system tool  
 
-## Screenshot – First Execution
+### Screenshot – First Execution
 
-![First execution of system_summary](../docs/screenshots/argus-system-summary/01_first_execution.png)
+![First execution](../docs/screenshots/argus-system-summary/01_first_execution.png)
 
 This validated the end-to-end execution path.
 
 ---
 
-# Step 3 – Initial Parsing Attempt
+## Step 3 – Initial Parsing Attempt
 
 The next iteration attempted to extract signals from formatted output.
 
@@ -91,13 +90,13 @@ Result:
 - inconsistent behavior  
 - reliance on fragile formatting assumptions  
 
-## Screenshot – Broken Parsing
+### Screenshot – Broken Parsing
 
-![Broken output from early parsing attempt](../docs/screenshots/argus-system-summary/02_broken_output.png)
+![Broken parsing](../docs/screenshots/argus-system-summary/02_broken_output.png)
 
 ---
 
-# Step 4 – Controlled Parsing Failure
+## Step 4 – Controlled Parsing Failure
 
 After tightening parsing logic:
 
@@ -106,9 +105,9 @@ After tightening parsing logic:
 
 This confirmed that the issue was not parsing complexity, but data format.
 
-## Screenshot – No Signal Detected
+### Screenshot – No Signal Detected
 
-![Controlled failure with no signal extraction](../docs/screenshots/argus-system-summary/03_no_signal_detected.png)
+![No signal detected](../docs/screenshots/argus-system-summary/03_no_signal_detected.png)
 
 Conclusion:
 
@@ -116,7 +115,7 @@ System tools were returning output optimized for human readability, not machine 
 
 ---
 
-# Step 5 – System Tool Refactor
+## Step 5 – System Tool Refactor
 
 Updated:
 
@@ -130,7 +129,7 @@ Changes:
 
 Example:
 
-```
+```json
 {
   "status": "success",
   "message": "...",
@@ -141,15 +140,15 @@ Example:
 }
 ```
 
-## Screenshot – Structured Output
+### Screenshot – Structured Output
 
-![Structured raw output from system_info](../docs/screenshots/argus-system-summary/04_system_info_structured_raw.png)
+![Structured raw output](../docs/screenshots/argus-system-summary/04_system_info_structured_raw.png)
 
 This change enabled reliable machine-level interpretation.
 
 ---
 
-# Step 6 – Structured Parsing Implementation
+## Step 6 – Structured Parsing Implementation
 
 Rewrote `system_summary` to:
 
@@ -158,7 +157,7 @@ Rewrote `system_summary` to:
 - eliminate regex-based parsing of formatted text  
 - calculate metrics such as memory %, disk %, and load  
 
-## Screenshot – Structured Parsing Success
+### Screenshot – Structured Parsing Success
 
 ![Structured parsing success](../docs/screenshots/argus-system-summary/05_structured_parsing_success.png)
 
@@ -166,7 +165,7 @@ This marked the first reliable signal extraction.
 
 ---
 
-# Step 7 – Interpretation Layer Upgrade
+## Step 7 – Interpretation Layer Upgrade
 
 Enhanced output to include:
 
@@ -175,27 +174,27 @@ Enhanced output to include:
 - conditional recommendations  
 - improved formatting  
 
-## Screenshot – Intelligent Summary Baseline
+### Screenshot – Intelligent Summary
 
-![Intelligent baseline summary](../docs/screenshots/argus-system-summary/06_intelligent_summary.png)
+![Intelligent summary](../docs/screenshots/argus-system-summary/06_intelligent_summary.png)
 
 At this stage, the tool produced consistent and meaningful system assessments.
 
 ---
 
-# Step 8 – CPU Load Testing
+## Step 8 – CPU Load Testing
 
 Generated CPU load using:
 
-```
+```bash
 yes > /dev/null &
 ```
 
 Multiple instances were spawned to observe behavior under increasing load.
 
-## Screenshot – High Load Test
+### Screenshot – High Load
 
-![High load behavior](../docs/screenshots/argus-system-summary/07_high_load_test.png)
+![High load](../docs/screenshots/argus-system-summary/07_high_load_test.png)
 
 Observed:
 
@@ -204,17 +203,17 @@ Observed:
 
 ---
 
-# Step 9 – Load Decay Behavior
+## Step 9 – Load Decay Behavior
 
 After terminating processes:
 
-```
+```bash
 pkill yes
 ```
 
 Immediately re-evaluated system state.
 
-## Screenshot – Load Still Elevated
+### Screenshot – Load Still Elevated
 
 ![Load decay initial](../docs/screenshots/argus-system-summary/08_load_decay_initial.png)
 
@@ -228,19 +227,19 @@ Linux load average is calculated using rolling time windows (1, 5, 15 minutes).
 
 ---
 
-# Step 10 – Load Recovery
+## Step 10 – Load Recovery
 
 After a short interval, load returned to normal.
 
-## Screenshot – Load Recovered
+### Screenshot – Load Recovered
 
-![Load decay recovered](../docs/screenshots/argus-system-summary/09_load_decay_recovered.png)
+![Load recovered](../docs/screenshots/argus-system-summary/09_load_decay_recovered.png)
 
 The tool accurately reflected this recovery.
 
 ---
 
-# Step 11 – Load Normalization
+## Step 11 – Load Normalization
 
 Adjusted load evaluation to account for CPU count:
 
@@ -250,7 +249,7 @@ Adjusted load evaluation to account for CPU count:
 
 ---
 
-# Final Result
+## Final Result
 
 The `system_summary` tool now:
 
@@ -262,11 +261,11 @@ The `system_summary` tool now:
 
 Execution remains fully aligned with the existing architecture:
 
-CLI → Control Plane → Execution Engine → Argus Tool → System Tool → OS
+CLI → Control Plane → Execution Engine → Argus Tool → System Tool → OS  
 
 ---
 
-# Key Outcome
+## Key Outcome
 
 This phase establishes the Argus pattern:
 
@@ -280,7 +279,7 @@ This represents a transition from execution-focused tooling to structured system
 
 ---
 
-# Next Phase
+## Next Phase
 
 Next tool:
 
@@ -293,6 +292,3 @@ Goals:
 - provide targeted troubleshooting guidance  
 
 With the Argus pattern established, subsequent tools should be significantly faster to implement.
-
----
-````
