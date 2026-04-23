@@ -104,6 +104,126 @@ knowledge/
 
 ---
 
+## Branching and Development Strategy
+
+The Knowledge Base Layer must be developed in an isolated branch.
+
+Example:
+
+```
+feature/knowledge-layer-v2
+```
+
+Rules:
+
+- Do NOT modify existing documentation during initial development  
+- Treat this as a parallel experimental system  
+- Keep all knowledge layer work isolated until validated  
+
+Development approach:
+
+- build independently  
+- validate behavior  
+- integrate only when stable  
+
+Merge strategy:
+
+- merge into main only after:
+  - structure is validated  
+  - reasoning quality is improved  
+  - no disruption to existing systems  
+
+The knowledge layer should coexist with existing systems after merge.
+
+---
+
+## Parallel System Model
+
+The system must support dual knowledge layers:
+
+- `/docs` → human-readable, narrative documentation  
+- `/knowledge` → structured, atomic, AI-reasonable knowledge  
+
+These systems must:
+
+- coexist without forced migration  
+- serve different purposes  
+- remain loosely coupled  
+
+Design principle:
+
+> Do NOT replace documentation prematurely  
+> Introduce structured knowledge as an additional layer  
+
+Both layers may be used simultaneously depending on query type.
+
+---
+
+## Data Model and Ingestion Rules
+
+The system must enforce a strict separation between:
+
+### Raw Data (Immutable)
+
+Examples:
+
+- logs  
+- configs  
+- transcripts  
+- source documents  
+
+Rules:
+
+- NEVER modified  
+- acts as ground truth  
+
+---
+
+### Knowledge Base (Derived)
+
+Examples:
+
+- summaries  
+- structured concept files  
+- linked knowledge pages  
+
+Rules:
+
+- ALWAYS derived from raw data  
+- may be updated over time  
+- must be versioned and traceable  
+
+---
+
+### Ingestion Pipeline
+
+Knowledge base content must be created via controlled ingestion:
+
+- raw input → processed by LLM  
+- output → structured markdown file  
+- saved into knowledge layer  
+
+---
+
+### Update Rules
+
+- no silent modifications  
+- all updates must be:
+  - logged  
+  - reviewable  
+  - traceable  
+
+---
+
+### Design Principle
+
+> Raw data is the source of truth  
+> Knowledge base is the interpreted layer  
+
+The system must never lose or overwrite original data.
+
+---
+
 ## Capabilities Enabled
 
 ### Structured Reasoning
@@ -143,11 +263,36 @@ This system complements—not replaces—RAG.
 
 ---
 
-### Future Routing Logic
+## Routing and Integration Strategy
+
+The system must support multiple knowledge access modes:
+
+- RAG-based retrieval  
+- Knowledge Base (wiki-style) retrieval  
+
+Routing behavior:
 
 - RAG → broad or fuzzy queries  
-- Knowledge Base → structured/system queries  
-- hybrid usage when necessary  
+- Knowledge Base → structured/system-level queries  
+- Hybrid → when both are beneficial  
+
+Example model:
+
+```
+if knowledge_mode == "rag":
+    use_rag()
+
+elif knowledge_mode == "wiki":
+    use_knowledge_base()
+```
+
+This allows:
+
+- side-by-side testing  
+- controlled comparison  
+- gradual transition without system disruption  
+
+The knowledge base must NOT replace RAG prematurely.
 
 ---
 
