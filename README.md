@@ -22,9 +22,9 @@ The documentation is organized to reflect how the system is actually built and u
 
 If you're new, start here to understand the system at a high level.
 
-- 👉 [NeuroCore Vision](./architecture/neurocore_vision.md)
-- 👉 [Argus ACLI Vision](./vision/argus_acli_vision.md)
-- 👉 [Argus Lab Vision](./vision/argus_lab_vision.md)
+- 👉 [NeuroCore Vision](/docs/architecture/neurocore_vision.md)
+- 👉 [Argus ACLI Vision](/docs/vision/argus_acli_vision.md)
+- 👉 [Argus Lab Vision](/docs/vision/argus_lab_vision.md)
 
 ---
 
@@ -32,9 +32,9 @@ If you're new, start here to understand the system at a high level.
 
 Defines how NeuroCore is structured and how all components interact.
 
-- 👉 [System Architecture](./architecture/system_architecture.md)
-- 👉 [Platform Ecosystem](./architecture/platform_ecosystem.md)
-- 👉 [System State](./architecture/system_state.md)
+- 👉 [System Architecture](/docs/architecture/system_architecture.md)
+- 👉 [Platform Ecosystem](/docs/architecture/platform_ecosystem.md)
+- 👉 [System State](/docs/architecture/system_state.md)
 
 ---
 
@@ -42,12 +42,12 @@ Defines how NeuroCore is structured and how all components interact.
 
 Detailed breakdown of how the system operates internally.
 
-- 👉 [Control Plane](./architecture/control_plane.md)
-- 👉 [Tool Execution System](./architecture/tool_execution.md)
-- 👉 [Task Engine](./architecture/task_engine.md)
-- 👉 [Observability](./architecture/observability.md)
-- 👉 [Evaluation Framework](./architecture/evaluation_framework.md)
-- 👉 [Security Policy](./architecture/security_policy.md)
+- 👉 [Control Plane](/docs/architecture/control_plane.md)
+- 👉 [Tool Execution System](/docs/architecture/tool_execution.md)
+- 👉 [Task Engine](/docs/architecture/task_engine.md)
+- 👉 [Observability](/docs/architecture/observability.md)
+- 👉 [Evaluation Framework](/docs/architecture/evaluation_framework.md)
+- 👉 [Security Policy](/docs/architecture/security_policy.md)
 
 ---
 
@@ -55,8 +55,8 @@ Detailed breakdown of how the system operates internally.
 
 User-facing systems built on top of NeuroCore.
 
-- 👉 [Argus V1 Blueprint](./distributions/argus_v1_blueprint.md)
-- 👉 [Argus ACLI Specification](./distributions/argus/acli_spec.md)
+- 👉 [Argus V1 Blueprint](/docs/distributions/argus_v1_blueprint.md)
+- 👉 [Argus ACLI Specification](/docs/distributions/argus/acli_spec.md)
 
 ---
 
@@ -64,10 +64,10 @@ User-facing systems built on top of NeuroCore.
 
 System layout, infrastructure design, and environment mapping.
 
-- 👉 [Repository Map](./infrastructure/neurocore_repository_map.txt)
-- 👉 [System Map](./infrastructure/neurocore_system_map.txt)
-- 👉 [Home System Map](./infrastructure/home_system_map.md)
-- 👉 [Home Infrastructure](./infrastructure/home_infrastructure.md)
+- 👉 [Repository Map](/docs/infrastructure/neurocore_repository_map.txt)
+- 👉 [System Map](/docs/infrastructure/neurocore_system_map.txt)
+- 👉 [Home System Map](/docs/infrastructure/home_system_map.md)
+- 👉 [Home Infrastructure](/docs/infrastructure/home_infrastructure.md)
 
 ---
 
@@ -75,10 +75,10 @@ System layout, infrastructure design, and environment mapping.
 
 How the AI system is operated, resumed, and constrained across sessions.
 
-- 👉 [Resume Prompt (Primary)](./ai-operations/resume_prompt_compressed.md)
-- 👉 [Context Loading Strategy](./ai-operations/context_loading_strategy.md)
-- 👉 [Mid-Phase Reset Protocol](./ai-operations/mid_phase_reset_protocol.md)
-- 👉 [Documentation Closeout Protocol](./ai-operations/documentation_closeout_protocol.md)
+- 👉 [Resume Prompt (Primary)](/docs/ai-operations/resume_prompt_compressed.md)
+- 👉 [Context Loading Strategy](/docs/ai-operations/context_loading_strategy.md)
+- 👉 [Mid-Phase Reset Protocol](/docs/ai-operations/mid_phase_reset_protocol.md)
+- 👉 [Documentation Closeout Protocol](/docs/ai-operations/documentation_closeout_protocol.md)
 
 ---
 
@@ -86,7 +86,7 @@ How the AI system is operated, resumed, and constrained across sessions.
 
 In-progress and phase-specific design work.
 
-- 👉 [Phase 5I – Real Execution](./design/phase_5i_real_execution.md)
+- 👉 [Phase 5I – Real Execution](/docs/design/phase_5i_real_execution.md)
 
 ---
 
@@ -94,7 +94,7 @@ In-progress and phase-specific design work.
 
 Physical infrastructure and hardware planning.
 
-- 👉 [Home AI Hardware](./hardware/home_ai_hardware.md)
+- 👉 [Home AI Hardware](/docs/hardware/home_ai_hardware.md)
 
 ---
 
@@ -102,32 +102,32 @@ Physical infrastructure and hardware planning.
 
 Complete system evolution from initial build to current state.
 
-👉 [Build Logs Directory](../build-logs/)
+👉 [Build Logs Directory](/build-logs/)
 
 ---
 
 ### 📂 All Build Logs
 
-- 👉 [000 – Foundation](../build-logs/000_foundation.md)
-- 👉 [001 – Runtime Stack](../build-logs/001_runtime_stack.md)
-- 👉 [002 – Interface Layer](../build-logs/002_interface_layer.md)
-- 👉 [003 – Knowledge Layer](../build-logs/003_knowledge_layer.md)
-- 👉 [004 – Knowledge Retrieval](../build-logs/004_knowledge_retrieval.md)
-- 👉 [005 – Logic Layer Router](../build-logs/005_logic_layer_router.md)
-- 👉 [006 – RAG Reasoning Integration](../build-logs/006_rag_reasoning_integration.md)
-- 👉 [007 – Backup and Rebuild Foundations](../build-logs/007_backup_and_rebuild_foundations.md)
-- 👉 [008 – Runtime Performance and API Migration](../build-logs/008_runtime_performance_and_api_migration.md)
-- 👉 [009 – Daemon Foundation](../build-logs/009_neurocore_daemon_foundation.md)
-- 👉 [010 – Runtime Integration](../build-logs/010_runtime_integration.md)
-- 👉 [011 – CLI Interface Layer](../build-logs/011_cli_interface_layer.md)
-- 👉 [012 – Streaming Pipeline and CLI Behavior](../build-logs/012_streaming_pipeline_and_cli_behavior.md)
-- 👉 [013 – RAG Metadata and Grounding](../build-logs/013_rag_metadata_and_grounding.md)
-- 👉 [014 – Session Memory and Query Rewriting](../build-logs/014_session_memory_query_rewriting_and_knowledge_correction.md)
-- 👉 [015 – CLI Piped Input Ingestion](../build-logs/015_cli_piped_input_ingestion.md)
-- 👉 [016 – Runtime Control Plane Enforcement](../build-logs/016_runtime_control_plane_enforcement.md)
-- 👉 [017 – Execution Layer and Control Integration](../build-logs/017_execution_layer_and_control_integration.md)
-- 👉 [018 – Observability and Tracing](../build-logs/018_observability_and_tracing.md)
-- 👉 [019 – Real Tool Execution and System Info](../build-logs/019_real_tool_execution_and_system_info.md)
+- 👉 [000 – Foundation](/build-logs/000_foundation.md)
+- 👉 [001 – Runtime Stack](/build-logs/001_runtime_stack.md)
+- 👉 [002 – Interface Layer](/build-logs/002_interface_layer.md)
+- 👉 [003 – Knowledge Layer](/build-logs/003_knowledge_layer.md)
+- 👉 [004 – Knowledge Retrieval](/build-logs/004_knowledge_retrieval.md)
+- 👉 [005 – Logic Layer Router](/build-logs/005_logic_layer_router.md)
+- 👉 [006 – RAG Reasoning Integration](/build-logs/006_rag_reasoning_integration.md)
+- 👉 [007 – Backup and Rebuild Foundations](/build-logs/007_backup_and_rebuild_foundations.md)
+- 👉 [008 – Runtime Performance and API Migration](/build-logs/008_runtime_performance_and_api_migration.md)
+- 👉 [009 – Daemon Foundation](/build-logs/009_neurocore_daemon_foundation.md)
+- 👉 [010 – Runtime Integration](/build-logs/010_runtime_integration.md)
+- 👉 [011 – CLI Interface Layer](/build-logs/011_cli_interface_layer.md)
+- 👉 [012 – Streaming Pipeline and CLI Behavior](/build-logs/012_streaming_pipeline_and_cli_behavior.md)
+- 👉 [013 – RAG Metadata and Grounding](/build-logs/013_rag_metadata_and_grounding.md)
+- 👉 [014 – Session Memory and Query Rewriting](/build-logs/014_session_memory_query_rewriting_and_knowledge_correction.md)
+- 👉 [015 – CLI Piped Input Ingestion](/build-logs/015_cli_piped_input_ingestion.md)
+- 👉 [016 – Runtime Control Plane Enforcement](/build-logs/016_runtime_control_plane_enforcement.md)
+- 👉 [017 – Execution Layer and Control Integration](/build-logs/017_execution_layer_and_control_integration.md)
+- 👉 [018 – Observability and Tracing](/build-logs/018_observability_and_tracing.md)
+- 👉 [019 – Real Tool Execution and System Info](/build-logs/019_real_tool_execution_and_system_info.md)
 
 ---
 
