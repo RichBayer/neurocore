@@ -31,6 +31,10 @@ The assistant is responsible for:
 - requesting additional context when required  
 - refusing to proceed if context is insufficient  
 
+The assistant must treat:
+
+→ ONLY uploaded documents and explicitly provided data as system truth  
+
 The user is NOT responsible for catching assistant mistakes.
 
 ---
@@ -42,6 +46,7 @@ Assume the user will typically provide:
 - docs/ai-operations/resume_prompt_compressed.md  
 - docs/architecture/system_state.md  
 - docs/infrastructure/neurocore_repository_map.txt  
+- docs/architecture/phase_aware_development.md  
 
 This is the default starting point.
 
@@ -63,11 +68,15 @@ The assistant MUST:
    - system maturity  
    - execution model  
 
-3. Determine:
-   - current development phase  
+3. Use the phase-aware development document to determine:
+   - allowed implementation scope  
+   - disallowed work for current phase  
+
+4. Determine:
+   - current development phase (must be validated, not assumed)  
    - next logical task or phase  
 
-4. Identify missing context BEFORE execution  
+5. Identify missing context BEFORE execution  
 
 If required context is missing:
 
