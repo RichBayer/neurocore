@@ -35,6 +35,8 @@ Defines how NeuroCore is structured and how all components interact.
 - 👉 [System Architecture](./architecture/system_architecture.md)
 - 👉 [Platform Ecosystem](./architecture/platform_ecosystem.md)
 - 👉 [System State](./architecture/system_state.md)
+- 👉 [Argus Output & Tool Contract](./architecture/argus_output_and_tool_contract.md)
+- 👉 [Phase-Aware Development](./architecture/phase_aware_development.md)
 
 ---
 
@@ -57,6 +59,7 @@ User-facing systems built on top of NeuroCore.
 
 - 👉 [Argus V1 Blueprint](./distributions/argus_v1_blueprint.md)
 - 👉 [Argus ACLI Specification](./distributions/argus/acli_spec.md)
+- 👉 [Argus Distribution & Deployment Plan](./distributions/argus/argus_distribution_and_deployment.md)
 
 ---
 
@@ -141,6 +144,7 @@ If you don’t want to read everything:
 - 👉 019 – Real Tool Execution  
 
 These represent major system milestones.
+
 ---
 
 ## 🧭 How to Navigate
