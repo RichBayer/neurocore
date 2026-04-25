@@ -1,7 +1,6 @@
 # /mnt/g/ai/projects/neurocore/tools/system/system_logs.py
 
 from __future__ import annotations
-
 from typing import Dict
 
 from runtime.tracing import trace_event, trace_context_from_request
@@ -15,43 +14,26 @@ class SystemLogs(BaseTool):
     description = "Retrieve recent system logs"
     execution_mode = "auto"
 
-    input_schema = {
-        "required": []
-    }
+    input_schema = {"required": []}
 
-    def validate_input(self, tool_input: Dict[str, str]) -> None:
+    def validate_input(self, tool_input: Dict) -> None:
         return
 
-    def execute(self, request: Dict[str, Dict]) -> Dict[str, str]:
+    def execute(self, request: Dict) -> Dict:
         ctx = trace_context_from_request(request)
-        tool_input = request["input"]
 
-        trace_event(
-            event="tool_invoked",
-            context=ctx,
-            component="system_logs",
-            details={"input": tool_input}
-        )
+        r = CommandRunner.run(["dmesg", "|", "tail", "-n", "50"])
 
-        trace_event(
-            event="system_logs_collection_started",
-            context=ctx,
-            component="system_logs"
-        )
-
-        result = CommandRunner.run(["journalctl", "-n", "50", "--no-pager"])
-
-        output = ["Recent System Logs\n"]
-        output.extend(result["stdout"].splitlines())
-
-        trace_event(
-            event="system_logs_execution_completed",
-            context=ctx,
-            component="system_logs",
-            status="success"
-        )
+        data = {
+            "raw": {
+                "stdout": r.get("stdout", ""),
+                "stderr": r.get("stderr", ""),
+                "returncode": r.get("returncode"),
+            }
+        }
 
         return self.build_result(
             status="success",
-            message="\n".join(output)
+            message="System logs collected",
+            data=data
         )

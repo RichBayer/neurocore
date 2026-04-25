@@ -1,83 +1,32 @@
 # /mnt/g/ai/projects/neurocore/tools/system/service_manager.py
 
 from __future__ import annotations
-
 from typing import Dict
 
 from runtime.tracing import trace_event, trace_context_from_request
-from tools.base_tool import BaseTool, ToolValidationError
+from tools.base_tool import BaseTool
 
 
 class ServiceManager(BaseTool):
 
     name = "service_manager"
-    description = "Manage system services (start, stop, restart, status)"
+    description = "Placeholder for service management operations"
     execution_mode = "manual"
 
-    input_schema = {
-        "required": ["action", "service"]
-    }
+    input_schema = {"required": []}
 
-    VALID_ACTIONS = {"start", "stop", "restart", "status"}
+    def validate_input(self, tool_input: Dict) -> None:
+        return
 
-    def validate_input(self, tool_input: Dict[str, str]) -> None:
-        action = tool_input.get("action")
-        service = tool_input.get("service")
-
-        if action not in self.VALID_ACTIONS:
-            raise ToolValidationError(
-                f"Invalid action '{action}'. Valid actions: {self.VALID_ACTIONS}"
-            )
-
-        if not isinstance(service, str) or not service.strip():
-            raise ToolValidationError("Service name must be a non-empty string")
-
-    def execute(self, request: Dict[str, Dict]) -> Dict[str, str]:
+    def execute(self, request: Dict) -> Dict:
         ctx = trace_context_from_request(request)
 
-        tool_input = request["input"]
+        data = {
+            "note": "Service management not yet implemented"
+        }
 
-        trace_event(
-            event="tool_invoked",
-            context=ctx,
-            component="service_manager",
-            details={"input": tool_input}
-        )
-
-        action = tool_input["action"]
-        service = tool_input["service"]
-
-        trace_event(
-            event="tool_action_prepared",
-            context=ctx,
-            component="service_manager",
-            details={"action": action, "service": service}
-        )
-
-        message = f"[SIMULATED] {action} executed on service '{service}'"
-
-        trace_event(
-            event="tool_execution_simulated",
-            context=ctx,
-            component="service_manager",
-            status="success"
-        )
-
-        result = self.build_result(
+        return self.build_result(
             status="success",
-            message=message,
-            data={
-                "action": action,
-                "service": service,
-                "mode": "simulation"
-            }
+            message="Service manager placeholder",
+            data=data
         )
-
-        trace_event(
-            event="tool_result_built",
-            context=ctx,
-            component="service_manager",
-            status="success"
-        )
-
-        return result

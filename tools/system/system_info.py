@@ -58,21 +58,23 @@ class SystemInfo(BaseTool):
         )
 
         if target == "system":
-            raw_data = self._system_summary()
+            data = self._system_summary()
         elif target == "cpu":
-            raw_data = self._cpu_info()
+            data = self._cpu_info()
         elif target == "memory":
-            raw_data = self._memory_info()
+            data = self._memory_info()
         elif target == "disk":
-            raw_data = self._disk_info()
+            data = self._disk_info()
         elif target == "os":
-            raw_data = self._os_info()
+            data = self._os_info()
         elif target == "uptime":
-            raw_data = self._uptime()
+            data = self._uptime()
         elif target == "hostname":
-            raw_data = self._hostname()
+            data = self._hostname()
         else:
             raise ToolValidationError(f"Unsupported target: {target}")
+
+        message = self._format_output(target, data)
 
         trace_event(
             event="system_info_execution_completed",
@@ -81,15 +83,14 @@ class SystemInfo(BaseTool):
             status="success"
         )
 
-        return {
-            "status": "success",
-            "tool": self.name,
-            "message": self._format_output(target, raw_data),
-            "data": raw_data  # 🔥 NEW: structured data
-        }
+        return self.build_result(
+            status="success",
+            message=message,
+            data=data
+        )
 
     # -------------------------
-    # FORMAT OUTPUT (UNCHANGED)
+    # FORMAT OUTPUT
     # -------------------------
 
     def _format_output(self, target: str, data: Dict[str, Any]) -> str:
@@ -107,37 +108,61 @@ class SystemInfo(BaseTool):
     def _hostname(self):
         r = CommandRunner.run(["hostname"])
         return {
-            "hostname": r["stdout"]
+            "raw": {
+                "stdout": r.get("stdout", ""),
+                "stderr": r.get("stderr", ""),
+                "returncode": r.get("returncode"),
+            }
         }
 
     def _uptime(self):
         r = CommandRunner.run(["uptime"])
         return {
-            "raw": r["stdout"]
+            "raw": {
+                "stdout": r.get("stdout", ""),
+                "stderr": r.get("stderr", ""),
+                "returncode": r.get("returncode"),
+            }
         }
 
     def _os_info(self):
         r = CommandRunner.run(["cat", "/etc/os-release"])
         return {
-            "raw": r["stdout"]
+            "raw": {
+                "stdout": r.get("stdout", ""),
+                "stderr": r.get("stderr", ""),
+                "returncode": r.get("returncode"),
+            }
         }
 
     def _cpu_info(self):
         r = CommandRunner.run(["lscpu"])
         return {
-            "raw": r["stdout"]
+            "raw": {
+                "stdout": r.get("stdout", ""),
+                "stderr": r.get("stderr", ""),
+                "returncode": r.get("returncode"),
+            }
         }
 
     def _memory_info(self):
         r = CommandRunner.run(["free", "-m"])
         return {
-            "raw": r["stdout"]
+            "raw": {
+                "stdout": r.get("stdout", ""),
+                "stderr": r.get("stderr", ""),
+                "returncode": r.get("returncode"),
+            }
         }
 
     def _disk_info(self):
         r = CommandRunner.run(["df", "-h", "/"])
         return {
-            "raw": r["stdout"]
+            "raw": {
+                "stdout": r.get("stdout", ""),
+                "stderr": r.get("stderr", ""),
+                "returncode": r.get("returncode"),
+            }
         }
 
     def _system_summary(self):
