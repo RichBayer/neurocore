@@ -9,7 +9,7 @@ The system runs as a persistent daemon and processes every request through a cle
 At this stage, NeuroCore supports:
 
 - real system execution through system tools  
-- structured data output for machine interpretation  
+- **enforced structured data output for machine interpretation across all system tools**  
 - an Argus tool layer for system-level reasoning and diagnostics  
 
 ---
@@ -232,7 +232,7 @@ All system tools now return:
 - `message` → human-readable output (CLI)  
 - `data` → structured output for Argus  
 
-This enables reliable machine-level interpretation.
+This contract is now **enforced across all system tools** and is no longer optional.
 
 ---
 
@@ -351,7 +351,7 @@ NeuroCore now supports:
 - Control-plane enforced execution  
 - Tool-based execution framework  
 - Real system command execution across multiple domains  
-- Structured system data (system_info)  
+- **Guaranteed structured system data across all system tools**  
 - Argus diagnostic layer (system_summary)  
 - Full observability and tracing  
 
