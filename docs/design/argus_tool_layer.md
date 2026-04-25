@@ -85,6 +85,95 @@ No raw command dumps allowed.
 
 ---
 
+# Deterministic Presentation Layer (CRITICAL)
+
+Argus tools must include a **deterministic presentation layer** as part of their output.
+
+This exists for a specific reason:
+
+NeuroCore must support a **no-model installation mode**, where no LLM is present.
+
+In that mode:
+
+- Argus is the ONLY source of interpretation  
+- There is no model to “explain” results  
+- Output must already be usable by a human  
+
+---
+
+## What This Means
+
+Argus tools are responsible for:
+
+- producing clear, human-readable summaries  
+- formatting findings in a consistent way  
+- presenting recommendations in a usable format  
+
+Example:
+
+Instead of returning:
+
+Network Analysis [WARN]
+
+The tool should return something like:
+
+⚠ Network Issue Detected  
+• 1 interface is down  
+
+Recommendation:  
+→ Check interface configuration  
+
+---
+
+## What This Is NOT
+
+This is NOT:
+
+- natural language generation  
+- conversational output  
+- dynamic phrasing  
+- model-like behavior  
+
+The presentation layer must remain:
+
+- deterministic  
+- rule-based  
+- consistent for identical inputs  
+
+Same input → same output, always.
+
+---
+
+## Why This Matters
+
+Without this layer:
+
+- output is technically correct but hard to use  
+- users must interpret system data manually  
+- no-model installs feel incomplete  
+
+With this layer:
+
+- Argus is immediately useful without a model  
+- output feels intentional and readable  
+- system behavior remains fully trustworthy  
+
+---
+
+## Architectural Boundary
+
+This presentation layer lives inside Argus tools.
+
+It must NOT:
+
+- rely on external reasoning  
+- call any model  
+- introduce variability  
+
+Future model integration will sit **on top of this layer**, not replace it.
+
+---
+
 # Enforcement Boundary
 
 The following must remain true:
@@ -102,6 +191,7 @@ The following must remain true:
 - No violation of execution boundaries
 - Output is human-readable and structured
 - Trace context preserved
+- Output is readable and usable without a model
 
 ---
 
