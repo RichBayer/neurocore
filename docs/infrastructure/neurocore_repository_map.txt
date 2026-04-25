@@ -6,10 +6,11 @@
 
 .
 ├── .gitignore
-├── README.md
 ├── NeuroCore_Map.md
+├── README.md
 ├── bootstrap/
 ├── diagrams/
+├── repo_tree.txt
 
 ---
 
@@ -52,7 +53,8 @@
 │   ├── 018_observability_and_tracing.md
 │   ├── 019_real_tool_execution_and_system_info.md
 │   ├── 020_neurocore_system_tool_expansion.md
-│   └── 021_argus_tool_layer_initial.md
+│   ├── 021_argus_tool_layer_initial.md
+│   └── 022_structured_tool_contract.md
 
 ---
 
@@ -73,22 +75,22 @@
 │
 │   ├── README.md
 │
-│   ├── vision/
-│   │   ├── argus_cli_vision.md
-│   │   └── argus_lab_vision.md
-│
 │   ├── ai-operations/
 │   │   ├── context_loading_strategy.md
+│   │   ├── documentation_closeout_protocol.md
+│   │   ├── mid_phase_reset_protocol.md
 │   │   └── resume_prompt_compressed.md
 │
 │   ├── ai-stack/
 │
 │   ├── architecture/
+│   │   ├── argus_output_and_tool_contract.md
 │   │   ├── control_plane.md
 │   │   ├── evaluation_framework.md
 │   │   ├── neurocore_master_blueprint.md
 │   │   ├── neurocore_vision.md
 │   │   ├── observability.md
+│   │   ├── phase_aware_development.md
 │   │   ├── platform_ecosystem.md
 │   │   ├── security_policy.md
 │   │   ├── system_architecture.md
@@ -104,11 +106,25 @@
 │
 │   ├── distributions/
 │   │   ├── argus/
-│   │   │   └── acli_spec.md
+│   │   │   ├── acli_spec.md
+│   │   │   └── argus_distribution_and_deployment.md
 │   │   └── argus_v1_blueprint.md
 │
 │   ├── hardware/
 │   │   └── home_ai_hardware.md
+│
+│   ├── ideas/
+│   │   └── backlog/
+│   │       ├── agent_capability_layer_neurocore.md
+│   │       ├── ai_documentation_intelligence_system.md
+│   │       ├── argus_acli_incident_memory.md
+│   │       ├── argus_acli_update_distribution_strategy.md
+│   │       ├── book_ai_workflow_transformation.md
+│   │       ├── content_engine_neurocore_narrative_series.md
+│   │       ├── feature_tracking_phase_id_system.md
+│   │       ├── knowledge_base_karpathy_style_layer.md
+│   │       ├── neurocore_daemon_service_management.md
+│   │       └── snapshot_state_model_deterministic_execution.md
 │
 │   ├── infrastructure/
 │   │   ├── home_infrastructure.md
@@ -133,10 +149,14 @@
 │   │   ├── runtime/
 │   │   ├── runtime-behavior/
 │   │   ├── runtime-control-plane/
+│   │   ├── structured-tool-contract/
 │   │   └── system-info-tool/
 │
 │   ├── neurocore_development_notebook.md
 │   ├── security/
+│   ├── vision/
+│   │   ├── argus_acli_vision.md
+│   │   └── argus_lab_vision.md
 │   └── voice/
 
 ---
@@ -173,6 +193,7 @@
 │   ├── tool_registry.py
 │
 │   ├── argus/
+│   │   ├── __init__.py
 │   │   └── system_summary.py
 │
 │   └── system/
@@ -194,8 +215,8 @@
 
 # SUMMARY
 
-- 49 directories  
-- 182 files  
+- 52 directories  
+- 207 files  
 
 ---
 
