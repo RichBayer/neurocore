@@ -4,7 +4,7 @@
 
 ## Overview
 
-This phase focused on enforcing a **strict structured output contract across the system tool layer**.
+This phase focused on enforcing a strict structured output contract across the system tool layer.
 
 Up to this point, tools were returning human-readable output, but the structure was inconsistent and not guaranteed. That works for CLI usage, but it breaks down immediately when you try to:
 
@@ -32,9 +32,9 @@ And again with another tool:
 
 Error:
 
-```
+~~~text
 BaseTool.build_result() missing 1 required positional argument: 'data'
-```
+~~~
 
 ---
 
@@ -42,7 +42,7 @@ BaseTool.build_result() missing 1 required positional argument: 'data'
 
 This wasn’t a bug in the system.
 
-This was the system **finally enforcing correctness**.
+This was the system finally enforcing correctness.
 
 Every failure was pointing to the same root issue:
 
@@ -80,15 +80,15 @@ Same issue here:
 
 After enforcing the new contract:
 
-```python
+~~~python
 build_result(status, message, data)
-```
+~~~
 
 Any tool still using:
 
-```python
+~~~python
 build_result(status, message)
-```
+~~~
 
 would fail immediately.
 
@@ -100,7 +100,7 @@ This exposed exactly which tools were not compliant.
 
 We updated all affected tools to follow the required structure:
 
-```json
+~~~json
 {
   "status": "success",
   "message": "...",
@@ -109,16 +109,16 @@ We updated all affected tools to follow the required structure:
     "parsed": {...}
   }
 }
-```
+~~~
 
 ### Example Fix Pattern
 
 Each tool now:
 
-1. Collects raw system output
-2. Stores it in `data["raw"]`
-3. Optionally structures key fields
-4. Returns a human-readable message separately
+1. Collects raw system output  
+2. Stores it in `data["raw"]`  
+3. Optionally structures key fields  
+4. Returns a human-readable message separately  
 
 ---
 
@@ -144,18 +144,18 @@ Once the pattern was confirmed working, the remaining system tools were brought 
 
 This included:
 
-- `network_interfaces.py`
-- `network_connections.py`
-- `uptime_load.py`
-- `system_logs.py`
-- `users_sessions.py`
-- `recent_logins.py`
-- `service_manager.py`
-- `system_info.py`
+- `network_interfaces.py`  
+- `network_connections.py`  
+- `uptime_load.py`  
+- `system_logs.py`  
+- `users_sessions.py`  
+- `recent_logins.py`  
+- `service_manager.py`  
+- `system_info.py`  
 
 These were updated using the same structured output pattern.
 
-No need to document each individually — the important part is that the **entire tool layer now follows the same contract**.
+No need to document each individually — the important part is that the entire tool layer now follows the same contract.
 
 ---
 
@@ -202,7 +202,7 @@ NeuroCore now has:
 - enforced structured tool output  
 - consistent data contracts across system tools  
 - clear separation between:
-  - human-readable output (`message`)
+  - human-readable output (`message`)  
   - machine-readable data (`data`)  
 - validated execution across multiple tool domains  
 
@@ -227,10 +227,8 @@ This includes:
 
 This phase wasn’t about adding features.
 
-It was about **making the system reliable enough to support real intelligence later**.
+It was about making the system reliable enough to support real intelligence later.
 
 Without this step, everything that comes next would have been fragile.
 
 With it, the foundation is solid.
-
----
