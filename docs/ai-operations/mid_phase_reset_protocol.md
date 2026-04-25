@@ -84,6 +84,16 @@ Full documentation sweep is NOT performed here.
 
 ---
 
+## 🚨 Validation Requirement (CRITICAL)
+
+Before checkpointing:
+
+→ assistant MUST validate current system behavior (if possible)  
+→ MUST distinguish between working and non-working components  
+→ MUST NOT checkpoint unverified assumptions as working  
+
+---
+
 ## State Classification (MANDATORY)
 
 The assistant MUST classify all work into:
@@ -143,6 +153,21 @@ The build log MUST:
 
 ---
 
+## 🚨 Broken State Reporting Requirement
+
+If any component is not working:
+
+The assistant MUST explicitly document:
+
+- what is broken
+- where it is broken
+- expected behavior
+- actual behavior
+
+Generic statements such as “some issues remain” are NOT allowed.
+
+---
+
 ## Design Document Update (REQUIRED)
 
 Location:
@@ -154,6 +179,15 @@ The assistant MUST update the design doc to reflect:
 - current implementation state
 - deviations from original design (if any)
 - incomplete sections clearly marked
+
+---
+
+## 🚨 Multi-Component Impact Rule
+
+If multiple system components are affected:
+
+→ assistant MUST update all relevant design documents  
+→ MUST NOT limit updates to a single feature area  
 
 ---
 
@@ -210,6 +244,15 @@ GOOD:
 
 ---
 
+## 🚨 Resume Readiness Validation
+
+After updating the resume prompt:
+
+→ assistant MUST confirm that the next session can resume without ambiguity  
+→ MUST ensure zero guessing is required to continue  
+
+---
+
 ## System State Update (CONDITIONAL)
 
 Only update:
@@ -241,6 +284,16 @@ The assistant MUST NOT:
 
 - invent paths
 - assume files exist
+
+---
+
+## 🚨 Minimal Checkpoint Rule
+
+If minimal or no meaningful progress occurred:
+
+→ assistant MUST declare a minimal checkpoint  
+→ MUST NOT fabricate progress  
+→ MUST still update resume prompt to reflect true state  
 
 ---
 
@@ -297,5 +350,3 @@ Failure to checkpoint results in:
 - lost work
 - inconsistent system state
 - documentation drift
-
-This
