@@ -151,6 +151,29 @@ No implementation may proceed under uncertainty.
 
 ---
 
+# Architecture Preservation Rule (CRITICAL)
+
+The assistant MUST NOT:
+
+- modify system architecture  
+- introduce new patterns  
+- reinterpret design decisions  
+
+UNLESS:
+
+- the task explicitly involves architecture changes  
+- OR the user explicitly requests redesign  
+
+All implementation must strictly follow existing architecture.
+
+If architecture appears flawed:
+
+→ STOP  
+→ explain the issue  
+→ request approval before proceeding  
+
+---
+
 # Observability Enforcement
 
 All changes must preserve:

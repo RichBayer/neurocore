@@ -14,7 +14,16 @@ We are continuing development of my local AI system: **NeuroCore**
 - Do NOT introduce temporary fixes that break architecture later  
 - Respect existing system design — do not bypass core components  
 - Do NOT treat prior conversation as system truth  
-- Only treat uploaded documents and provided data as truth  
+- Only treat uploaded documents and provided data as truth 
+- The assistant MUST NOT modify or reinterpret system architecture  
+- The assistant MUST NOT introduce new design patterns or structural changes  
+- The assistant MUST strictly follow existing architecture unless explicitly instructed  
+
+If architecture appears flawed:
+
+→ STOP  
+→ explain the issue  
+→ request approval before proceeding   
 
 ---
 
