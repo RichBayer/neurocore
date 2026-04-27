@@ -57,13 +57,13 @@ At first, the output was technically useful, but still too raw. It showed inform
 
 ### Raw CLI Output
 
-![Disk Raw](../docs/screenshots/argus-acli-ux/01_disk_command_current_cli_output.png)
+![Disk Raw](../docs/screenshots/argus_acli_ux/01_disk_command_current_cli_output.png)
 
 The next step was making the CLI show the interpretation clearly. Instead of forcing the user to stare at system output and decide what mattered, Argus needed to show the finding directly.
 
 ### Structured Output Introduced
 
-![Disk Structured](../docs/screenshots/argus-acli-ux/02_disk_command_structured_output_cleaned.png)
+![Disk Structured](../docs/screenshots/argus_acli_ux/02_disk_command_structured_output_cleaned.png)
 
 That gave the output a readable shape, but it exposed another important issue.
 
@@ -73,7 +73,7 @@ A good admin tool should show what it thinks **and** the evidence it used to rea
 
 ### Cleanup Before Raw Integration
 
-![Disk Cleaned](../docs/screenshots/argus-acli-ux/03_disk_command_cleaned_output_before_raw.png)
+![Disk Cleaned](../docs/screenshots/argus_acli_ux/03_disk_command_cleaned_output_before_raw.png)
 
 The fix was to preserve the raw system output and display it underneath the interpretation.
 
@@ -81,7 +81,7 @@ That changed the output from “trust me” to “here is what I found, and here
 
 ### Final Output with Raw Evidence
 
-![Disk Final](../docs/screenshots/argus-acli-ux/04_disk_command_final_output_with_real_raw.png)
+![Disk Final](../docs/screenshots/argus_acli_ux/04_disk_command_final_output_with_real_raw.png)
 
 That distinction is important for the long-term direction of Argus.
 
@@ -103,7 +103,7 @@ So the CLI output was updated to show the severity scale directly:
 OK < INFO < WARN < CRITICAL
 ```
 
-![Disk Severity](../docs/screenshots/argus-acli-ux/05_disk_command_with_severity_scale.png)
+![Disk Severity](../docs/screenshots/argus_acli_ux/05_disk_command_with_severity_scale.png)
 
 This is a small UX detail, but it matters.
 
@@ -121,7 +121,7 @@ The system tools should be responsible for collecting data.
 
 Keeping those responsibilities separate matters because the CLI will evolve later. It may eventually support filtering, summary mode, raw-output toggles, or different presentation styles. None of that should require changing the diagnostic logic inside the tools.
 
-![CLI Formatter](../docs/screenshots/argus-acli-ux/06_cli_formatter_extracted_no_behavior_change.png)
+![CLI Formatter](../docs/screenshots/argus_acli_ux/06_cli_formatter_extracted_no_behavior_change.png)
 
 The formatter was extracted inside the CLI so structured Argus output could be displayed consistently without changing tool behavior.
 
@@ -137,7 +137,7 @@ The first test showed that memory output had the interpretation, but not the raw
 
 ### Missing Raw Output
 
-![Memory Missing Raw](../docs/screenshots/argus-acli-ux/07_memory_no_raw_output.png)
+![Memory Missing Raw](../docs/screenshots/argus_acli_ux/07_memory_no_raw_output.png)
 
 That was a contract problem.
 
@@ -154,7 +154,7 @@ Memory already had severity and findings. It needed raw output added so the user
 
 ### Raw Output Added
 
-![Memory With Raw](../docs/screenshots/argus-acli-ux/08_memory_with_raw_output.png)
+![Memory With Raw](../docs/screenshots/argus_acli_ux/08_memory_with_raw_output.png)
 
 After that, one more consistency issue showed up.
 
@@ -164,7 +164,7 @@ The CLI was updated so recommendations are always shown, even when there are non
 
 ### Full Contract Achieved
 
-![Memory Full](../docs/screenshots/argus-acli-ux/09_memory_full_contract_output.png)
+![Memory Full](../docs/screenshots/argus_acli_ux/09_memory_full_contract_output.png)
 
 That gives every diagnostic output the same structure.
 
@@ -186,7 +186,7 @@ The first attempt showed that the request was not being routed as an execution r
 
 ### Command Not Routed
 
-![System Not Routed](../docs/screenshots/argus-acli-ux/10_system_command_not_routed.png)
+![System Not Routed](../docs/screenshots/argus_acli_ux/10_system_command_not_routed.png)
 
 That confirmed the control plane did not yet recognize `system` as a valid execution keyword.
 
@@ -194,7 +194,7 @@ After routing was added, the next issue appeared. The control plane could route 
 
 ### Tool Not Registered
 
-![Tool Not Registered](../docs/screenshots/argus-acli-ux/11_system_tool_not_registered.png)
+![Tool Not Registered](../docs/screenshots/argus_acli_ux/11_system_tool_not_registered.png)
 
 This was a good reminder of the full tool path.
 
@@ -224,7 +224,7 @@ The first working version combined disk and memory. That proved the basic patter
 
 ### Raw Unstructured Output
 
-![System Raw](../docs/screenshots/argus-acli-ux/12_system_analysis_raw_unstructured.png)
+![System Raw](../docs/screenshots/argus_acli_ux/12_system_analysis_raw_unstructured.png)
 
 The issue was not that data was missing. The issue was that raw evidence was being displayed as internal dictionary structures.
 
@@ -234,7 +234,7 @@ The formatter was updated so raw sections were labeled cleanly.
 
 ### Clean Output Introduced
 
-![System Clean](../docs/screenshots/argus-acli-ux/13_system_analysis_final_clean_output.png)
+![System Clean](../docs/screenshots/argus_acli_ux/13_system_analysis_final_clean_output.png)
 
 At this point, the system had its first clean multi-signal diagnostic output.
 
@@ -250,7 +250,7 @@ Before adding it to `system_analysis`, the individual network tool was tested fi
 
 ### Missing Raw
 
-![Network Missing](../docs/screenshots/argus-acli-ux/14_network_no_raw_output.png)
+![Network Missing](../docs/screenshots/argus_acli_ux/14_network_no_raw_output.png)
 
 The tool could interpret interface state, but it did not expose the raw `ip` output.
 
@@ -258,13 +258,13 @@ That needed to be fixed before network could be trusted inside the system-level 
 
 ### Raw Added
 
-![Network Raw](../docs/screenshots/argus-acli-ux/15_network_with_raw_output.png)
+![Network Raw](../docs/screenshots/argus_acli_ux/15_network_with_raw_output.png)
 
 Once raw evidence was present, network analysis could be added to `system_analysis`.
 
 ### Integrated into System
 
-![System Network](../docs/screenshots/argus-acli-ux/16_system_analysis_with_network.png)
+![System Network](../docs/screenshots/argus_acli_ux/16_system_analysis_with_network.png)
 
 This expanded the system view beyond resource usage.
 
@@ -282,13 +282,13 @@ The first test showed that process analysis had clean findings and recommendatio
 
 ### Missing Raw
 
-![Processes Missing](../docs/screenshots/argus-acli-ux/17_processes_no_raw_output.png)
+![Processes Missing](../docs/screenshots/argus_acli_ux/17_processes_no_raw_output.png)
 
 After adding raw handling, another issue appeared.
 
 ### Empty Raw
 
-![Processes Empty](../docs/screenshots/argus-acli-ux/18_processes_raw_empty.png)
+![Processes Empty](../docs/screenshots/argus_acli_ux/18_processes_raw_empty.png)
 
 The raw section existed, but it was empty.
 
@@ -301,7 +301,7 @@ The fix was to preserve both raw outputs separately:
 
 ### Fixed Raw Output
 
-![Processes Final](../docs/screenshots/argus-acli-ux/19_processes_with_raw_output.png)
+![Processes Final](../docs/screenshots/argus_acli_ux/19_processes_with_raw_output.png)
 
 That completed the evidence pipeline for process diagnostics.
 
@@ -315,7 +315,7 @@ With the individual signals cleaned up, they were combined into the final system
 
 ### Overview
 
-![System Overview](../docs/screenshots/argus-acli-ux/20_system_analysis_overview.png)
+![System Overview](../docs/screenshots/argus_acli_ux/20_system_analysis_overview.png)
 
 This is the main result of the phase.
 
@@ -333,25 +333,25 @@ Instead of making the user run several commands and manually compare the results
 
 ### Disk Section
 
-![Disk Section](../docs/screenshots/argus-acli-ux/21_system_analysis_disk_section.png)
+![Disk Section](../docs/screenshots/argus_acli_ux/21_system_analysis_disk_section.png)
 
 ---
 
 ### Memory Section
 
-![Memory Section](../docs/screenshots/argus-acli-ux/22_system_analysis_memory_section.png)
+![Memory Section](../docs/screenshots/argus_acli_ux/22_system_analysis_memory_section.png)
 
 ---
 
 ### Network Section
 
-![Network Section](../docs/screenshots/argus-acli-ux/23_system_analysis_network_section.png)
+![Network Section](../docs/screenshots/argus_acli_ux/23_system_analysis_network_section.png)
 
 ---
 
 ### Process Section
 
-![Process Section](../docs/screenshots/argus-acli-ux/24_system_analysis_process_section.png)
+![Process Section](../docs/screenshots/argus_acli_ux/24_system_analysis_process_section.png)
 
 Each section keeps the raw evidence visible.
 
