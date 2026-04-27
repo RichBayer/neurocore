@@ -11,6 +11,8 @@ At this stage, NeuroCore supports:
 - real system execution through system tools  
 - **enforced structured data output for machine interpretation across all system tools**  
 - an Argus tool layer for system-level reasoning and diagnostics  
+- **multi-signal system diagnostics through aggregation tools**
+- **structured CLI diagnostic output (UX layer)**
 
 ---
 
@@ -51,6 +53,7 @@ Notes:
 - CLI is intentionally simple  
 - Responsible only for input + output formatting  
 - Does not contain execution logic  
+- **Now provides structured diagnostic presentation (severity, findings, recommendations, raw evidence)**
 
 ---
 
@@ -107,7 +110,7 @@ runtime/control_plane.py
 Responsibilities:
 
 - Request classification (execution vs reasoning)  
-- Execution keyword detection (e.g. `info`, `processes`, `disk`, `memory`, `summary`)  
+- Execution keyword detection (e.g. `info`, `processes`, `disk`, `memory`, `summary`, `system`)  
 - Policy enforcement  
 - Confirmation handling (when required)  
 - Tool selection and validation  
@@ -221,6 +224,7 @@ Rules:
 - `connections_analysis`
 - `uptime_analysis`
 - `logs_analysis`
+- **system_analysis (multi-signal aggregation tool)**
 
 ---
 
@@ -361,6 +365,8 @@ NeuroCore now supports:
 - **Guaranteed structured system data across all system tools**  
 - **Full Argus diagnostic layer across core system domains**
 - **Deterministic system interpretation (severity + findings + recommendations)**
+- **Multi-signal system diagnostics (aggregation layer)**
+- **Human-readable CLI diagnostic output (UX layer)**
 - Full observability and tracing  
 
 ---
@@ -384,6 +390,8 @@ NeuroCore is now:
 - executing real system commands across multiple domains  
 - exposing structured system state  
 - supporting a full diagnostic interpretation layer (Argus)  
+- supporting multi-signal system analysis  
+- presenting structured diagnostic output through the CLI  
 - fully observable end-to-end  
 - stable for further expansion  
 
@@ -393,5 +401,5 @@ NeuroCore is now:
 
 - Expand Argus tool intelligence (deeper reasoning, multi-signal correlation)  
 - Continue manifest-driven tool development  
-- Begin shaping Argus ACLI user experience layer  
+- Refine Argus ACLI output control (filtering, summarization, signal selection)  
 - Maintain strict control plane enforcement  

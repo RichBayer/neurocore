@@ -27,6 +27,7 @@ from tools.argus.network_analysis import NetworkAnalysis
 from tools.argus.connections_analysis import ConnectionsAnalysis
 from tools.argus.uptime_analysis import UptimeAnalysis
 from tools.argus.logs_analysis import LogsAnalysis
+from tools.argus.system_analysis import SystemAnalysis  # <-- ADDED
 
 
 def register_tools():
@@ -55,6 +56,7 @@ def register_tools():
     registry.register(ConnectionsAnalysis())
     registry.register(UptimeAnalysis())
     registry.register(LogsAnalysis())
+    registry.register(SystemAnalysis())  # <-- ADDED
 
 
 register_tools()

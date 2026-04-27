@@ -16,6 +16,65 @@ def build_trace(source: str) -> dict:
     }
 
 
+# -------------------------
+# ARGUS FORMATTER
+# -------------------------
+
+def format_argus_output(output, data):
+    severity = data.get("severity", "UNKNOWN")
+    findings = data.get("findings", [])
+    recommendations = data.get("recommendations", [])
+    raw = data.get("raw", {})
+
+    # Clean title
+    title = output or ""
+    if title.startswith("[OK] "):
+        title = title.replace("[OK] ", "", 1)
+
+    if "[" in title:
+        title = title.split("[")[0].strip()
+
+    print(f"=== {title} ===\n")
+    print(f"Severity: {severity} (Scale: OK < INFO < WARN < CRITICAL)\n")
+
+    # Findings
+    if findings:
+        print("Findings:")
+        for f in findings:
+            if isinstance(f, dict):
+                msg = f.get("message", str(f))
+            else:
+                msg = str(f)
+            print(f"- {msg}")
+        print()
+
+    # Recommendations
+    print("Recommendations:")
+    if recommendations:
+        for r in recommendations:
+            print(f"- {r}")
+    else:
+        print("- None")
+    print()
+
+    # RAW OUTPUT (FIXED)
+    if isinstance(raw, dict) and raw:
+        print("--- RAW OUTPUT ---")
+
+        for section, value in raw.items():
+            print(f"\n[{section.upper()}]")
+
+            if isinstance(value, dict):
+                for sub_key, sub_val in value.items():
+                    print(sub_val)
+            else:
+                print(value)
+
+
+# -------------------------
+# REQUEST HANDLING
+# -------------------------
+
 def send_request(payload):
     client = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
     client.connect(SOCKET_PATH)
@@ -34,16 +93,20 @@ def send_request(payload):
 
     client.close()
 
-    # Try to parse JSON response
     try:
         response = json.loads(buffer)
 
         status = response.get("status")
         output = response.get("response")
         error = response.get("error")
+        data = response.get("data", {})
 
         if status == "success":
-            print(output)
+
+            if isinstance(data, dict) and "severity" in data:
+                format_argus_output(output, data)
+            else:
+                print(output)
 
         elif status == "confirmation_required":
             print(output)
@@ -55,7 +118,6 @@ def send_request(payload):
             print(buffer)
 
     except json.JSONDecodeError:
-        # fallback for reasoning / non-JSON responses
         print(buffer, end="")
 
 

@@ -52,6 +52,9 @@ class DiskAnalysis(BaseTool):
         data = result.get("data", {})
         filesystems = data.get("filesystems", [])
 
+        raw_result = data.get("raw", {})
+        raw_output = raw_result.get("stdout", "")
+
         findings: List[Dict[str, Any]] = []
         recommendations: List[str] = []
 
@@ -120,6 +123,9 @@ class DiskAnalysis(BaseTool):
             data={
                 "severity": highest_severity,
                 "findings": findings,
-                "recommendations": recommendations
+                "recommendations": recommendations,
+                "raw": {
+                    "disk_usage": raw_output
+                }
             }
         )

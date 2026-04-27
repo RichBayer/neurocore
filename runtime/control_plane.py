@@ -28,7 +28,8 @@ class ControlPlane:
         "layout", "network", "connections",
         "uptime", "logs", "users", "logins",
         # Argus keywords
-        "summary"
+        "summary",
+        "system"  # <-- ADDED
     }
 
     CONFIRM_PREFIX = "confirm "
@@ -124,6 +125,9 @@ class ControlPlane:
         # -------------------------
         if action == "summary":
             return {"tool": "system_summary", "input": {}}
+
+        if action == "system":  # <-- ADDED
+            return {"tool": "system_analysis", "input": {}}
 
         if action == "processes":
             return {"tool": "process_top_analysis", "input": {}}

@@ -74,11 +74,37 @@ The assistant should expect the following:
 - docs/infrastructure/neurocore_repository_map.txt  
 - docs/architecture/phase_aware_development.md  
 
-These define:
+---
 
-- system state  
-- file structure  
-- allowed development progression  
+# 🧠 TOOL CREATION ENFORCEMENT (CRITICAL)
+
+When creating or modifying ANY tool:
+
+The assistant MUST follow:
+
+```
+docs/design/argus_tool_creation_workflow.md
+```
+
+This includes:
+
+- tool file must exist before registration  
+- tool must be registered in tools/__init__.py  
+- control plane must route the command  
+- output contract must be complete  
+- raw output must be preserved  
+
+The assistant MUST NOT:
+
+- reference tools before they exist  
+- skip registration  
+- skip validation  
+- assume execution path works  
+
+If any step is missing:
+
+→ STOP  
+→ fix the workflow  
 
 ---
 
@@ -109,293 +135,79 @@ If required documentation is not identifiable:
 
 # 🧠 SYSTEM MAP AWARENESS (CONDITIONAL)
 
-The system map defines the broader NeuroCore environment outside the repository.
-
-This includes:
-
-- filesystem layout under /mnt/g/ai  
-- memory, models, and runtime locations  
-- system-level architecture outside the repo  
-
-The system map is NOT loaded by default.
-
----
-
-## When to Use the System Map
-
-The assistant MUST request the system map if a task involves:
-
-- filesystem paths outside the NeuroCore repository  
-- runtime environment behavior  
-- memory, models, or system-level components  
-- infrastructure-level debugging  
-- cross-layer system design beyond the repo  
-
----
-
-## System Map Rules
-
-The assistant MUST:
-
-- treat the system map as the source of truth for environment structure  
-- use it to validate paths outside the repository  
-- request it BEFORE proceeding if environment context is required  
-
-The assistant MUST NOT:
-
-- assume filesystem structure outside the repository  
-- infer locations of models, memory, or runtime components  
-- fabricate paths outside the repo map  
-
----
-
-## Relationship to Repository Map
-
-- Repository Map → defines code, tools, and documentation  
-- System Map → defines environment and runtime context  
-
-Both must be used together when working across system boundaries.
+(unchanged)
 
 ---
 
 # 🧠 EXTERNAL REPOSITORY BOUNDARY RULE
 
-The repository map only defines the current NeuroCore repository.
-
-The assistant must treat all external systems as UNKNOWN unless explicitly provided.
-
-This includes:
-
-- Argus Lab  
-- VM environments  
-- external infrastructure  
-- future related repositories  
-
-The assistant MUST NOT:
-
-- assume external files exist  
-- invent external paths  
-- merge external systems into NeuroCore  
-
-If a task requires external context:
-
-→ STOP  
-→ request the relevant files or repository map  
+(unchanged)
 
 ---
 
 # 🧠 CONTEXT CLASSIFICATION RULE (CRITICAL)
 
-All context must be treated as:
-
-## Static Context
-- architecture  
-- system design  
-- repository structure  
-
-## Runtime State
-- logs  
-- system output  
-- execution results  
-
-## Task Intent
-- what is being built  
-
-If runtime state is not provided:
-
-→ it is UNKNOWN  
-→ it must NOT be inferred  
+(unchanged)
 
 ---
 
 # 🧠 EXECUTION SAFETY VALIDATION (MANDATORY)
 
-Before ANY implementation:
-
-1. List all files that will be modified  
-2. Confirm each file exists using the repository map  
-3. Identify the system layer being modified:
-   - interface  
-   - runtime  
-   - control plane  
-   - tool layer (system or argus)  
-
-If ANY of the above is unclear:
-
-→ STOP  
-→ request clarification  
-
-NO implementation may proceed under uncertainty.
+(unchanged)
 
 ---
 
 # 🧠 OBSERVABILITY ENFORCEMENT
 
-All changes must preserve:
-
-- request_id continuity  
-- trace propagation  
-- full execution visibility  
-
-Any change that risks breaking observability:
-
-→ treat as a critical failure  
+(unchanged)
 
 ---
 
 # 🧠 AUTOMATIC TASK PROGRESSION (STRICT)
 
-After context is loaded:
-
-The assistant MUST:
-
-- determine the current development phase (from system_state and phase-aware document)  
-- validate it against system_state and build logs  
-- identify the next logical task  
-
-The assistant MUST NOT default to:
-
-→ “What do you want to do next?”
-
-Only ask when:
-
-- multiple valid paths exist  
-- phase is ambiguous  
+(unchanged)
 
 ---
 
 # 🧠 AFTER CONTEXT LOAD
 
-After ingestion is complete:
-
-1. Confirm context is loaded  
-2. Determine current phase (validate using system_state and phase-aware document, do NOT assume)  
-3. Propose next task  
-
-Do NOT ask for the task by default.
+(unchanged)
 
 ---
 
 # 🧠 EDITING RULES (CRITICAL)
 
-- ALWAYS provide complete file replacements  
-- NEVER provide partial edits  
-- ALL files must be in a single code block  
-- Use four backticks (````)  
+(unchanged)
 
 ---
 
 # 🧠 BUILD PHASE WORKFLOW (MANDATORY)
 
-Before starting ANY build phase:
-
----
-
-## 1. Create Design File
-
-```
-/mnt/g/ai/projects/neurocore/docs/design/<feature>.md
-```
-
----
-
-## 2. Create Screenshot Directory
-
-```
-/mnt/g/ai/projects/neurocore/docs/screenshots/<feature-name>/
-```
-
----
-
-## 3. Define Screenshot Plan
-
-```
-01_name.png  
-02_name.png  
-03_name.png  
-```
-
----
-
-## 4. Capture DURING Build
-
-Capture:
-
-- failures  
-- broken states  
-- fixes  
-- final output  
-
----
-
-## 5. Build Log Written LAST
-
-Location:
-
-```
-/mnt/g/ai/projects/neurocore/build-logs/
-```
-
-Rules:
-
-- Must reflect REAL events  
-- Must embed screenshots inline  
-- Must follow existing style  
+(unchanged)
 
 ---
 
 # 🧠 DOCUMENTATION REQUIREMENTS
 
-All changes must include:
-
-- Build log  
-- Updated system_state.md (if needed)  
-- Updated architecture docs (if needed)  
+(unchanged)
 
 ---
 
 # 🧠 SYSTEM IDENTITY
 
-NeuroCore is:
-
-- a local-first AI system  
-- a persistent daemon-based runtime  
-- a control-plane governed execution system  
+(unchanged)
 
 ---
 
 # 🧠 PLATFORM MODEL
 
-NeuroCore = platform  
-Argus = distribution  
-
-Argus:
-
-- defines user experience  
-- uses tools  
-- never bypasses control plane  
+(unchanged)
 
 ---
 
 # 🧠 TOOL ARCHITECTURE (CRITICAL)
 
-## System Tool Layer
-
-Location:
-
-```
-/mnt/g/ai/projects/neurocore/tools/system/
-```
-
-## Argus Tool Layer
-
-Location:
-
-```
-/mnt/g/ai/projects/neurocore/tools/argus/
-```
-
-Rules remain unchanged.
+(unchanged)
 
 ---
 
@@ -407,45 +219,57 @@ The system now includes:
 
 - full structured system tool layer  
 - enforced structured output contract  
-- **Argus diagnostic layer (implemented)**  
+- Argus diagnostic layer (implemented)  
 - deterministic system interpretation  
 - severity + findings + recommendations across core domains  
+- **multi-signal system aggregation (`system_analysis`)**
+- **structured CLI diagnostic UX layer**
+- **full diagnostic output including raw evidence across all tools**
 
 Argus is no longer conceptual.
 
-It is now a working diagnostic layer.
+It is now a working diagnostic system capable of:
+
+- multi-domain visibility  
+- aggregated system state  
+- human-readable diagnostics backed by real system data  
 
 ---
 
-# 🧭 NEXT PHASE DIRECTION
+# 🧭 NEXT PHASE DIRECTION (UPDATED)
 
 Next phase focus:
 
-## Argus ACLI User Experience Layer
+## Output Control and Signal Management
 
 Goals:
 
-- improve CLI output readability  
-- structure findings clearly  
-- group results by severity  
-- refine human-readable summaries  
-- make outputs feel like a real tool, not raw data  
+- reduce output noise  
+- introduce filtering  
+- introduce summarization  
+- allow signal selection  
+- control raw output visibility  
+- improve readability without losing data  
 
-Secondary direction (after UX):
+This phase prepares the system for:
 
-- multi-signal diagnostics (combine tools)  
-- smarter detection patterns  
+- real-world usability  
+- repeated diagnostic workflows  
+- future model integration  
+
+---
+
+## Secondary Direction (After Output Control)
+
+- deeper multi-signal correlation  
+- improved detection logic  
+- reduction of false positives  
 
 ---
 
 # 🧭 DEVELOPMENT STYLE
 
-Act as a senior systems engineer:
-
-- architecture first  
-- no shortcuts  
-- no system breakage  
-- validate everything  
+(unchanged)
 
 ---
 
@@ -456,4 +280,5 @@ Continue development aligned with:
 - current system_state  
 - phase-aware development rules  
 - strict control plane enforcement  
-- Argus diagnostic layer expansion and refinement  
+- Argus diagnostic system expansion  
+- output control layer development  

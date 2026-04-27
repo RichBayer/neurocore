@@ -52,6 +52,9 @@ class MemoryAnalysis(BaseTool):
         data = result.get("data", {})
         mem = data.get("memory", {})
 
+        raw_result = data.get("raw", {})
+        raw_output = raw_result.get("stdout", "")
+
         # -------------------------
         # PARSE MEMORY VALUES
         # -------------------------
@@ -118,6 +121,9 @@ class MemoryAnalysis(BaseTool):
             data={
                 "severity": severity,
                 "findings": findings,
-                "recommendations": recommendations
+                "recommendations": recommendations,
+                "raw": {
+                    "memory_usage": raw_output
+                }
             }
         )

@@ -44,6 +44,7 @@ build-logs/
 ├── 022_structured_tool_contract.md
 ├── 023_system_tool_structuring_and_normalization.md
 ├── 024_argus_tool_layer_foundation_and_expansion.md
+├── 025_system_analysis_multi_signal.md
 
 ---
 
@@ -91,6 +92,7 @@ docs/
 
 ### DESIGN
 ├── design/
+│   ├── argus_acli_user_experience_layer.md
 │   ├── argus_system_summary_v1.md
 │   ├── argus_tool_layer.md
 │   ├── phase_5i_real_execution.md
@@ -134,6 +136,7 @@ docs/screenshots/
 ├── argus-system-summary/
 ├── argus-tool-expansion/
 ├── argus-tools/
+├── argus_acli_ux/
 ├── backups/
 ├── daemon/
 ├── execution-layer/
@@ -195,7 +198,8 @@ tools/
 │   ├── network_analysis.py
 │   ├── connections_analysis.py
 │   ├── uptime_analysis.py
-│   └── logs_analysis.py
+│   ├── logs_analysis.py
+│   └── system_analysis.py
 
 ### SYSTEM TOOL LAYER
 ├── system/
@@ -217,8 +221,8 @@ tools/
 
 ## NOTES
 
-- Repository map reflects current state after Phase 5J Argus tool expansion
-- Argus tool layer now contains full diagnostic suite across system domains
+- Repository map reflects current state after Phase 5J Argus tool expansion and system analysis aggregation
+- Argus tool layer now includes multi-signal system analysis capability
 - Screenshots are organized by feature and phase for build log traceability
 - All system tools conform to structured output contract
 - Argus tools consume structured data and produce deterministic diagnostics

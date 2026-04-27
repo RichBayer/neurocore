@@ -49,15 +49,18 @@ Each layer depends on the one before it.
 
 System is currently in:
 
-Phase 5J – Argus Tool Layer Expansion
+## Phase 6 – Distribution Layer (NEXT)
+
+Phase 5J is COMPLETE.
 
 Confirmed capabilities:
 
 - execution engine COMPLETE
 - control plane COMPLETE
 - system tools ACTIVE
-- structured data model PARTIAL
-- Argus tools STARTED (system_summary)
+- **structured data model FULLY ENFORCED across all system tools**
+- **Argus diagnostic layer FULLY IMPLEMENTED across core domains**
+- **deterministic interpretation ACTIVE (severity + findings + recommendations)**
 
 ---
 
@@ -65,81 +68,75 @@ Confirmed capabilities:
 
 ---
 
-### Phase 5J (CURRENT) – Argus Tool Layer
+### Phase 5J (COMPLETE) – Argus Tool Layer
 
-Allowed work:
+This phase is COMPLETE and serves as a foundational reference.
 
-- build Argus tools
-- expand system tool coverage
-- enforce structured data output
-- define output contracts
-- establish deterministic diagnostics
+What was achieved:
 
-Required focus:
+- full Argus diagnostic layer across system domains  
+- structured output contract enforced across ALL system tools  
+- deterministic interpretation pattern established  
+- consistent tool composition model (system → Argus)  
+- stable control plane routing for diagnostic commands  
 
-- structured system data (CRITICAL)
-- consistent tool behavior
-- clean separation between system and Argus tools
+Established pattern:
+
+```
+system tool → structured data → interpretation → normalized output
+```
+
+This pattern is now **canonical** and must be followed for all future Argus development.
 
 ---
 
-### MUST be implemented DURING Phase 5J
+### MUST have been implemented DURING Phase 5J
 
-These are foundational and must NOT be delayed:
+(These are now COMPLETE and must be preserved)
 
 #### 1. Structured Output Contract
 
-All tools must return:
+All tools return:
 
 - message (human-readable)
 - data (machine-readable)
 
-Argus tools MUST include:
+Argus tools include:
 
 - severity
 - findings
 - recommendations
 
-Reason:
-
-This enables:
-
-- memory system
-- future model reasoning
-- tool composition
+Status: ✅ COMPLETE
 
 ---
 
 #### 2. System Tool Data Compliance
 
-ALL system tools must:
+ALL system tools:
 
 - return structured data
-- NOT rely on raw text output
+- do NOT rely on raw text output
 
-Reason:
-
-Argus tools depend on data, not message parsing.
+Status: ✅ COMPLETE
 
 ---
 
 #### 3. Argus Tool Pattern Enforcement
 
-ALL Argus tools must:
+ALL Argus tools:
 
 - consume system tool data
 - produce structured findings
 - remain deterministic
 
-Reason:
-
-This is the core of Argus behavior.
+Status: ✅ COMPLETE
 
 ---
 
 #### 4. Command Consistency (Control Plane)
 
-Command patterns must stabilize:
+Command patterns stabilized:
 
 summary  
 processes  
@@ -148,31 +145,25 @@ memory
 logs  
 network  
 
-Reason:
-
-This becomes the product API.
+Status: ✅ STABLE (treated as product API moving forward)
 
 ---
 
 #### 5. Incident Memory Integration Points
 
-NOT full implementation.
-
-BUT must define:
+Defined but NOT implemented:
 
 - incident candidate structure
-- where candidates are generated (Argus tools)
+- generation point (Argus tools)
 - deterministic signature approach
 
-Reason:
-
-Prevents rework when memory system is added.
+Status: ⚠️ DEFINED ONLY (implementation deferred to Phase 6)
 
 ---
 
 ## MUST NOT be implemented in Phase 5J
 
-These introduce premature complexity:
+(Still applies historically — preserved for reference)
 
 - full installer
 - packaging (deb, rpm, etc.)
@@ -184,33 +175,43 @@ These introduce premature complexity:
 
 Reason:
 
-Foundation is not complete yet.
+Foundation had to be completed first.
 
 ---
 
-## Phase 6 – Distribution Layer (NEXT)
+## Phase 6 – Distribution Layer (CURRENT / NEXT)
 
-This is where Argus becomes a product.
+This is where Argus becomes a **real user-facing product**.
 
 ---
 
 ### To be implemented in Phase 6
 
-#### 1. ACLI Interface
+#### 1. Argus ACLI User Experience Layer (PRIMARY FOCUS)
 
 Create:
 
+```
 distributions/argus/cli/acli.py
+```
 
-Responsibilities:
+Goals:
 
-- wrap NeuroCore CLI behavior
-- provide user-friendly command interface
-- maintain control plane flow
+- improve CLI output readability  
+- structure findings clearly  
+- group results by severity  
+- refine human-readable summaries  
+- make outputs feel like a real tool, not raw data  
+
+Constraints:
+
+- MUST NOT bypass control plane  
+- MUST preserve structured output contract  
+- MUST consume Argus tool outputs (not system tools directly)
 
 ---
 
-#### 2. Runtime Packaging
+#### 2. Runtime Packaging (INITIAL, NOT FINAL)
 
 Bundle:
 
@@ -220,18 +221,20 @@ Bundle:
 
 Ensure:
 
-- clean install
-- reproducible environment
+- clean reproducible setup
+- minimal install friction
+
+(NOT full packaging system yet)
 
 ---
 
-#### 3. File System Layout
+#### 3. File System Layout (PLANNING LEVEL)
 
 Example:
 
-/opt/argus/
-/opt/argus/runtime/
-/opt/argus/tools/
+/opt/argus/  
+/opt/argus/runtime/  
+/opt/argus/tools/  
 
 User data:
 
@@ -241,15 +244,16 @@ User data:
 
 #### 4. Incident Memory (FULL IMPLEMENTATION)
 
-Now implement:
+Now that structured diagnostics exist, implement:
 
 - save incident after user confirmation
-- load incident history
-- recurrence detection
+- store structured diagnostic output
+- load historical incidents
+- detect recurrence patterns
 
 Reason:
 
-Now enough structured data exists.
+Phase 5J made this possible.
 
 ---
 

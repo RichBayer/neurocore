@@ -54,10 +54,18 @@ class ProcessTopAnalysis(BaseTool):
         cpu_top = data.get("cpu_top", [])
         mem_top = data.get("memory_top", [])
 
+        raw_result = data.get("raw", {})
+
+        cpu_raw = raw_result.get("cpu", {}).get("stdout", "")
+        mem_raw = raw_result.get("memory", {}).get("stdout", "")
+
         findings: List[Dict[str, Any]] = []
         recommendations: List[str] = []
 
-        # High CPU usage detection
+        # -------------------------
+        # INTERPRETATION LOGIC
+        # -------------------------
+
         for proc in cpu_top:
             if proc.get("cpu_percent", 0) > 80:
                 findings.append({
@@ -67,7 +75,6 @@ class ProcessTopAnalysis(BaseTool):
                     "evidence": proc
                 })
 
-        # High memory usage detection
         for proc in mem_top:
             if proc.get("mem_percent", 0) > 50:
                 findings.append({
@@ -92,6 +99,10 @@ class ProcessTopAnalysis(BaseTool):
             if severity_priority.index(f["severity"]) > severity_priority.index(highest_severity):
                 highest_severity = f["severity"]
 
+        # -------------------------
+        # RECOMMENDATIONS
+        # -------------------------
+
         if highest_severity in ["WARN", "CRITICAL"]:
             recommendations.append("Investigate high resource usage processes")
 
@@ -110,6 +121,10 @@ class ProcessTopAnalysis(BaseTool):
             data={
                 "severity": highest_severity,
                 "findings": findings,
-                "recommendations": recommendations
+                "recommendations": recommendations,
+                "raw": {
+                    "cpu_top": cpu_raw,
+                    "memory_top": mem_raw
+                }
             }
         )

@@ -52,6 +52,9 @@ class NetworkAnalysis(BaseTool):
         data = result.get("data", {})
         interfaces = data.get("interfaces", [])
 
+        raw_result = data.get("raw", {})
+        raw_output = raw_result.get("stdout", "")
+
         findings: List[Dict[str, Any]] = []
         recommendations: List[str] = []
 
@@ -117,6 +120,9 @@ class NetworkAnalysis(BaseTool):
             data={
                 "severity": highest_severity,
                 "findings": findings,
-                "recommendations": recommendations
+                "recommendations": recommendations,
+                "raw": {
+                    "network_interfaces": raw_output
+                }
             }
         )
