@@ -1,11 +1,32 @@
 # NeuroCore
 
-### Argus (ACLI) — Reduce downtime and understand your system faster
+NeuroCore is a controlled AI platform designed to understand and interact with real Linux environments.
 
-Reduce downtime. Fix issues faster.  
-Understand what’s actually happening on your system.
+Most AI systems today focus on making models smarter.
 
-NeuroCore is built to shorten the time between:
+NeuroCore takes a different approach.
+
+Instead of relying on the model alone, it defines how intelligence is applied — what data is used, what actions are allowed, and how results are produced.
+
+It acts as a control layer between AI and real Linux environments, ensuring that analysis is grounded in actual system data and constrained by clear rules.
+
+The result is simple:
+
+less guessing  
+more signal  
+and outputs you can actually trust
+
+---
+
+## Argus (ACLI)
+
+A product built on NeuroCore, designed to eliminate frustration and confusion and help you understand what’s actually happening in your Linux environment.
+
+### Reduce downtime and understand your Linux environment faster
+
+Argus takes simple commands, extracts real data from your environment, interprets it, and tells you what’s wrong in a human-readable format.
+
+It reduces the time between:
 
 something breaking…  
 and you knowing exactly why.
@@ -19,15 +40,13 @@ I built this because I got tired of two things.
 System tools give you raw data with no explanation.  
 AI tools can talk all day but don’t actually understand your system.
 
-NeuroCore is my answer to that.
+Argus is my answer to that.
 
-At its core, this system takes real, structured data from your machine and feeds it into a controlled intelligence layer that explains what’s actually going on.
+At its core, it takes real, structured data from your machine and explains what’s actually going on.
 
 Not guesses. Not generic advice.
 
 It sees your system — CPU, memory, disk, network — and interprets it in context.
-
-Sitting on top of that is Argus, a CLI interface that makes it usable.
 
 You ask something simple like:
 
@@ -56,8 +75,11 @@ This isn’t an AI running wild on your machine. It’s a structured, controlled
 You run:
 
     ai "summary"
+    ai "How is my system doing?"
 
 On a healthy system:
+
+![System Summary OK](docs/screenshots/argus-system-summary/06_intelligent_summary.png)
 
 System Summary
 
@@ -71,9 +93,11 @@ None
 
 ---
 
-Now here’s what happens when things go sideways.
+Now here’s what happens when things go sideways. This tool is active and usable in Argus today.
 
 I pushed the system under load using a simple stress test. Argus picked it up immediately:
+
+![System Summary Critical](docs/screenshots/argus-system-summary/07_high_load_test.png)
 
 System Summary [CRITICAL]
 
@@ -92,6 +116,8 @@ Then I stopped the load.
 Instead of instantly flipping back to “OK,” Argus reflects reality.
 
 System load decays over time, and it tracks that:
+
+![System Summary Warning](docs/screenshots/argus-system-summary/08_load_decay_initial.png)
 
 System Summary [WARNING]
 
@@ -201,7 +227,7 @@ I’m building a controlled lab environment where I can:
 
 - inject failures  
 - break services  
-- simulate real-world issues  
+- simulate hundreds of real-world issues  
 
 …and train Argus to troubleshoot them correctly.
 
@@ -235,11 +261,11 @@ This is a system that helps you understand what’s going on so you can make the
 
 ## Powered by NeuroCore
 
-Argus runs on NeuroCore, a local runtime that enforces how everything works.
+Argus runs on NeuroCore, a local runtime with a control plane and execution model that enforces how everything works.
 
 Every request, every action, every piece of system interaction goes through a controlled execution layer.
 
-Nothing bypasses it.
+Nothing bypasses it. It’s the spine that connects the brain to the system itself.
 
 That’s what keeps this predictable, safe, and grounded in reality.
 
